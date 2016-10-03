@@ -15,7 +15,7 @@ private:
     std::string * nodeValue;
 
     std::vector<AttributeEntity> * attrList;
-    
+
     std::vector<NodeEntity> * childList;
 
     NodeEntity * Find(NodeEntity * node, std::string * tagName);
@@ -76,4 +76,3 @@ public:
 
     ~NodeEntity();
 };
-

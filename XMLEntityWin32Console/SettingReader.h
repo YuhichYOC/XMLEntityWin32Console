@@ -1,0 +1,61 @@
+#pragma once
+
+#include <codecvt>                 // wstring_convert を利用するために必要
+
+#include <Shlwapi.h>               // SHCreateStreamOnFile を利用するために必要
+
+#include <atlbase.h>               // スマートポインタを利用するために必要
+
+#include "NodeEntity.h"
+
+class SettingReader
+{
+private:
+
+    std::string * directory;
+
+    std::string * fileName;
+
+    NodeEntity * myNode;
+
+    int nodeId;
+
+    IStream * stream;
+
+    IXmlReader * reader;
+
+    bool prepared;
+
+    bool parseSucceeded;
+
+    std::string * errorMessage;
+
+    wchar_t * ConvertStrToWChar_t(std::string * arg);
+
+public:
+
+    void SetDirectory(std::string * arg);
+
+    std::string * GetDirectory();
+
+    void SetFileName(std::string * arg);
+
+    std::string * GetFileName();
+
+    NodeEntity * GetNode();
+
+    void Prepare();
+
+    bool IsPrepared();
+
+    void Parse();
+
+    bool IsParseSucceeded();
+
+    std::string * GetErrorMessage();
+
+    SettingReader();
+
+    ~SettingReader();
+};
+
