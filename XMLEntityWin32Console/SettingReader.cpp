@@ -165,7 +165,7 @@ void SettingReader::ParseAttributes(IXmlReader * reader, std::vector<std::string
     const wchar_t * localName;
     const wchar_t * value;
     uint32_t prefixLength;
-    
+
     if (FAILED(reader->MoveToFirstAttribute())) {
         return;
     }
