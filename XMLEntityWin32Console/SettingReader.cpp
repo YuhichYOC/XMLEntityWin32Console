@@ -29,6 +29,8 @@ NodeEntity * SettingReader::GetNode()
 
 void SettingReader::Prepare()
 {
+    setlocale(LC_ALL, "japanese");
+
     if (fileName->length() == 0) {
         errorMessage->assign("SettingReader::Prepare -- File name is not set. Method : Parse");
         prepared = false;
@@ -60,9 +62,10 @@ void SettingReader::Prepare()
 
 wchar_t * SettingReader::WChar_tFromStr(std::string * arg)
 {
-    std::unique_ptr<std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>> conv(new std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>());
-    std::unique_ptr<std::wstring> wstr(new std::wstring(conv.get()->from_bytes(*arg)));
-    std::unique_ptr<wchar_t> retVal(new wchar_t(*wstr->c_str()));
+    size_t retSize = strlen(arg->c_str()) + 1;
+    size_t convSize = 0;
+    std::unique_ptr<wchar_t> retVal(new wchar_t[retSize]);
+    mbstowcs_s(&convSize, retVal.get(), retSize, arg->c_str(), _TRUNCATE);
     return retVal.get();
 }
 
@@ -192,18 +195,23 @@ void SettingReader::ParseAttributes(IXmlReader * reader, std::vector<std::string
 
 std::string * SettingReader::StrFromWChar_t(wchar_t * arg)
 {
-    std::unique_ptr<std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>> conv(new std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>());
-    std::unique_ptr<std::string> str(new std::string(conv.get()->to_bytes(*arg)));
-    return str.get();
+    size_t retSize = sizeof(arg);
+    size_t convSize = 0;
+    std::unique_ptr<char> arrayFromArg(new char[retSize]);
+    wcstombs_s(&convSize, arrayFromArg.get(), retSize, arg, _TRUNCATE);
+    std::unique_ptr<std::string> retVal(new std::string(arrayFromArg.get()));
+    return retVal.get();
 }
 
 std::string * SettingReader::StrFromCWChar_t(const wchar_t * arg)
 {
     // const ‹³‚Ù‚ñ‚Æ‚Ð‚Å‚½‚é‚Æ‚Ü‚Ð‚ë
-    std::unique_ptr<wchar_t> nonConstedChar(new wchar_t(*arg));
-    std::unique_ptr<std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>> conv(new std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>());
-    std::unique_ptr<std::string> str(new std::string(conv.get()->to_bytes(nonConstedChar.get())));
-    return str.get();
+    size_t retSize = sizeof(arg);
+    size_t convSize = 0;
+    std::unique_ptr<char> arrayFromArg(new char[retSize]);
+    wcstombs_s(&convSize, arrayFromArg.get(), retSize, arg, _TRUNCATE);
+    std::unique_ptr<std::string> retVal(new std::string(arrayFromArg.get()));
+    return retVal.get();
 }
 
 bool SettingReader::IsParseSucceeded()
