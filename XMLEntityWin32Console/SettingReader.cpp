@@ -71,15 +71,43 @@ bool SettingReader::IsPrepared()
 void SettingReader::Parse()
 {
     nodeId = 0;
+
+    std::vector<std::string> treeStack;
+
     XmlNodeType nodeType;
     while (reader->Read(&nodeType) == S_OK) {
         switch (nodeType)
         {
+        case XmlNodeType_None:
+            break;
+        case XmlNodeType_Element:
+
+            break;
+        case XmlNodeType_Attribute:
+            break;
+        case XmlNodeType_Text:
+            break;
+        case XmlNodeType_CDATA:
+            break;
+        case XmlNodeType_ProcessingInstruction:
+            break;
+        case XmlNodeType_Comment:
+            break;
+        case XmlNodeType_DocumentType:
+            break;
+        case XmlNodeType_Whitespace:
+            break;
+        case XmlNodeType_EndElement:
+            break;
+        case XmlNodeType_XmlDeclaration:
+            break;
         default:
             break;
         }
     }
 }
+
+
 
 bool SettingReader::IsParseSucceeded()
 {
@@ -106,7 +134,11 @@ SettingReader::~SettingReader()
     delete directory;
     delete fileName;
     delete myNode;
-    delete stream;
-    delete reader;
+    if (stream != nullptr) {
+        delete stream;
+    }
+    if (reader != nullptr) {
+        delete reader;
+    }
     delete errorMessage;
 }
