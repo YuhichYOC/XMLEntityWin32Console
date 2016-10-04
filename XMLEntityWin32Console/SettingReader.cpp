@@ -62,8 +62,8 @@ wchar_t * SettingReader::WChar_tFromStr(std::string * arg)
 {
     std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> conv;
     std::wstring wstr = conv.from_bytes(*arg);
-    wchar_t * retVal = new wchar_t(wstr.c_str);
-    return retVal;
+    std::unique_ptr<wchar_t> retVal(new wchar_t(*wstr.c_str()));
+    return retVal.get();
 }
 
 bool SettingReader::IsPrepared()
@@ -193,17 +193,17 @@ void SettingReader::ParseAttributes(IXmlReader * reader, std::vector<std::string
 std::string * SettingReader::StrFromWChar_t(wchar_t * arg)
 {
     std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> conv;
-    std::string str = conv.to_bytes(*arg);
-    return &str;
+    std::unique_ptr<std::string> str(new std::string(conv.to_bytes(*arg)));
+    return str.get();
 }
 
 std::string * SettingReader::StrFromCWChar_t(const wchar_t * arg)
 {
     // const ‹³‚Ù‚ñ‚Æ‚Ð‚Å‚½‚é‚Æ‚Ü‚Ð‚ë
-    wchar_t * nonConstedChar = new wchar_t(*arg);
+    std::unique_ptr<wchar_t> nonConstedChar(new wchar_t(*arg));
     std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> conv;
-    std::string str = conv.to_bytes(nonConstedChar);
-    return &str;
+    std::unique_ptr<std::string> str(new std::string(conv.to_bytes(nonConstedChar.get())));
+    return str.get();
 }
 
 bool SettingReader::IsParseSucceeded()

@@ -4,7 +4,7 @@
 
 #include <Shlwapi.h>               // SHCreateStreamOnFile を利用するために必要
 
-#include <atlbase.h>               // スマートポインタを利用するために必要
+#include <atlbase.h>
 
 #include "NodeEntity.h"
 
