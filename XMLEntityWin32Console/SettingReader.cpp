@@ -64,9 +64,9 @@ wchar_t * SettingReader::WChar_tFromStr(std::string * arg)
 {
     size_t retSize = strlen(arg->c_str()) + 1;
     size_t convSize = 0;
-    std::unique_ptr<wchar_t> retVal(new wchar_t[retSize]);
-    mbstowcs_s(&convSize, retVal.get(), retSize, arg->c_str(), _TRUNCATE);
-    return retVal.get();
+    wchar_t * retVal = new wchar_t[retSize];
+    mbstowcs_s(&convSize, retVal, retSize, arg->c_str(), _TRUNCATE);
+    return retVal;
 }
 
 bool SettingReader::IsPrepared()
@@ -135,16 +135,16 @@ void SettingReader::ParseElement(IXmlReader * reader, std::vector<std::string> *
     newNode->SetNodeName(StrFromCWChar_t(localName));
     newNode->SetNodeID(nodeId);
 
+    tree->push_back(*newNode->GetNodeName());
     ParseAttributes(reader, tree);
     if (nodeId == 1) {
-        tree->push_back(*newNode->GetNodeName());
         myNode = newNode;
     }
     else {
-        myNode->FindFromTail(tree)->AddChild(newNode);
-        if (!reader->IsEmptyElement()) {
-            tree->push_back(*newNode->GetNodeName());
+        if (reader->IsEmptyElement()) {
+            tree->pop_back();
         }
+        myNode->FindFromTail(tree)->AddChild(newNode);
     }
 }
 
@@ -195,23 +195,25 @@ void SettingReader::ParseAttributes(IXmlReader * reader, std::vector<std::string
 
 std::string * SettingReader::StrFromWChar_t(wchar_t * arg)
 {
-    size_t retSize = sizeof(arg);
+    std::wstring castedArg = arg;
+    size_t retSize = castedArg.length() + 1;
     size_t convSize = 0;
     std::unique_ptr<char> arrayFromArg(new char[retSize]);
     wcstombs_s(&convSize, arrayFromArg.get(), retSize, arg, _TRUNCATE);
-    std::unique_ptr<std::string> retVal(new std::string(arrayFromArg.get()));
-    return retVal.get();
+    std::string * retVal = new std::string(arrayFromArg.get());
+    return retVal;
 }
 
 std::string * SettingReader::StrFromCWChar_t(const wchar_t * arg)
 {
     // const ‹³‚Ù‚ñ‚Æ‚Ð‚Å‚½‚é‚Æ‚Ü‚Ð‚ë
-    size_t retSize = sizeof(arg);
+    std::wstring castedArg = arg;
+    size_t retSize = castedArg.length() + 1;
     size_t convSize = 0;
     std::unique_ptr<char> arrayFromArg(new char[retSize]);
     wcstombs_s(&convSize, arrayFromArg.get(), retSize, arg, _TRUNCATE);
-    std::unique_ptr<std::string> retVal(new std::string(arrayFromArg.get()));
-    return retVal.get();
+    std::string * retVal = new std::string(arrayFromArg.get());
+    return retVal;
 }
 
 bool SettingReader::IsParseSucceeded()
