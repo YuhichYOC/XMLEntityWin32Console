@@ -22,7 +22,7 @@ std::string * AttributeEntity::GetAttrValue()
 
 bool AttributeEntity::NameEquals(std::string * arg)
 {
-    if ((attrName->compare(*arg)) != 0) {
+    if ((attrName->compare(*arg)) == 0) {
         return true;
     }
     else {
@@ -32,7 +32,7 @@ bool AttributeEntity::NameEquals(std::string * arg)
 
 bool AttributeEntity::ValueEquals(std::string * arg)
 {
-    if ((attrValue->compare(*arg)) != 0) {
+    if ((attrValue->compare(*arg)) == 0) {
         return true;
     }
     else {

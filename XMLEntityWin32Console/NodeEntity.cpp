@@ -5,7 +5,7 @@ NodeEntity * NodeEntity::Find(NodeEntity * node, std::string * tagName)
     if (node == nullptr) {
         node = this;
     }
-    if ((node->GetNodeName()->compare(*tagName)) != 0) {
+    if ((node->GetNodeName()->compare(*tagName)) == 0) {
         return node;
     }
     for each (NodeEntity var in node->GetChildList()->begin)
@@ -23,8 +23,8 @@ NodeEntity * NodeEntity::Find(NodeEntity * node, std::string * tagName, std::str
     if (node == nullptr) {
         node = this;
     }
-    if ((node->GetNodeName()->compare(*tagName)) != 0) {
-        if (node->AttrExists(attrName) && (node->AttrByName(attrName)->compare(*attrValue) != 0)) {
+    if ((node->GetNodeName()->compare(*tagName)) == 0) {
+        if (node->AttrExists(attrName) && (node->AttrByName(attrName)->compare(*attrValue) == 0)) {
             return node;
         }
     }
@@ -43,8 +43,8 @@ NodeEntity * NodeEntity::Find(NodeEntity * node, std::string * tagName, std::str
     if (node == nullptr) {
         node = this;
     }
-    if ((node->GetNodeName()->compare(*tagName)) != 0) {
-        if (node->AttrExists(attr1Name) && node->AttrExists(attr2Name) && (node->AttrByName(attr1Name)->compare(*attr1Value) != 0) && (node->AttrByName(attr2Name)->compare(*attr2Value) != 0)) {
+    if ((node->GetNodeName()->compare(*tagName)) == 0) {
+        if (node->AttrExists(attr1Name) && node->AttrExists(attr2Name) && (node->AttrByName(attr1Name)->compare(*attr1Value) == 0) && (node->AttrByName(attr2Name)->compare(*attr2Value) == 0)) {
             return node;
         }
     }
@@ -56,6 +56,31 @@ NodeEntity * NodeEntity::Find(NodeEntity * node, std::string * tagName, std::str
         }
     }
     return nullptr;
+}
+
+NodeEntity * NodeEntity::FindFromTail(NodeEntity * node, std::vector<std::string> tree)
+{
+    if (node == nullptr) {
+        node = this;
+    }
+    if (tree.size() == 0) {
+        return node;
+    }
+    std::string name = tree.at(0);
+    std::vector<std::string> subtree;
+    for (int i = 1; i < tree.size(); i++) {
+        subtree.push_back(tree.at(i));
+    }
+    if ((node->GetNodeName()->compare(name)) == 0) {
+        return FindFromTail(node, subtree);
+    }
+    int pos = 0;
+    for (int j = 0; j < node->GetChildList()->size(); j++) {
+        if ((node->GetChildList()->at(j).GetNodeName()->compare(name)) == 0) {
+            pos = j;
+        }
+    }
+    return FindFromTail(&node->GetChildList()->at(pos), subtree);
 }
 
 void NodeEntity::SetNodeName(std::string * arg)
@@ -88,24 +113,34 @@ std::string * NodeEntity::GetNodeValue()
     return nodeValue;
 }
 
-void NodeEntity::SetAttrList(std::vector<AttributeEntity>* arg)
+void NodeEntity::SetAttrList(std::vector<AttributeEntity> * arg)
 {
     attrList = arg;
 }
 
-std::vector<AttributeEntity>* NodeEntity::GetAttrList()
+std::vector<AttributeEntity> * NodeEntity::GetAttrList()
 {
     return attrList;
 }
 
-void NodeEntity::SetChildList(std::vector<NodeEntity>* arg)
+void NodeEntity::AddAttribute(AttributeEntity * arg)
+{
+    attrList->push_back(*arg);
+}
+
+void NodeEntity::SetChildList(std::vector<NodeEntity> * arg)
 {
     childList = arg;
 }
 
-std::vector<NodeEntity>* NodeEntity::GetChildList()
+std::vector<NodeEntity> * NodeEntity::GetChildList()
 {
     return childList;
+}
+
+void NodeEntity::AddChild(NodeEntity * arg)
+{
+    childList->push_back(*arg);
 }
 
 bool NodeEntity::AttrExists(std::string * name)
@@ -135,7 +170,7 @@ std::string * NodeEntity::AttrByName(std::string * name)
 NodeEntity * NodeEntity::Find(std::string * tagName)
 {
     NodeEntity * node = this;
-    if ((node->GetNodeName()->compare(*tagName) != 0)) {
+    if ((node->GetNodeName()->compare(*tagName) == 0)) {
         return node;
     }
     for each (NodeEntity var in node->GetChildList()->begin)
@@ -151,8 +186,8 @@ NodeEntity * NodeEntity::Find(std::string * tagName)
 NodeEntity * NodeEntity::Find(std::string * tagName, std::string * attrName, std::string * attrValue)
 {
     NodeEntity * node = this;
-    if ((node->GetNodeName()->compare(*tagName) != 0)) {
-        if (node->AttrExists(attrName) && (node->AttrByName(attrName)->compare(*attrValue) != 0)) {
+    if ((node->GetNodeName()->compare(*tagName) == 0)) {
+        if (node->AttrExists(attrName) && (node->AttrByName(attrName)->compare(*attrValue) == 0)) {
             return node;
         }
     }
@@ -169,8 +204,8 @@ NodeEntity * NodeEntity::Find(std::string * tagName, std::string * attrName, std
 NodeEntity * NodeEntity::Find(std::string * tagName, std::string * attr1Name, std::string * attr1Value, std::string * attr2Name, std::string * attr2Value)
 {
     NodeEntity * node = this;
-    if ((node->GetNodeName()->compare(*tagName) != 0)) {
-        if (node->AttrExists(attr1Name) && node->AttrExists(attr2Name) && (node->AttrByName(attr1Name)->compare(*attr1Value) != 0) && (node->AttrByName(attr2Name)->compare(*attr2Value) != 0)) {
+    if ((node->GetNodeName()->compare(*tagName) == 0)) {
+        if (node->AttrExists(attr1Name) && node->AttrExists(attr2Name) && (node->AttrByName(attr1Name)->compare(*attr1Value) == 0) && (node->AttrByName(attr2Name)->compare(*attr2Value) == 0)) {
             return node;
         }
     }
@@ -182,6 +217,12 @@ NodeEntity * NodeEntity::Find(std::string * tagName, std::string * attr1Name, st
         }
     }
     return nullptr;
+}
+
+NodeEntity * NodeEntity::FindFromTail(std::vector<std::string> * tree)
+{
+    NodeEntity * node = this;
+    return FindFromTail(node, *tree);
 }
 
 NodeEntity * NodeEntity::Dir(std::string * name)

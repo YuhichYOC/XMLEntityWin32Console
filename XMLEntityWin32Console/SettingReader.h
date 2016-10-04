@@ -32,6 +32,16 @@ private:
 
     wchar_t * ConvertStrToWChar_t(std::string * arg);
 
+    void ParseElement(IXmlReader * reader, std::vector<std::string> * tree);
+
+    void ParseCDATA(IXmlReader * reader, std::vector<std::string> * tree);
+
+    void ParseEndElement(IXmlReader * reader, std::vector<std::string> * tree);
+
+    void ParseAttributes(IXmlReader * reader, std::vector<std::string> * tree);
+
+    std::string * ConvertWChar_tToStr(wchar_t * arg);
+
 public:
 
     void SetDirectory(std::string * arg);

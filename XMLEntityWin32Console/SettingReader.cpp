@@ -72,7 +72,7 @@ void SettingReader::Parse()
 {
     nodeId = 0;
 
-    std::vector<std::string> treeStack;
+    std::vector<std::string> * tree = new std::vector<std::string>();
 
     XmlNodeType nodeType;
     while (reader->Read(&nodeType) == S_OK) {
@@ -81,13 +81,14 @@ void SettingReader::Parse()
         case XmlNodeType_None:
             break;
         case XmlNodeType_Element:
-
+            ParseElement(reader, tree);
             break;
         case XmlNodeType_Attribute:
             break;
         case XmlNodeType_Text:
             break;
         case XmlNodeType_CDATA:
+            ParseCDATA(reader, tree);
             break;
         case XmlNodeType_ProcessingInstruction:
             break;
@@ -98,6 +99,7 @@ void SettingReader::Parse()
         case XmlNodeType_Whitespace:
             break;
         case XmlNodeType_EndElement:
+            ParseEndElement(reader, tree);
             break;
         case XmlNodeType_XmlDeclaration:
             break;
@@ -105,9 +107,92 @@ void SettingReader::Parse()
             break;
         }
     }
+
+    parseSucceeded = true;
 }
 
+void SettingReader::ParseElement(IXmlReader * reader, std::vector<std::string> * tree)
+{
+    wchar_t * prefix;
+    wchar_t * localName;
+    uint32_t prefixLength;
+    if (FAILED(reader->GetPrefix(&prefix, &prefixLength))) {
+        return;
+    }
+    if (FAILED(reader->GetLocalName(&localName, NULL))) {
+        return;
+    }
 
+    nodeId++;
+
+    NodeEntity * newNode = new NodeEntity();
+    newNode->SetNodeName(ConvertWChar_tToStr(localName));
+    newNode->SetNodeID(nodeId);
+
+    ParseAttributes(reader, tree);
+    if (nodeId == 1) {
+        tree->push_back(*newNode->GetNodeName());
+        myNode == newNode;
+    }
+    else {
+        myNode->FindFromTail(tree)->AddChild(newNode);
+        if (!reader->IsEmptyElement()) {
+            tree->push_back(*newNode->GetNodeName());
+        }
+    }
+}
+
+void SettingReader::ParseCDATA(IXmlReader * reader, std::vector<std::string> * tree)
+{
+    wchar_t * value;
+    if (FAILED(reader->GetValue(&value, NULL))) {
+        return;
+    }
+    myNode->FindFromTail(tree)->SetNodeValue(ConvertWChar_tToStr(value));
+}
+
+void SettingReader::ParseEndElement(IXmlReader * reader, std::vector<std::string> * tree)
+{
+    tree->pop_back();
+}
+
+void SettingReader::ParseAttributes(IXmlReader * reader, std::vector<std::string> * tree)
+{
+    wchar_t * prefix;
+    wchar_t * localName;
+    wchar_t * value;
+    uint32_t prefixLength;
+    
+    if (FAILED(reader->MoveToFirstAttribute())) {
+        return;
+    }
+    while (true) {
+        if (FAILED(reader->GetPrefix(&prefix, &prefixLength))) {
+            continue;
+        }
+        if (FAILED(reader->GetLocalName(&localName, NULL))) {
+            continue;
+        }
+        if (FAILED(reader->GetValue(&value, NULL))) {
+            continue;
+        }
+        AttributeEntity * newAttr = new AttributeEntity();
+        newAttr->SetAttrName(ConvertWChar_tToStr(localName));
+        newAttr->SetAttrValue(ConvertWChar_tToStr(value));
+        myNode->FindFromTail(tree)->AddAttribute(newAttr);
+
+        if (reader->MoveToNextAttribute() != S_OK) {
+            break;
+        }
+    }
+}
+
+std::string * SettingReader::ConvertWChar_tToStr(wchar_t * arg)
+{
+    std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> conv;
+    std::string str = conv.to_bytes(*arg);
+    return &str;
+}
 
 bool SettingReader::IsParseSucceeded()
 {

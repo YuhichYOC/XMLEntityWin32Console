@@ -24,6 +24,8 @@ private:
 
     NodeEntity * Find(NodeEntity * node, std::string * tagName, std::string * attr1Name, std::string * attr1Value, std::string * attr2Name, std::string * attr2Value);
 
+    NodeEntity * FindFromTail(NodeEntity * node, std::vector<std::string> tree);
+
 public:
 
     void SetNodeName(std::string * arg);
@@ -42,9 +44,13 @@ public:
 
     std::vector<AttributeEntity> * GetAttrList();
 
+    void AddAttribute(AttributeEntity * arg);
+
     void SetChildList(std::vector<NodeEntity> * arg);
 
     std::vector<NodeEntity> * GetChildList();
+
+    void AddChild(NodeEntity * arg);
 
     bool AttrExists(std::string * name);
 
@@ -55,6 +61,8 @@ public:
     NodeEntity * Find(std::string * tagName, std::string * attrName, std::string * attrValue);
 
     NodeEntity * Find(std::string * tagName, std::string * attr1Name, std::string * attr1Value, std::string * attr2Name, std::string * attr2Value);
+
+    NodeEntity * FindFromTail(std::vector<std::string> * tree);
 
     NodeEntity * Dir(std::string * name);
 
