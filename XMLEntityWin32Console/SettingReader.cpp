@@ -34,7 +34,7 @@ void SettingReader::Prepare()
         prepared = false;
         return;
     }
-    if (FAILED(SHCreateStreamOnFile(ConvertStrToWChar_t(fileName), STGM_READ, &stream))) {
+    if (FAILED(SHCreateStreamOnFile(WChar_tFromStr(fileName), STGM_READ, &stream))) {
         errorMessage->assign("SettingReader::Prepare -- File reader can't be create. Method : SHCreateStreamOnFile");
         prepared = false;
         return;
@@ -58,13 +58,12 @@ void SettingReader::Prepare()
     prepared = true;
 }
 
-wchar_t * SettingReader::ConvertStrToWChar_t(std::string * arg)
+wchar_t * SettingReader::WChar_tFromStr(std::string * arg)
 {
     std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> conv;
     std::wstring wstr = conv.from_bytes(*arg);
-    wchar_t retVal;
-    retVal = *wstr.c_str();
-    return &retVal;
+    wchar_t * retVal = new wchar_t(wstr.c_str);
+    return retVal;
 }
 
 bool SettingReader::IsPrepared()
@@ -117,8 +116,8 @@ void SettingReader::Parse()
 
 void SettingReader::ParseElement(IXmlReader * reader, std::vector<std::string> * tree)
 {
-    wchar_t * prefix;
-    wchar_t * localName;
+    const wchar_t * prefix;
+    const wchar_t * localName;
     uint32_t prefixLength;
     if (FAILED(reader->GetPrefix(&prefix, &prefixLength))) {
         return;
@@ -130,13 +129,13 @@ void SettingReader::ParseElement(IXmlReader * reader, std::vector<std::string> *
     nodeId++;
 
     NodeEntity * newNode = new NodeEntity();
-    newNode->SetNodeName(ConvertWChar_tToStr(localName));
+    newNode->SetNodeName(StrFromCWChar_t(localName));
     newNode->SetNodeID(nodeId);
 
     ParseAttributes(reader, tree);
     if (nodeId == 1) {
         tree->push_back(*newNode->GetNodeName());
-        myNode == newNode;
+        myNode = newNode;
     }
     else {
         myNode->FindFromTail(tree)->AddChild(newNode);
@@ -148,11 +147,11 @@ void SettingReader::ParseElement(IXmlReader * reader, std::vector<std::string> *
 
 void SettingReader::ParseCDATA(IXmlReader * reader, std::vector<std::string> * tree)
 {
-    wchar_t * value;
+    const wchar_t * value;
     if (FAILED(reader->GetValue(&value, NULL))) {
         return;
     }
-    myNode->FindFromTail(tree)->SetNodeValue(ConvertWChar_tToStr(value));
+    myNode->FindFromTail(tree)->SetNodeValue(StrFromCWChar_t(value));
 }
 
 void SettingReader::ParseEndElement(IXmlReader * reader, std::vector<std::string> * tree)
@@ -162,9 +161,9 @@ void SettingReader::ParseEndElement(IXmlReader * reader, std::vector<std::string
 
 void SettingReader::ParseAttributes(IXmlReader * reader, std::vector<std::string> * tree)
 {
-    wchar_t * prefix;
-    wchar_t * localName;
-    wchar_t * value;
+    const wchar_t * prefix;
+    const wchar_t * localName;
+    const wchar_t * value;
     uint32_t prefixLength;
     
     if (FAILED(reader->MoveToFirstAttribute())) {
@@ -181,8 +180,8 @@ void SettingReader::ParseAttributes(IXmlReader * reader, std::vector<std::string
             continue;
         }
         AttributeEntity * newAttr = new AttributeEntity();
-        newAttr->SetAttrName(ConvertWChar_tToStr(localName));
-        newAttr->SetAttrValue(ConvertWChar_tToStr(value));
+        newAttr->SetAttrName(StrFromCWChar_t(localName));
+        newAttr->SetAttrValue(StrFromCWChar_t(value));
         myNode->FindFromTail(tree)->AddAttribute(newAttr);
 
         if (reader->MoveToNextAttribute() != S_OK) {
@@ -191,10 +190,19 @@ void SettingReader::ParseAttributes(IXmlReader * reader, std::vector<std::string
     }
 }
 
-std::string * SettingReader::ConvertWChar_tToStr(wchar_t * arg)
+std::string * SettingReader::StrFromWChar_t(wchar_t * arg)
 {
     std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> conv;
     std::string str = conv.to_bytes(*arg);
+    return &str;
+}
+
+std::string * SettingReader::StrFromCWChar_t(const wchar_t * arg)
+{
+    // const ‹³‚Ù‚ñ‚Æ‚Ð‚Å‚½‚é‚Æ‚Ü‚Ð‚ë
+    wchar_t * nonConstedChar = new wchar_t(*arg);
+    std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> conv;
+    std::string str = conv.to_bytes(nonConstedChar);
     return &str;
 }
 

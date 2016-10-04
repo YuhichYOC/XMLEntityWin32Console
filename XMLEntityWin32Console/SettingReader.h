@@ -30,7 +30,7 @@ private:
 
     std::string * errorMessage;
 
-    wchar_t * ConvertStrToWChar_t(std::string * arg);
+    wchar_t * WChar_tFromStr(std::string * arg);
 
     void ParseElement(IXmlReader * reader, std::vector<std::string> * tree);
 
@@ -40,7 +40,9 @@ private:
 
     void ParseAttributes(IXmlReader * reader, std::vector<std::string> * tree);
 
-    std::string * ConvertWChar_tToStr(wchar_t * arg);
+    std::string * StrFromWChar_t(wchar_t * arg);
+
+    std::string * StrFromCWChar_t(const wchar_t * arg);
 
 public:
 
