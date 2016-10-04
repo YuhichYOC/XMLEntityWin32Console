@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "NodeEntity.h"
 
 NodeEntity * NodeEntity::Find(NodeEntity * node, std::string * tagName)
@@ -8,9 +10,8 @@ NodeEntity * NodeEntity::Find(NodeEntity * node, std::string * tagName)
     if ((node->GetNodeName()->compare(*tagName)) == 0) {
         return node;
     }
-    for each (NodeEntity var in node->GetChildList()->begin)
-    {
-        NodeEntity * retVal = Find(&var, tagName);
+    for (int i = 0; i < node->GetChildList()->size(); i++) {
+        NodeEntity * retVal = Find(&node->GetChildList()->at(i), tagName);
         if (retVal != nullptr) {
             return retVal;
         }
@@ -28,9 +29,8 @@ NodeEntity * NodeEntity::Find(NodeEntity * node, std::string * tagName, std::str
             return node;
         }
     }
-    for each (NodeEntity var in node->GetChildList()->begin)
-    {
-        NodeEntity * retVal = Find(&var, tagName, attrName, attrValue);
+    for (int i = 0; i < node->GetChildList()->size(); i++) {
+        NodeEntity * retVal = Find(&node->GetChildList()->at(i), tagName, attrName, attrValue);
         if (retVal != nullptr) {
             return retVal;
         }
@@ -48,9 +48,8 @@ NodeEntity * NodeEntity::Find(NodeEntity * node, std::string * tagName, std::str
             return node;
         }
     }
-    for each (NodeEntity var in node->GetChildList()->begin)
-    {
-        NodeEntity * retVal = Find(&var, tagName, attr1Name, attr1Value, attr2Name, attr2Value);
+    for (int i = 0; i < node->GetChildList()->size(); i++) {
+        NodeEntity * retVal = Find(&node->GetChildList()->at(i), tagName, attr1Name, attr1Value, attr2Name, attr2Value);
         if (retVal != nullptr) {
             return retVal;
         }
@@ -146,9 +145,8 @@ void NodeEntity::AddChild(NodeEntity * arg)
 bool NodeEntity::AttrExists(std::string * name)
 {
     bool retVal = false;
-    for each (AttributeEntity var in attrList->begin)
-    {
-        if (var.NameEquals(name)) {
+    for (int i = 0; i < attrList->size(); i++) {
+        if (attrList->at(i).NameEquals(name)) {
             retVal = true;
         }
     }
@@ -158,10 +156,9 @@ bool NodeEntity::AttrExists(std::string * name)
 std::string * NodeEntity::AttrByName(std::string * name)
 {
     std::string * retVal = new std::string();
-    for each (AttributeEntity var in attrList->begin)
-    {
-        if (var.NameEquals(name)) {
-            retVal = var.GetAttrValue();
+    for (int i = 0; i < attrList->size(); i++) {
+        if (attrList->at(i).NameEquals(name)) {
+            retVal = attrList->at(i).GetAttrValue();
         }
     }
     return retVal;
@@ -173,9 +170,8 @@ NodeEntity * NodeEntity::Find(std::string * tagName)
     if ((node->GetNodeName()->compare(*tagName) == 0)) {
         return node;
     }
-    for each (NodeEntity var in node->GetChildList()->begin)
-    {
-        NodeEntity * retVal = Find(&var, tagName);
+    for (int i = 0; i < node->GetChildList()->size(); i++) {
+        NodeEntity * retVal = Find(&node->GetChildList()->at(i), tagName);
         if (retVal != nullptr) {
             return retVal;
         }
@@ -191,9 +187,8 @@ NodeEntity * NodeEntity::Find(std::string * tagName, std::string * attrName, std
             return node;
         }
     }
-    for each (NodeEntity var in node->GetChildList()->begin)
-    {
-        NodeEntity * retVal = Find(&var, tagName, attrName, attrValue);
+    for (int i = 0; i < node->GetChildList()->size(); i++) {
+        NodeEntity * retVal = Find(&node->GetChildList()->at(i), tagName, attrName, attrValue);
         if (retVal != nullptr) {
             return retVal;
         }
@@ -209,9 +204,8 @@ NodeEntity * NodeEntity::Find(std::string * tagName, std::string * attr1Name, st
             return node;
         }
     }
-    for each (NodeEntity var in node->GetChildList()->begin)
-    {
-        NodeEntity * retVal = Find(&var, tagName, attr1Name, attr1Value, attr2Name, attr2Value);
+    for (int i = 0; i < node->GetChildList()->size(); i++) {
+        NodeEntity * retVal = Find(&node->GetChildList()->at(i), tagName, attr1Name, attr1Value, attr2Name, attr2Value);
         if (retVal != nullptr) {
             return retVal;
         }

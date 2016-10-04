@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "SettingReader.h"
 
 void SettingReader::SetDirectory(std::string * arg)
@@ -60,7 +62,9 @@ wchar_t * SettingReader::ConvertStrToWChar_t(std::string * arg)
 {
     std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> conv;
     std::wstring wstr = conv.from_bytes(*arg);
-    return wstr.c_str;
+    wchar_t retVal;
+    retVal = *wstr.c_str();
+    return &retVal;
 }
 
 bool SettingReader::IsPrepared()

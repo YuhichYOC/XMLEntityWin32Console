@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "AttributeEntity.h"
 
 void AttributeEntity::SetAttrName(std::string * arg)
