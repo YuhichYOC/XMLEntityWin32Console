@@ -173,21 +173,22 @@ void SettingReader::ParseAttributes(IXmlReader * reader, std::vector<std::string
         return;
     }
     while (true) {
-        if (FAILED(reader->GetPrefix(&prefix, &prefixLength))) {
-            continue;
+        if (!reader->IsDefault()) {
+            if (FAILED(reader->GetPrefix(&prefix, &prefixLength))) {
+                continue;
+            }
+            if (FAILED(reader->GetLocalName(&localName, NULL))) {
+                continue;
+            }
+            if (FAILED(reader->GetValue(&value, NULL))) {
+                continue;
+            }
+            AttributeEntity * newAttr = new AttributeEntity();
+            newAttr->SetAttrName(StrFromCWChar_t(localName));
+            newAttr->SetAttrValue(StrFromCWChar_t(value));
+            myNode->FindFromTail(tree, name)->AddAttribute(newAttr);
         }
-        if (FAILED(reader->GetLocalName(&localName, NULL))) {
-            continue;
-        }
-        if (FAILED(reader->GetValue(&value, NULL))) {
-            continue;
-        }
-        AttributeEntity * newAttr = new AttributeEntity();
-        newAttr->SetAttrName(StrFromCWChar_t(localName));
-        newAttr->SetAttrValue(StrFromCWChar_t(value));
-        myNode->FindFromTail(tree, name)->AddAttribute(newAttr);
-
-        if (reader->MoveToNextAttribute() != S_OK) {
+        if (S_OK != reader->MoveToNextAttribute()) {
             break;
         }
     }

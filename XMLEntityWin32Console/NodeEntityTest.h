@@ -16,6 +16,10 @@ public:
 
     void NodeEntityTest02();
 
+    void NodeEntityTest03();
+
+    void NodeEntityTest04();
+
     NodeEntityTest();
 
     ~NodeEntityTest();
