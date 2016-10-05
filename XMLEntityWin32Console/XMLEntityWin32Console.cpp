@@ -47,8 +47,11 @@ void SettingReaderTest01()
 
 int main()
 {
+    /*
     NodeEntityTest01();
     NodeEntityTest02();
+    */
+    SettingReaderTest01();
 
     std::string value;
     std::cin >> value;

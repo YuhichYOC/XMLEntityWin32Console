@@ -77,19 +77,57 @@ NodeEntity * NodeEntity::FindFromTail(NodeEntity * node, std::vector<std::string
     if ((node->GetNodeName()->compare(name)) == 0) {
         return FindFromTail(node, subtree);
     }
-    int pos = -1;
-    int jLoopCount = (int)node->GetChildList()->size();
-    for (int j = 0; j < jLoopCount; j++) {
-        if ((node->GetChildList()->at(j)->GetNodeName()->compare(name)) == 0) {
-            pos = j;
-        }
-    }
+    int pos = FindChildIndexByName(node, name);
     if (pos >= 0) {
         return FindFromTail(node->GetChildList()->at(pos), subtree);
     }
     else {
         return nullptr;
     }
+}
+
+NodeEntity * NodeEntity::FindFromTail(NodeEntity * node, std::vector<std::string> tree, std::string leafName)
+{
+    if (node == nullptr) {
+        node = this;
+    }
+    if (tree.size() == 0) {
+        int retPos = FindChildIndexByName(node, leafName);
+        if (retPos >= 0) {
+            return node->GetChildList()->at(retPos);
+        }
+        else {
+            return nullptr;
+        }
+    }
+    std::string name = tree.at(0);
+    std::vector<std::string> subtree;
+    int iLoopCount = (int)tree.size();
+    for (int i = 1; i < iLoopCount; i++) {
+        subtree.push_back(tree.at(i));
+    }
+    if ((node->GetNodeName()->compare(name)) == 0) {
+        return FindFromTail(node, subtree, leafName);
+    }
+    int pos = FindChildIndexByName(node, name);
+    if (pos >= 0) {
+        return FindFromTail(node->GetChildList()->at(pos), subtree, leafName);
+    }
+    else {
+        return nullptr;
+    }
+}
+
+int NodeEntity::FindChildIndexByName(NodeEntity * node, std::string name)
+{
+    int pos = -1;
+    int iLoopCount = (int)node->GetChildList()->size();
+    for (int i = 0; i < iLoopCount; i++) {
+        if ((node->GetChildList()->at(i)->GetNodeName()->compare(name)) == 0) {
+            pos = i;
+        }
+    }
+    return pos;
 }
 
 void NodeEntity::SetNodeName(std::string * arg)
@@ -232,6 +270,12 @@ NodeEntity * NodeEntity::FindFromTail(std::vector<std::string> * tree)
 {
     NodeEntity * node = this;
     return FindFromTail(node, *tree);
+}
+
+NodeEntity * NodeEntity::FindFromTail(std::vector<std::string> * tree, std::string * leafName)
+{
+    NodeEntity * node = this;
+    return FindFromTail(node, *tree, *leafName);
 }
 
 NodeEntity * NodeEntity::Dir(std::string * name)

@@ -38,7 +38,7 @@ private:
 
     void ParseEndElement(IXmlReader * reader, std::vector<std::string> * tree);
 
-    void ParseAttributes(IXmlReader * reader, std::vector<std::string> * tree);
+    void ParseAttributes(IXmlReader * reader, std::vector<std::string> * tree, std::string * name);
 
     std::string * StrFromWChar_t(wchar_t * arg);
 
