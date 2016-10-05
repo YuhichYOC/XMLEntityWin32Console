@@ -10,9 +10,9 @@ NodeEntity * NodeEntity::Find(NodeEntity * node, std::string * tagName)
     if ((node->GetNodeName()->compare(*tagName)) == 0) {
         return node;
     }
-    int iLoopCount = node->GetChildList()->size();
+    int iLoopCount = (int)node->GetChildList()->size();
     for (int i = 0; i < iLoopCount; i++) {
-        NodeEntity * retVal = Find(&node->GetChildList()->at(i), tagName);
+        NodeEntity * retVal = Find(node->GetChildList()->at(i), tagName);
         if (retVal != nullptr) {
             return retVal;
         }
@@ -30,9 +30,9 @@ NodeEntity * NodeEntity::Find(NodeEntity * node, std::string * tagName, std::str
             return node;
         }
     }
-    int iLoopCount = node->GetChildList()->size();
+    int iLoopCount = (int)node->GetChildList()->size();
     for (int i = 0; i < iLoopCount; i++) {
-        NodeEntity * retVal = Find(&node->GetChildList()->at(i), tagName, attrName, attrValue);
+        NodeEntity * retVal = Find(node->GetChildList()->at(i), tagName, attrName, attrValue);
         if (retVal != nullptr) {
             return retVal;
         }
@@ -50,9 +50,9 @@ NodeEntity * NodeEntity::Find(NodeEntity * node, std::string * tagName, std::str
             return node;
         }
     }
-    int iLoopCount = node->GetChildList()->size();
+    int iLoopCount = (int)node->GetChildList()->size();
     for (int i = 0; i < iLoopCount; i++) {
-        NodeEntity * retVal = Find(&node->GetChildList()->at(i), tagName, attr1Name, attr1Value, attr2Name, attr2Value);
+        NodeEntity * retVal = Find(node->GetChildList()->at(i), tagName, attr1Name, attr1Value, attr2Name, attr2Value);
         if (retVal != nullptr) {
             return retVal;
         }
@@ -70,21 +70,26 @@ NodeEntity * NodeEntity::FindFromTail(NodeEntity * node, std::vector<std::string
     }
     std::string name = tree.at(0);
     std::vector<std::string> subtree;
-    int iLoopCount = tree.size();
+    int iLoopCount = (int)tree.size();
     for (int i = 1; i < iLoopCount; i++) {
         subtree.push_back(tree.at(i));
     }
     if ((node->GetNodeName()->compare(name)) == 0) {
         return FindFromTail(node, subtree);
     }
-    int pos = 0;
-    int jLoopCount = node->GetChildList()->size();
+    int pos = -1;
+    int jLoopCount = (int)node->GetChildList()->size();
     for (int j = 0; j < jLoopCount; j++) {
-        if ((node->GetChildList()->at(j).GetNodeName()->compare(name)) == 0) {
+        if ((node->GetChildList()->at(j)->GetNodeName()->compare(name)) == 0) {
             pos = j;
         }
     }
-    return FindFromTail(&node->GetChildList()->at(pos), subtree);
+    if (pos >= 0) {
+        return FindFromTail(node->GetChildList()->at(pos), subtree);
+    }
+    else {
+        return nullptr;
+    }
 }
 
 void NodeEntity::SetNodeName(std::string * arg)
@@ -117,42 +122,42 @@ std::string * NodeEntity::GetNodeValue()
     return nodeValue;
 }
 
-void NodeEntity::SetAttrList(std::vector<AttributeEntity> * arg)
+void NodeEntity::SetAttrList(std::vector<AttributeEntity *> * arg)
 {
     attrList = arg;
 }
 
-std::vector<AttributeEntity> * NodeEntity::GetAttrList()
+std::vector<AttributeEntity *> * NodeEntity::GetAttrList()
 {
     return attrList;
 }
 
 void NodeEntity::AddAttribute(AttributeEntity * arg)
 {
-    attrList->push_back(*arg);
+    attrList->push_back(arg);
 }
 
-void NodeEntity::SetChildList(std::vector<NodeEntity> * arg)
+void NodeEntity::SetChildList(std::vector<NodeEntity *> * arg)
 {
     childList = arg;
 }
 
-std::vector<NodeEntity> * NodeEntity::GetChildList()
+std::vector<NodeEntity *> * NodeEntity::GetChildList()
 {
     return childList;
 }
 
 void NodeEntity::AddChild(NodeEntity * arg)
 {
-    childList->push_back(*arg);
+    childList->push_back(arg);
 }
 
 bool NodeEntity::AttrExists(std::string * name)
 {
     bool retVal = false;
-    int iLoopCount = attrList->size();
+    int iLoopCount = (int)attrList->size();
     for (int i = 0; i < iLoopCount; i++) {
-        if (attrList->at(i).NameEquals(name)) {
+        if (attrList->at(i)->NameEquals(name)) {
             retVal = true;
         }
     }
@@ -162,10 +167,10 @@ bool NodeEntity::AttrExists(std::string * name)
 std::string * NodeEntity::AttrByName(std::string * name)
 {
     std::string * retVal = new std::string();
-    int iLoopCount = attrList->size();
+    int iLoopCount = (int)attrList->size();
     for (int i = 0; i < iLoopCount; i++) {
-        if (attrList->at(i).NameEquals(name)) {
-            retVal = attrList->at(i).GetAttrValue();
+        if (attrList->at(i)->NameEquals(name)) {
+            retVal = attrList->at(i)->GetAttrValue();
         }
     }
     return retVal;
@@ -177,9 +182,9 @@ NodeEntity * NodeEntity::Find(std::string * tagName)
     if ((node->GetNodeName()->compare(*tagName) == 0)) {
         return node;
     }
-    int iLoopCount = node->GetChildList()->size();
+    int iLoopCount = (int)node->GetChildList()->size();
     for (int i = 0; i < iLoopCount; i++) {
-        NodeEntity * retVal = Find(&node->GetChildList()->at(i), tagName);
+        NodeEntity * retVal = Find(node->GetChildList()->at(i), tagName);
         if (retVal != nullptr) {
             return retVal;
         }
@@ -195,9 +200,9 @@ NodeEntity * NodeEntity::Find(std::string * tagName, std::string * attrName, std
             return node;
         }
     }
-    int iLoopCount = node->GetChildList()->size();
+    int iLoopCount = (int)node->GetChildList()->size();
     for (int i = 0; i < iLoopCount; i++) {
-        NodeEntity * retVal = Find(&node->GetChildList()->at(i), tagName, attrName, attrValue);
+        NodeEntity * retVal = Find(node->GetChildList()->at(i), tagName, attrName, attrValue);
         if (retVal != nullptr) {
             return retVal;
         }
@@ -213,9 +218,9 @@ NodeEntity * NodeEntity::Find(std::string * tagName, std::string * attr1Name, st
             return node;
         }
     }
-    int iLoopCount = node->GetChildList()->size();
+    int iLoopCount = (int)node->GetChildList()->size();
     for (int i = 0; i < iLoopCount; i++) {
-        NodeEntity * retVal = Find(&node->GetChildList()->at(i), tagName, attr1Name, attr1Value, attr2Name, attr2Value);
+        NodeEntity * retVal = Find(node->GetChildList()->at(i), tagName, attr1Name, attr1Value, attr2Name, attr2Value);
         if (retVal != nullptr) {
             return retVal;
         }
@@ -305,8 +310,8 @@ NodeEntity::NodeEntity()
 {
     nodeName = new std::string();
     nodeValue = new std::string();
-    attrList = new std::vector<AttributeEntity>();
-    childList = new std::vector<NodeEntity>();
+    attrList = new std::vector<AttributeEntity *>();
+    childList = new std::vector<NodeEntity *>();
 }
 
 NodeEntity::~NodeEntity()

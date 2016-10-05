@@ -14,9 +14,9 @@ private:
 
     std::string * nodeValue;
 
-    std::vector<AttributeEntity> * attrList;
+    std::vector<AttributeEntity *> * attrList;
 
-    std::vector<NodeEntity> * childList;
+    std::vector<NodeEntity *> * childList;
 
     NodeEntity * Find(NodeEntity * node, std::string * tagName);
 
@@ -40,15 +40,15 @@ public:
 
     std::string * GetNodeValue();
 
-    void SetAttrList(std::vector<AttributeEntity> * arg);
+    void SetAttrList(std::vector<AttributeEntity *> * arg);
 
-    std::vector<AttributeEntity> * GetAttrList();
+    std::vector<AttributeEntity *> * GetAttrList();
 
     void AddAttribute(AttributeEntity * arg);
 
-    void SetChildList(std::vector<NodeEntity> * arg);
+    void SetChildList(std::vector<NodeEntity *> * arg);
 
-    std::vector<NodeEntity> * GetChildList();
+    std::vector<NodeEntity *> * GetChildList();
 
     void AddChild(NodeEntity * arg);
 
