@@ -4,27 +4,27 @@
 
 void SettingReader::SetDirectory(std::string * arg)
 {
-    directory = arg;
+    directory.reset(arg);
 }
 
 std::string * SettingReader::GetDirectory()
 {
-    return directory;
+    return directory.get();
 }
 
 void SettingReader::SetFileName(std::string * arg)
 {
-    fileName = arg;
+    fileName.reset(arg);
 }
 
 std::string * SettingReader::GetFileName()
 {
-    return fileName;
+    return fileName.get();
 }
 
 NodeEntity * SettingReader::GetNode()
 {
-    return myNode;
+    return myNode.get();
 }
 
 void SettingReader::Prepare()
@@ -36,7 +36,7 @@ void SettingReader::Prepare()
         prepared = false;
         return;
     }
-    if (FAILED(SHCreateStreamOnFile(WChar_tFromStr(fileName), STGM_READ, &stream))) {
+    if (FAILED(SHCreateStreamOnFile(WChar_tFromStr(fileName.get()), STGM_READ, &stream))) {
         errorMessage->assign("SettingReader::Prepare -- File reader can't be create. Method : SHCreateStreamOnFile");
         prepared = false;
         return;
@@ -131,18 +131,18 @@ void SettingReader::ParseElement(IXmlReader * reader, std::vector<std::string> *
 
     nodeId++;
 
-    NodeEntity * newNode = new NodeEntity();
-    newNode->SetNodeName(StrFromCWChar_t(localName));
-    newNode->SetNodeID(nodeId);
+    std::unique_ptr<NodeEntity> newNode(new NodeEntity());
+    newNode.get()->SetNodeName(StrFromCWChar_t(localName));
+    newNode.get()->SetNodeID(nodeId);
 
     if (nodeId == 1) {
-        myNode = newNode;
+        myNode.reset(newNode.get());
     }
     else {
         if (reader->IsEmptyElement()) {
             tree->pop_back();
         }
-        myNode->FindFromTail(tree)->AddChild(newNode);
+        myNode.get()->FindFromTail(tree)->AddChild(std::move(newNode));
     }
     ParseAttributes(reader, tree, newNode->GetNodeName());
     tree->push_back(*newNode->GetNodeName());
@@ -183,10 +183,10 @@ void SettingReader::ParseAttributes(IXmlReader * reader, std::vector<std::string
             if (FAILED(reader->GetValue(&value, NULL))) {
                 continue;
             }
-            AttributeEntity * newAttr = new AttributeEntity();
-            newAttr->SetAttrName(StrFromCWChar_t(localName));
-            newAttr->SetAttrValue(StrFromCWChar_t(value));
-            myNode->FindFromTail(tree, name)->AddAttribute(newAttr);
+            std::unique_ptr<AttributeEntity> newAttr(new AttributeEntity());
+            newAttr.get()->SetAttrName(StrFromCWChar_t(localName));
+            newAttr.get()->SetAttrValue(StrFromCWChar_t(value));
+            myNode.get()->FindFromTail(tree, name)->AddAttribute(std::move(newAttr));
         }
         if (S_OK != reader->MoveToNextAttribute()) {
             break;
@@ -224,29 +224,25 @@ bool SettingReader::IsParseSucceeded()
 
 std::string * SettingReader::GetErrorMessage()
 {
-    return errorMessage;
+    return errorMessage.get();
 }
 
 SettingReader::SettingReader()
 {
-    directory = new std::string();
-    fileName = new std::string();
-    myNode = new NodeEntity();
+    directory = std::unique_ptr<std::string>();
+    fileName = std::unique_ptr<std::string>();
+    myNode = std::unique_ptr<NodeEntity>();
+    errorMessage = std::unique_ptr<std::string>();
     stream = nullptr;
     reader = nullptr;
-    errorMessage = new std::string();
 }
 
 SettingReader::~SettingReader()
 {
-    delete directory;
-    delete fileName;
-    delete myNode;
     if (stream != nullptr) {
         delete stream;
     }
     if (reader != nullptr) {
         delete reader;
     }
-    delete errorMessage;
 }

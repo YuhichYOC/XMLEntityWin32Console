@@ -12,11 +12,11 @@ class SettingReader
 {
 private:
 
-    std::string * directory;
+    std::unique_ptr<std::string> directory;
 
-    std::string * fileName;
+    std::unique_ptr<std::string> fileName;
 
-    NodeEntity * myNode;
+    std::unique_ptr<NodeEntity> myNode;
 
     int nodeId;
 
@@ -28,7 +28,7 @@ private:
 
     bool parseSucceeded;
 
-    std::string * errorMessage;
+    std::unique_ptr<std::string> errorMessage;
 
     wchar_t * WChar_tFromStr(std::string * arg);
 

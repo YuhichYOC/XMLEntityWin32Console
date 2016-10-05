@@ -6,9 +6,9 @@ class AttributeEntity
 {
 private:
 
-    std::string * attrName;
+    std::unique_ptr<std::string> attrName;
 
-    std::string * attrValue;
+    std::unique_ptr<std::string> attrValue;
 
 public:
 

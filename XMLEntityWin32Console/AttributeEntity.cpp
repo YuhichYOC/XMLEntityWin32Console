@@ -4,22 +4,22 @@
 
 void AttributeEntity::SetAttrName(std::string * arg)
 {
-    attrName = arg;
+    attrName.reset(arg);
 }
 
 std::string * AttributeEntity::GetAttrName()
 {
-    return attrName;
+    return attrName.get();
 }
 
 void AttributeEntity::SetAttrValue(std::string * arg)
 {
-    attrValue = arg;
+    attrValue.reset(arg);
 }
 
 std::string * AttributeEntity::GetAttrValue()
 {
-    return attrValue;
+    return attrValue.get();
 }
 
 bool AttributeEntity::NameEquals(std::string * arg)
@@ -44,12 +44,10 @@ bool AttributeEntity::ValueEquals(std::string * arg)
 
 AttributeEntity::AttributeEntity()
 {
-    attrName = new std::string();
-    attrValue = new std::string();
+    attrName = std::unique_ptr<std::string>();
+    attrValue = std::unique_ptr<std::string>();
 }
 
 AttributeEntity::~AttributeEntity()
 {
-    delete attrName;
-    delete attrValue;
 }

@@ -7,6 +7,22 @@ bool NodeEntityTest::GetTestSuccess()
     return testSuccess;
 }
 
+void NodeEntityTest::SmartPointerTest01()
+{
+    std::unique_ptr<AttributeEntity> attr(new AttributeEntity());
+    attr->SetAttrName(new std::string("test"));
+
+    testSuccess = true;
+}
+
+void NodeEntityTest::NoSmartPointerTest01()
+{
+    AttributeEntity * attr = new AttributeEntity();
+    attr->SetAttrName(new std::string("test"));
+
+    testSuccess = true;
+}
+
 void NodeEntityTest::NodeEntityTest01()
 {
     std::unique_ptr<NodeEntity> node(new NodeEntity());
@@ -31,27 +47,27 @@ void NodeEntityTest::NodeEntityTest01()
     name = new std::string("AAA");
     addNodeAAA.get()->SetNodeName(name);
 
-    node.get()->AddChild(addNodeAAA.get());
+    node.get()->AddChild(std::move(addNodeAAA));
     tree->push_back(*name);
 
     std::unique_ptr<NodeEntity> addNodeBBB(new NodeEntity());
     name = new std::string("BBB");
     addNodeBBB.get()->SetNodeName(name);
 
-    node.get()->FindFromTail(tree.get())->AddChild(addNodeBBB.get());
+    node.get()->FindFromTail(tree.get())->AddChild(std::move(addNodeBBB));
     tree->push_back(*name);
 
     std::unique_ptr<NodeEntity> addNodeCCC(new NodeEntity());
     name = new std::string("CCC");
     addNodeCCC.get()->SetNodeName(name);
 
-    node.get()->FindFromTail(tree.get())->AddChild(addNodeCCC.get());
+    node.get()->FindFromTail(tree.get())->AddChild(std::move(addNodeCCC));
 
     std::unique_ptr<NodeEntity> addNodeDDD(new NodeEntity());
     name = new std::string("DDD");
     addNodeDDD->SetNodeName(name);
 
-    node.get()->FindFromTail(tree.get())->AddChild(addNodeDDD.get());
+    node.get()->FindFromTail(tree.get())->AddChild(std::move(addNodeDDD));
 
     testSuccess = true;
 
@@ -87,9 +103,9 @@ void NodeEntityTest::NodeEntityTest02()
     addAttrAAAtype.get()->SetAttrName(name);
     name = new std::string("typeAAA");
     addAttrAAAtype.get()->SetAttrValue(name);
-    addNodeAAA.get()->AddAttribute(addAttrAAAtype.get());
+    addNodeAAA.get()->AddAttribute(std::move(addAttrAAAtype));
 
-    node.get()->AddChild(addNodeAAA.get());
+    node.get()->AddChild(std::move(addNodeAAA));
     name = new std::string("AAA");
     tree.get()->push_back(*name);
 
@@ -102,15 +118,15 @@ void NodeEntityTest::NodeEntityTest02()
     addAttrBBBname.get()->SetAttrName(name);
     name = new std::string("nameBBB");
     addAttrBBBname.get()->SetAttrValue(name);
-    addNodeBBB.get()->AddAttribute(addAttrBBBname.get());
+    addNodeBBB.get()->AddAttribute(std::move(addAttrBBBname));
     std::unique_ptr<AttributeEntity> addAttrBBBtype(new AttributeEntity());
     name = new std::string("type");
     addAttrBBBtype.get()->SetAttrName(name);
     name = new std::string("typeBBB");
     addAttrBBBtype.get()->SetAttrValue(name);
-    addNodeBBB.get()->AddAttribute(addAttrBBBtype.get());
+    addNodeBBB.get()->AddAttribute(std::move(addAttrBBBtype));
 
-    node.get()->FindFromTail(tree.get())->AddChild(addNodeBBB.get());
+    node.get()->FindFromTail(tree.get())->AddChild(std::move(addNodeBBB));
     name = new std::string("BBB");
     tree.get()->push_back(*name);
 
@@ -123,9 +139,9 @@ void NodeEntityTest::NodeEntityTest02()
     addAttrCCCtype.get()->SetAttrName(name);
     name = new std::string("typeCCC");
     addAttrCCCtype.get()->SetAttrValue(name);
-    addNodeCCC.get()->AddAttribute(addAttrCCCtype.get());
+    addNodeCCC.get()->AddAttribute(std::move(addAttrCCCtype));
 
-    node.get()->FindFromTail(tree.get())->AddChild(addNodeCCC.get());
+    node.get()->FindFromTail(tree.get())->AddChild(std::move(addNodeCCC));
 
     std::unique_ptr<NodeEntity> addNodeDDD(new NodeEntity());
     name = new std::string("DDD");
@@ -136,9 +152,9 @@ void NodeEntityTest::NodeEntityTest02()
     addAttrDDDname.get()->SetAttrName(name);
     name = new std::string("nameDDD");
     addAttrDDDname.get()->SetAttrValue(name);
-    addNodeDDD.get()->AddAttribute(addAttrDDDname.get());
+    addNodeDDD.get()->AddAttribute(std::move(addAttrDDDname));
 
-    node.get()->FindFromTail(tree.get())->AddChild(addNodeDDD.get());
+    node.get()->FindFromTail(tree.get())->AddChild(std::move(addNodeDDD));
 
     testSuccess = true;
 
@@ -174,9 +190,9 @@ void NodeEntityTest::NodeEntityTest03()
     addAttrAAAtype.get()->SetAttrName(name);
     name = new std::string("typeAAA");
     addAttrAAAtype.get()->SetAttrValue(name);
-    addNodeAAA.get()->AddAttribute(addAttrAAAtype.get());
+    addNodeAAA.get()->AddAttribute(std::move(addAttrAAAtype));
 
-    node.get()->AddChild(addNodeAAA.get());
+    node.get()->AddChild(std::move(addNodeAAA));
     name = new std::string("AAA");
     tree.get()->push_back(*name);
 
@@ -189,15 +205,15 @@ void NodeEntityTest::NodeEntityTest03()
     addAttrBBBname.get()->SetAttrName(name);
     name = new std::string("nameBBB");
     addAttrBBBname.get()->SetAttrValue(name);
-    addNodeBBB.get()->AddAttribute(addAttrBBBname.get());
+    addNodeBBB.get()->AddAttribute(std::move(addAttrBBBname));
     std::unique_ptr<AttributeEntity> addAttrBBBtype(new AttributeEntity());
     name = new std::string("type");
     addAttrBBBtype.get()->SetAttrName(name);
     name = new std::string("typeBBB");
     addAttrBBBtype.get()->SetAttrValue(name);
-    addNodeBBB.get()->AddAttribute(addAttrBBBtype.get());
+    addNodeBBB.get()->AddAttribute(std::move(addAttrBBBtype));
 
-    node.get()->FindFromTail(tree.get())->AddChild(addNodeBBB.get());
+    node.get()->FindFromTail(tree.get())->AddChild(std::move(addNodeBBB));
     name = new std::string("BBB");
     tree.get()->push_back(*name);
 
@@ -210,9 +226,9 @@ void NodeEntityTest::NodeEntityTest03()
     addAttrCCCtype.get()->SetAttrName(name);
     name = new std::string("typeCCC");
     addAttrCCCtype.get()->SetAttrValue(name);
-    addNodeCCC.get()->AddAttribute(addAttrCCCtype.get());
+    addNodeCCC.get()->AddAttribute(std::move(addAttrCCCtype));
 
-    node.get()->FindFromTail(tree.get())->AddChild(addNodeCCC.get());
+    node.get()->FindFromTail(tree.get())->AddChild(std::move(addNodeCCC));
 
     std::unique_ptr<NodeEntity> addNodeDDD(new NodeEntity());
     name = new std::string("DDD");
@@ -223,12 +239,12 @@ void NodeEntityTest::NodeEntityTest03()
     addAttrDDDname.get()->SetAttrName(name);
     name = new std::string("nameDDD");
     addAttrDDDname.get()->SetAttrValue(name);
-    addNodeDDD.get()->AddAttribute(addAttrDDDname.get());
+    addNodeDDD.get()->AddAttribute(std::move(addAttrDDDname));
 
-    node.get()->FindFromTail(tree.get())->AddChild(addNodeDDD.get());
+    node.get()->FindFromTail(tree.get())->AddChild(std::move(addNodeDDD));
 
     name = new std::string("CCC");
-    NodeEntity testNode = *node.get()->FindFromTail(tree.get(), name);
+    NodeEntity * testNode = node.get()->FindFromTail(tree.get(), name);
 
     testSuccess = true;
 
@@ -264,9 +280,9 @@ void NodeEntityTest::NodeEntityTest04()
     addAttrAAAtype.get()->SetAttrName(name);
     name = new std::string("typeAAA");
     addAttrAAAtype.get()->SetAttrValue(name);
-    addNodeAAA.get()->AddAttribute(addAttrAAAtype.get());
+    addNodeAAA.get()->AddAttribute(std::move(addAttrAAAtype));
 
-    node.get()->AddChild(addNodeAAA.get());
+    node.get()->AddChild(std::move(addNodeAAA));
     name = new std::string("AAA");
     tree.get()->push_back(*name);
 
@@ -279,15 +295,15 @@ void NodeEntityTest::NodeEntityTest04()
     addAttrBBBname.get()->SetAttrName(name);
     name = new std::string("nameBBB");
     addAttrBBBname.get()->SetAttrValue(name);
-    addNodeBBB.get()->AddAttribute(addAttrBBBname.get());
+    addNodeBBB.get()->AddAttribute(std::move(addAttrBBBname));
     std::unique_ptr<AttributeEntity> addAttrBBBtype(new AttributeEntity());
     name = new std::string("type");
     addAttrBBBtype.get()->SetAttrName(name);
     name = new std::string("typeBBB");
     addAttrBBBtype.get()->SetAttrValue(name);
-    addNodeBBB.get()->AddAttribute(addAttrBBBtype.get());
+    addNodeBBB.get()->AddAttribute(std::move(addAttrBBBtype));
 
-    node.get()->FindFromTail(tree.get())->AddChild(addNodeBBB.get());
+    node.get()->FindFromTail(tree.get())->AddChild(std::move(addNodeBBB));
     name = new std::string("BBB");
     tree.get()->push_back(*name);
 
@@ -300,9 +316,9 @@ void NodeEntityTest::NodeEntityTest04()
     addAttrCCCtype.get()->SetAttrName(name);
     name = new std::string("typeCCC");
     addAttrCCCtype.get()->SetAttrValue(name);
-    addNodeCCC.get()->AddAttribute(addAttrCCCtype.get());
+    addNodeCCC.get()->AddAttribute(std::move(addAttrCCCtype));
 
-    node.get()->FindFromTail(tree.get())->AddChild(addNodeCCC.get());
+    node.get()->FindFromTail(tree.get())->AddChild(std::move(addNodeCCC));
 
     std::unique_ptr<NodeEntity> addNodeDDD(new NodeEntity());
     name = new std::string("DDD");
@@ -313,12 +329,12 @@ void NodeEntityTest::NodeEntityTest04()
     addAttrDDDname.get()->SetAttrName(name);
     name = new std::string("nameDDD");
     addAttrDDDname.get()->SetAttrValue(name);
-    addNodeDDD.get()->AddAttribute(addAttrDDDname.get());
+    addNodeDDD.get()->AddAttribute(std::move(addAttrDDDname));
 
-    node.get()->FindFromTail(tree.get())->AddChild(addNodeDDD.get());
+    node.get()->FindFromTail(tree.get())->AddChild(std::move(addNodeDDD));
 
     name = new std::string("BBB");
-    NodeEntity testNode = *node.get()->FindFromTail(tree.get(), name);
+    NodeEntity * testNode = node.get()->FindFromTail(tree.get(), name);
 
     testSuccess = true;
 

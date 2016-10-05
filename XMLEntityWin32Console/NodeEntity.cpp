@@ -116,12 +116,12 @@ int NodeEntity::FindChildIndexByName(NodeEntity * node, std::string name)
 
 void NodeEntity::SetNodeName(std::string * arg)
 {
-    nodeName = arg;
+    nodeName.reset(arg);
 }
 
 std::string * NodeEntity::GetNodeName()
 {
-    return nodeName;
+    return nodeName.get();
 }
 
 void NodeEntity::SetNodeID(int arg)
@@ -136,42 +136,42 @@ int NodeEntity::GetNodeID()
 
 void NodeEntity::SetNodeValue(std::string * arg)
 {
-    nodeValue = arg;
+    nodeValue.reset(arg);
 }
 
 std::string * NodeEntity::GetNodeValue()
 {
-    return nodeValue;
+    return nodeValue.get();
 }
 
 void NodeEntity::SetAttrList(std::vector<AttributeEntity *> * arg)
 {
-    attrList = arg;
+    attrList.reset(arg);
 }
 
 std::vector<AttributeEntity *> * NodeEntity::GetAttrList()
 {
-    return attrList;
+    return attrList.get();
 }
 
-void NodeEntity::AddAttribute(AttributeEntity * arg)
+void NodeEntity::AddAttribute(std::unique_ptr<AttributeEntity> arg)
 {
-    attrList->push_back(arg);
+    attrList.get()->push_back(arg.get());
 }
 
 void NodeEntity::SetChildList(std::vector<NodeEntity *> * arg)
 {
-    childList = arg;
+    childList.reset(arg);
 }
 
 std::vector<NodeEntity *> * NodeEntity::GetChildList()
 {
-    return childList;
+    return childList.get();
 }
 
-void NodeEntity::AddChild(NodeEntity * arg)
+void NodeEntity::AddChild(std::unique_ptr<NodeEntity> arg)
 {
-    childList->push_back(arg);
+    childList.get()->push_back(arg.get());
 }
 
 bool NodeEntity::AttrExists(std::string * name)
@@ -358,16 +358,12 @@ NodeEntity * NodeEntity::SubCategory(std::string * childName, std::string * gran
 
 NodeEntity::NodeEntity()
 {
-    nodeName = new std::string();
-    nodeValue = new std::string();
-    attrList = new std::vector<AttributeEntity *>();
-    childList = new std::vector<NodeEntity *>();
+    nodeName = std::unique_ptr<std::string>();
+    nodeValue = std::unique_ptr<std::string>();
+    attrList = std::unique_ptr<std::vector<AttributeEntity *>>();
+    childList = std::unique_ptr<std::vector<NodeEntity *>>();
 }
 
 NodeEntity::~NodeEntity()
 {
-    delete nodeName;
-    delete nodeValue;
-    delete attrList;
-    delete childList;
 }

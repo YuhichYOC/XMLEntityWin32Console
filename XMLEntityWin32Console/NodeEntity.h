@@ -8,15 +8,15 @@ class NodeEntity
 {
 private:
 
-    std::string * nodeName;
+    std::unique_ptr<std::string> nodeName;
 
     int nodeId;
 
-    std::string * nodeValue;
+    std::unique_ptr<std::string> nodeValue;
 
-    std::vector<AttributeEntity *> * attrList;
+    std::unique_ptr<std::vector<AttributeEntity *>> attrList;
 
-    std::vector<NodeEntity *> * childList;
+    std::unique_ptr<std::vector<NodeEntity *>> childList;
 
     NodeEntity * Find(NodeEntity * node, std::string * tagName);
 
@@ -48,13 +48,13 @@ public:
 
     std::vector<AttributeEntity *> * GetAttrList();
 
-    void AddAttribute(AttributeEntity * arg);
+    void AddAttribute(std::unique_ptr<AttributeEntity> arg);
 
     void SetChildList(std::vector<NodeEntity *> * arg);
 
     std::vector<NodeEntity *> * GetChildList();
 
-    void AddChild(NodeEntity * arg);
+    void AddChild(std::unique_ptr<NodeEntity> arg);
 
     bool AttrExists(std::string * name);
 
