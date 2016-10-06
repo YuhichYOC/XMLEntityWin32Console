@@ -46,10 +46,19 @@ AttributeEntity::AttributeEntity()
 {
     attrName = new std::string();
     attrValue = new std::string();
+    disposed = false;
+}
+
+void AttributeEntity::Dispose()
+{
+    delete attrName;
+    delete attrValue;
+    disposed = true;
 }
 
 AttributeEntity::~AttributeEntity()
 {
-    delete attrName;
-    delete attrValue;
+    if (!disposed) {
+        Dispose();
+    }
 }

@@ -60,7 +60,7 @@ NodeEntity * NodeEntity::Find(NodeEntity * node, std::string * tagName, std::str
     return nullptr;
 }
 
-NodeEntity * NodeEntity::FindFromTail(NodeEntity * node, std::vector<std::string> tree)
+NodeEntity * NodeEntity::FindFromTail(NodeEntity * node, std::vector<std::string *> tree)
 {
     if (node == nullptr) {
         node = this;
@@ -68,7 +68,7 @@ NodeEntity * NodeEntity::FindFromTail(NodeEntity * node, std::vector<std::string
     if (tree.size() == 0) {
         return node;
     }
-    int pos = FindChildIndexByName(node, tree.at(0));
+    int pos = FindChildIndexByName(node, *tree.at(0));
     tree.erase(tree.begin());
     if (pos >= 0) {
         return FindFromTail(node->GetChildList()->at(pos), tree);
@@ -78,7 +78,7 @@ NodeEntity * NodeEntity::FindFromTail(NodeEntity * node, std::vector<std::string
     }
 }
 
-NodeEntity * NodeEntity::FindFromTail(NodeEntity * node, std::vector<std::string> tree, std::string leafName)
+NodeEntity * NodeEntity::FindFromTail(NodeEntity * node, std::vector<std::string *> tree, std::string leafName)
 {
     if (node == nullptr) {
         node = this;
@@ -92,7 +92,7 @@ NodeEntity * NodeEntity::FindFromTail(NodeEntity * node, std::vector<std::string
             return nullptr;
         }
     }
-    int pos = FindChildIndexByName(node, tree.at(0));
+    int pos = FindChildIndexByName(node, *tree.at(0));
     tree.erase(tree.begin());
     if (pos >= 0) {
         return FindFromTail(node->GetChildList()->at(pos), tree, leafName);
@@ -112,6 +112,26 @@ int NodeEntity::FindChildIndexByName(NodeEntity * node, std::string name)
         }
     }
     return pos;
+}
+
+void NodeEntity::DisposeAttrList()
+{
+    int iLoopCount = attrList->size();
+    for (int i = 0; i < iLoopCount; i++) {
+        attrList->at(i)->Dispose();
+        delete attrList->at(i);
+    }
+    delete attrList;
+}
+
+void NodeEntity::DisposeChildList()
+{
+    int iLoopCount = childList->size();
+    for (int i = 0; i < iLoopCount; i++) {
+        childList->at(i)->Dispose();
+        delete childList->at(i);
+    }
+    delete childList;
 }
 
 void NodeEntity::SetNodeName(std::string * arg)
@@ -250,20 +270,20 @@ NodeEntity * NodeEntity::Find(std::string * tagName, std::string * attr1Name, st
     return nullptr;
 }
 
-NodeEntity * NodeEntity::FindFromTail(std::vector<std::string> * tree)
+NodeEntity * NodeEntity::FindFromTail(std::vector<std::string *> * tree)
 {
     NodeEntity * node = this;
     if (tree->size() <= 1) {
         return node;
     }
     else {
-        std::vector<std::string> subtree = *tree;
+        std::vector<std::string *> subtree = *tree;
         subtree.erase(subtree.begin());
         return FindFromTail(node, subtree);
     }
 }
 
-NodeEntity * NodeEntity::FindFromTail(std::vector<std::string> * tree, std::string * leafName)
+NodeEntity * NodeEntity::FindFromTail(std::vector<std::string *> * tree, std::string * leafName)
 {
     NodeEntity * node = this;
     if (tree->size() <= 0) {
@@ -273,11 +293,11 @@ NodeEntity * NodeEntity::FindFromTail(std::vector<std::string> * tree, std::stri
         if (leafName->length() == 0) {
             return FindFromTail(tree);
         }
-        else if (tree->at(tree->size() - 1).compare(*leafName) == 0) {
+        else if (tree->at(tree->size() - 1)->compare(*leafName) == 0) {
             return FindFromTail(tree);
         }
         else {
-            std::vector<std::string> subtree = *tree;
+            std::vector<std::string *> subtree = *tree;
             subtree.erase(subtree.begin());
             return FindFromTail(node, subtree, *leafName);
         }
@@ -362,12 +382,21 @@ NodeEntity::NodeEntity()
     nodeValue = new std::string();
     attrList = new std::vector<AttributeEntity *>();
     childList = new std::vector<NodeEntity *>();
+    disposed = false;
+}
+
+void NodeEntity::Dispose()
+{
+    DisposeAttrList();
+    DisposeChildList();
+    delete nodeName;
+    delete nodeValue;
+    disposed = true;
 }
 
 NodeEntity::~NodeEntity()
 {
-    delete nodeName;
-    delete nodeValue;
-    delete attrList;
-    delete childList;
+    if (!disposed) {
+        Dispose();
+    }
 }

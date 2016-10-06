@@ -78,7 +78,7 @@ void SettingReader::Parse()
 {
     nodeId = 0;
 
-    std::vector<std::string> * tree = new std::vector<std::string>();
+    std::vector<std::string *> * tree = new std::vector<std::string *>();
 
     XmlNodeType nodeType;
     while (reader->Read(&nodeType) == S_OK) {
@@ -117,7 +117,7 @@ void SettingReader::Parse()
     parseSucceeded = true;
 }
 
-void SettingReader::ParseElement(IXmlReader * reader, std::vector<std::string> * tree)
+void SettingReader::ParseElement(IXmlReader * reader, std::vector<std::string *> * tree)
 {
     const wchar_t * prefix;
     const wchar_t * localName;
@@ -145,10 +145,10 @@ void SettingReader::ParseElement(IXmlReader * reader, std::vector<std::string> *
         myNode->FindFromTail(tree)->AddChild(newNode);
     }
     ParseAttributes(reader, tree, newNode->GetNodeName());
-    tree->push_back(*newNode->GetNodeName());
+    tree->push_back(newNode->GetNodeName());
 }
 
-void SettingReader::ParseCDATA(IXmlReader * reader, std::vector<std::string> * tree)
+void SettingReader::ParseCDATA(IXmlReader * reader, std::vector<std::string *> * tree)
 {
     const wchar_t * value;
     if (FAILED(reader->GetValue(&value, NULL))) {
@@ -157,12 +157,12 @@ void SettingReader::ParseCDATA(IXmlReader * reader, std::vector<std::string> * t
     myNode->FindFromTail(tree)->SetNodeValue(StrFromCWChar_t(value));
 }
 
-void SettingReader::ParseEndElement(IXmlReader * reader, std::vector<std::string> * tree)
+void SettingReader::ParseEndElement(IXmlReader * reader, std::vector<std::string *> * tree)
 {
     tree->pop_back();
 }
 
-void SettingReader::ParseAttributes(IXmlReader * reader, std::vector<std::string> * tree, std::string * name)
+void SettingReader::ParseAttributes(IXmlReader * reader, std::vector<std::string *> * tree, std::string * name)
 {
     const wchar_t * prefix;
     const wchar_t * localName;

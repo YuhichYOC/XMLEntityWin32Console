@@ -32,13 +32,13 @@ private:
 
     wchar_t * WChar_tFromStr(std::string * arg);
 
-    void ParseElement(IXmlReader * reader, std::vector<std::string> * tree);
+    void ParseElement(IXmlReader * reader, std::vector<std::string *> * tree);
 
-    void ParseCDATA(IXmlReader * reader, std::vector<std::string> * tree);
+    void ParseCDATA(IXmlReader * reader, std::vector<std::string *> * tree);
 
-    void ParseEndElement(IXmlReader * reader, std::vector<std::string> * tree);
+    void ParseEndElement(IXmlReader * reader, std::vector<std::string *> * tree);
 
-    void ParseAttributes(IXmlReader * reader, std::vector<std::string> * tree, std::string * name);
+    void ParseAttributes(IXmlReader * reader, std::vector<std::string *> * tree, std::string * name);
 
     std::string * StrFromWChar_t(wchar_t * arg);
 

@@ -10,6 +10,8 @@ private:
 
     std::string * attrValue;
 
+    bool disposed;
+
 public:
 
     void SetAttrName(std::string * arg);
@@ -25,6 +27,8 @@ public:
     bool ValueEquals(std::string * arg);
 
     AttributeEntity();
+
+    void Dispose();
 
     ~AttributeEntity();
 };

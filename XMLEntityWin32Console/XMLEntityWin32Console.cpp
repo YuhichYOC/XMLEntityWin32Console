@@ -5,6 +5,7 @@
 
 #include "NodeEntityTest.h"
 #include "SettingReaderTest.h"
+#include "SmartPointerTest.h"
 
 void NodeEntityTest01()
 {
@@ -71,13 +72,40 @@ void SettingReaderTest01()
     delete sTest;
 }
 
+void SmartPointerTest01()
+{
+    SmartPointerTest * sTest = new SmartPointerTest();
+    sTest->SmartPointerTest01();
+    if (sTest->GetTestSuccess()) {
+        std::cout << "sTest 01 success." << "\n";
+    }
+    else {
+        std::cout << "sTest 01 failed." << "\n";
+    }
+    delete sTest;
+}
+
+void SmartPointerTest02()
+{
+    SmartPointerTest * sTest = new SmartPointerTest();
+    sTest->SmartPointerTest02();
+    if (sTest->GetTestSuccess()) {
+        std::cout << "sTest 02 success." << "\n";
+    }
+    else {
+        std::cout << "sTest 02 failed." << "\n";
+    }
+    delete sTest;
+}
+
 int main()
 {
     /*
-    SettingReaderTest01();
     NodeEntityTest01();
     NodeEntityTest02();
     NodeEntityTest04();
+    SettingReaderTest01();
+    SmartPointerTest01();
     */
     NodeEntityTest03();
 

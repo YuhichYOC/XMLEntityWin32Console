@@ -24,11 +24,17 @@ private:
 
     NodeEntity * Find(NodeEntity * node, std::string * tagName, std::string * attr1Name, std::string * attr1Value, std::string * attr2Name, std::string * attr2Value);
 
-    NodeEntity * FindFromTail(NodeEntity * node, std::vector<std::string> tree);
+    NodeEntity * FindFromTail(NodeEntity * node, std::vector<std::string *> tree);
 
-    NodeEntity * FindFromTail(NodeEntity * node, std::vector<std::string> tree, std::string leafName);
+    NodeEntity * FindFromTail(NodeEntity * node, std::vector<std::string *> tree, std::string leafName);
 
     int FindChildIndexByName(NodeEntity * node, std::string name);
+
+    bool disposed;
+
+    void DisposeAttrList();
+
+    void DisposeChildList();
 
 public:
 
@@ -66,9 +72,9 @@ public:
 
     NodeEntity * Find(std::string * tagName, std::string * attr1Name, std::string * attr1Value, std::string * attr2Name, std::string * attr2Value);
 
-    NodeEntity * FindFromTail(std::vector<std::string> * tree);
+    NodeEntity * FindFromTail(std::vector<std::string *> * tree);
 
-    NodeEntity * FindFromTail(std::vector<std::string> * tree, std::string * leafName);
+    NodeEntity * FindFromTail(std::vector<std::string *> * tree, std::string * leafName);
 
     NodeEntity * Dir(std::string * name);
 
@@ -87,6 +93,8 @@ public:
     NodeEntity * SubCategory(std::string * childName, std::string * grandChildName, std::string * greatGrandChildName);
 
     NodeEntity();
+
+    void Dispose();
 
     ~NodeEntity();
 };
