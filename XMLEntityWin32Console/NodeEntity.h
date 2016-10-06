@@ -8,27 +8,27 @@ class NodeEntity
 {
 private:
 
-    std::string * nodeName;
+    unique_ptr<string> nodeName;
 
     int nodeId;
 
-    std::string * nodeValue;
+    unique_ptr<string> nodeValue;
 
-    std::vector<AttributeEntity *> * attrList;
+    vector<AttributeEntity *> * attrList;
 
-    std::vector<NodeEntity *> * childList;
+    vector<NodeEntity *> * childList;
 
-    NodeEntity * Find(NodeEntity * node, std::string * tagName);
+    NodeEntity * Find(NodeEntity * node, string * tagName);
 
-    NodeEntity * Find(NodeEntity * node, std::string * tagName, std::string * attrName, std::string * attrValue);
+    NodeEntity * Find(NodeEntity * node, string * tagName, string * attrName, string * attrValue);
 
-    NodeEntity * Find(NodeEntity * node, std::string * tagName, std::string * attr1Name, std::string * attr1Value, std::string * attr2Name, std::string * attr2Value);
+    NodeEntity * Find(NodeEntity * node, string * tagName, string * attr1Name, string * attr1Value, string * attr2Name, string * attr2Value);
 
-    NodeEntity * FindFromTail(NodeEntity * node, std::vector<std::string *> tree);
+    NodeEntity * FindFromTail(NodeEntity * node, vector<string *> tree);
 
-    NodeEntity * FindFromTail(NodeEntity * node, std::vector<std::string *> tree, std::string leafName);
+    NodeEntity * FindFromTail(NodeEntity * node, vector<string *> tree, string leafName);
 
-    int FindChildIndexByName(NodeEntity * node, std::string name);
+    int FindChildIndexByName(NodeEntity * node, string name);
 
     bool disposed;
 
@@ -38,59 +38,59 @@ private:
 
 public:
 
-    void SetNodeName(std::string * arg);
+    void SetNodeName(string * arg);
 
-    std::string * GetNodeName();
+    string * GetNodeName();
 
     void SetNodeID(int arg);
 
     int GetNodeID();
 
-    void SetNodeValue(std::string * arg);
+    void SetNodeValue(string * arg);
 
-    std::string * GetNodeValue();
+    string * GetNodeValue();
 
-    void SetAttrList(std::vector<AttributeEntity *> * arg);
+    void SetAttrList(vector<AttributeEntity *> * arg);
 
-    std::vector<AttributeEntity *> * GetAttrList();
+    vector<AttributeEntity *> * GetAttrList();
 
     void AddAttribute(AttributeEntity * arg);
 
-    void SetChildList(std::vector<NodeEntity *> * arg);
+    void SetChildList(vector<NodeEntity *> * arg);
 
-    std::vector<NodeEntity *> * GetChildList();
+    vector<NodeEntity *> * GetChildList();
 
     void AddChild(NodeEntity * arg);
 
-    bool AttrExists(std::string * name);
+    bool AttrExists(string * name);
 
-    std::string * AttrByName(std::string * name);
+    string * AttrByName(string * name);
 
-    NodeEntity * Find(std::string * tagName);
+    NodeEntity * Find(string * tagName);
 
-    NodeEntity * Find(std::string * tagName, std::string * attrName, std::string * attrValue);
+    NodeEntity * Find(string * tagName, string * attrName, string * attrValue);
 
-    NodeEntity * Find(std::string * tagName, std::string * attr1Name, std::string * attr1Value, std::string * attr2Name, std::string * attr2Value);
+    NodeEntity * Find(string * tagName, string * attr1Name, string * attr1Value, string * attr2Name, string * attr2Value);
 
-    NodeEntity * FindFromTail(std::vector<std::string *> * tree);
+    NodeEntity * FindFromTail(vector<string *> * tree);
 
-    NodeEntity * FindFromTail(std::vector<std::string *> * tree, std::string * leafName);
+    NodeEntity * FindFromTail(vector<string *> * tree, string * leafName);
 
-    NodeEntity * Dir(std::string * name);
+    NodeEntity * Dir(string * name);
 
-    NodeEntity * File(std::string * name);
+    NodeEntity * File(string * name);
 
-    NodeEntity * Tag(std::string * name);
+    NodeEntity * Tag(string * name);
 
-    NodeEntity * Attr(std::string * name);
+    NodeEntity * Attr(string * name);
 
-    NodeEntity * Table(std::string * name);
+    NodeEntity * Table(string * name);
 
-    NodeEntity * SubCategory(std::string * name);
+    NodeEntity * SubCategory(string * name);
 
-    NodeEntity * SubCategory(std::string * childName, std::string * grandChildName);
+    NodeEntity * SubCategory(string * childName, string * grandChildName);
 
-    NodeEntity * SubCategory(std::string * childName, std::string * grandChildName, std::string * greatGrandChildName);
+    NodeEntity * SubCategory(string * childName, string * grandChildName, string * greatGrandChildName);
 
     NodeEntity * Clone();
 

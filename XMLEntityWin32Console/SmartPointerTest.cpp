@@ -9,11 +9,11 @@ bool SmartPointerTest::GetTestSuccess()
 
 void SmartPointerTest::SmartPointerTest01()
 {
-    std::unique_ptr<NodeEntity> node(new NodeEntity());
-    node->SetNodeName(new std::string("test"));
+    unique_ptr<NodeEntity> node(new NodeEntity());
+    node->SetNodeName(new string("test"));
 
     AttributeEntity * attr = new AttributeEntity();
-    attr->SetAttrName(new std::string("test"));
+    attr->SetAttrName(new string("test"));
 
     node->AddAttribute(attr);
 
@@ -23,7 +23,7 @@ void SmartPointerTest::SmartPointerTest01()
 void SmartPointerTest::SmartPointerTest02()
 {
     NodeEntity * node = new NodeEntity();
-    node->SetNodeName(new std::string("test"));
+    node->SetNodeName(new string("test"));
 
     testSuccess = true;
 }

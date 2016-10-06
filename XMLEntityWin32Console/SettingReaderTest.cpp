@@ -9,7 +9,7 @@ bool SettingReaderTest::GetTestSuccess()
 
 void SettingReaderTest::SettingReaderTest01()
 {
-    std::string * fileName = new std::string("E:\\Users\\b50061tem.NES00\\Desktop\\Desktop\\ì¬•¨\\Proj.1609\\XMLEntityWin32Console\\Setting.config");
+    string * fileName = new string("E:\\Users\\b50061tem.NES00\\Desktop\\Desktop\\ì¬•¨\\Proj.1609\\XMLEntityWin32Console\\Setting.config");
     SettingReader * sr = new SettingReader();
     sr->SetFileName(fileName);
     sr->Prepare();
@@ -27,7 +27,7 @@ void SettingReaderTest::SettingReaderTest01()
 
 void SettingReaderTest::SettingReaderTest02()
 {
-    std::string * fileName = new std::string("E:\\Users\\b50061tem.NES00\\Desktop\\Desktop\\ì¬•¨\\Proj.1609\\XMLEntityWin32Console\\Setting.config");
+    string * fileName = new string("E:\\Users\\b50061tem.NES00\\Desktop\\Desktop\\ì¬•¨\\Proj.1609\\XMLEntityWin32Console\\Setting.config");
     SettingReader * sr = new SettingReader();
     sr->SetFileName(fileName);
     sr->Prepare();
@@ -43,8 +43,8 @@ void SettingReaderTest::SettingReaderTest02()
     // ÀÛ‚Ì’l‚É‚Â‚¢‚ÄŒŸØ
     sr->GetNode()->Dispose();
 
-    std::string value;
-    std::cin >> value;
+    string value;
+    cin >> value;
 }
 
 SettingReaderTest::SettingReaderTest()

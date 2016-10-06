@@ -4,12 +4,12 @@
 
 void AttributeEntity::SetAttrName(std::string * arg)
 {
-    attrName = arg;
+    attrName.reset(arg);
 }
 
 std::string * AttributeEntity::GetAttrName()
 {
-    return attrName;
+    return attrName.get();
 }
 
 std::string * AttributeEntity::CloneAttrName()
@@ -20,12 +20,12 @@ std::string * AttributeEntity::CloneAttrName()
 
 void AttributeEntity::SetAttrValue(std::string * arg)
 {
-    attrValue = arg;
+    attrValue.reset(arg);
 }
 
 std::string * AttributeEntity::GetAttrValue()
 {
-    return attrValue;
+    return attrValue.get();
 }
 
 std::string * AttributeEntity::CloneAttrValue()
@@ -64,15 +64,13 @@ AttributeEntity * AttributeEntity::Clone()
 
 AttributeEntity::AttributeEntity()
 {
-    attrName = new std::string();
-    attrValue = new std::string();
+    attrName = unique_ptr<string>();
+    attrValue = unique_ptr<string>();
     disposed = false;
 }
 
 void AttributeEntity::Dispose()
 {
-    delete attrName;
-    delete attrValue;
     disposed = true;
 }
 

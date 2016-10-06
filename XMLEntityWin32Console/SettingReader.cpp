@@ -2,24 +2,24 @@
 
 #include "SettingReader.h"
 
-void SettingReader::SetDirectory(std::string * arg)
+void SettingReader::SetDirectory(string * arg)
 {
-    directory = arg;
+    directory.reset(arg);
 }
 
-std::string * SettingReader::GetDirectory()
+string * SettingReader::GetDirectory()
 {
-    return directory;
+    return directory.get();
 }
 
-void SettingReader::SetFileName(std::string * arg)
+void SettingReader::SetFileName(string * arg)
 {
-    fileName = arg;
+    fileName.reset(arg);
 }
 
-std::string * SettingReader::GetFileName()
+string * SettingReader::GetFileName()
 {
-    return fileName;
+    return fileName.get();
 }
 
 NodeEntity * SettingReader::GetNode()
@@ -36,7 +36,7 @@ void SettingReader::Prepare()
         prepared = false;
         return;
     }
-    if (FAILED(SHCreateStreamOnFile(WChar_tFromStr(fileName), STGM_READ, &stream))) {
+    if (FAILED(SHCreateStreamOnFile(WChar_tFromStr(fileName.get()), STGM_READ, &stream))) {
         errorMessage->assign("SettingReader::Prepare -- File reader can't be create. Method : SHCreateStreamOnFile");
         prepared = false;
         return;
@@ -60,7 +60,7 @@ void SettingReader::Prepare()
     prepared = true;
 }
 
-wchar_t * SettingReader::WChar_tFromStr(std::string * arg)
+wchar_t * SettingReader::WChar_tFromStr(string * arg)
 {
     size_t retSize = strlen(arg->c_str()) + 1;
     size_t convSize = 0;
@@ -78,7 +78,7 @@ void SettingReader::Parse()
 {
     nodeId = 0;
 
-    std::vector<std::string *> * tree = new std::vector<std::string *>();
+    vector<string *> * tree = new vector<string *>();
 
     XmlNodeType nodeType;
     while (reader->Read(&nodeType) == S_OK) {
@@ -118,7 +118,7 @@ void SettingReader::Parse()
     parseSucceeded = true;
 }
 
-void SettingReader::ParseElement(IXmlReader * reader, std::vector<std::string *> * tree)
+void SettingReader::ParseElement(IXmlReader * reader, vector<string *> * tree)
 {
     const wchar_t * prefix;
     const wchar_t * localName;
@@ -149,7 +149,7 @@ void SettingReader::ParseElement(IXmlReader * reader, std::vector<std::string *>
     tree->push_back(newNode->GetNodeName());
 }
 
-void SettingReader::ParseText(IXmlReader * reader, std::vector<std::string *> * tree)
+void SettingReader::ParseText(IXmlReader * reader, vector<string *> * tree)
 {
     const wchar_t * value;
     if (FAILED(reader->GetValue(&value, NULL))) {
@@ -158,7 +158,7 @@ void SettingReader::ParseText(IXmlReader * reader, std::vector<std::string *> * 
     myNode->FindFromTail(tree)->SetNodeValue(StrFromCWChar_t(value));
 }
 
-void SettingReader::ParseCDATA(IXmlReader * reader, std::vector<std::string *> * tree)
+void SettingReader::ParseCDATA(IXmlReader * reader, vector<string *> * tree)
 {
     const wchar_t * value;
     if (FAILED(reader->GetValue(&value, NULL))) {
@@ -167,12 +167,12 @@ void SettingReader::ParseCDATA(IXmlReader * reader, std::vector<std::string *> *
     myNode->FindFromTail(tree)->SetNodeValue(StrFromCWChar_t(value));
 }
 
-void SettingReader::ParseEndElement(IXmlReader * reader, std::vector<std::string *> * tree)
+void SettingReader::ParseEndElement(IXmlReader * reader, vector<string *> * tree)
 {
     tree->pop_back();
 }
 
-void SettingReader::ParseAttributes(IXmlReader * reader, std::vector<std::string *> * tree, std::string * name)
+void SettingReader::ParseAttributes(IXmlReader * reader, vector<string *> * tree, string * name)
 {
     const wchar_t * prefix;
     const wchar_t * localName;
@@ -204,26 +204,26 @@ void SettingReader::ParseAttributes(IXmlReader * reader, std::vector<std::string
     }
 }
 
-std::string * SettingReader::StrFromWChar_t(wchar_t * arg)
+string * SettingReader::StrFromWChar_t(wchar_t * arg)
 {
-    std::wstring castedArg = arg;
+    wstring castedArg = arg;
     size_t retSize = castedArg.length() + 1;
     size_t convSize = 0;
-    std::unique_ptr<char> arrayFromArg(new char[retSize]);
+    unique_ptr<char> arrayFromArg(new char[retSize]);
     wcstombs_s(&convSize, arrayFromArg.get(), retSize, arg, _TRUNCATE);
-    std::string * retVal = new std::string(arrayFromArg.get());
+    string * retVal = new string(arrayFromArg.get());
     return retVal;
 }
 
-std::string * SettingReader::StrFromCWChar_t(const wchar_t * arg)
+string * SettingReader::StrFromCWChar_t(const wchar_t * arg)
 {
     // const ‹³‚Ù‚ñ‚Æ‚Ð‚Å‚½‚é‚Æ‚Ü‚Ð‚ë
-    std::wstring castedArg = arg;
+    wstring castedArg = arg;
     size_t retSize = castedArg.length() + 1;
     size_t convSize = 0;
-    std::unique_ptr<char> arrayFromArg(new char[retSize]);
+    unique_ptr<char> arrayFromArg(new char[retSize]);
     wcstombs_s(&convSize, arrayFromArg.get(), retSize, arg, _TRUNCATE);
-    std::string * retVal = new std::string(arrayFromArg.get());
+    string * retVal = new string(arrayFromArg.get());
     return retVal;
 }
 
@@ -232,17 +232,17 @@ bool SettingReader::IsParseSucceeded()
     return parseSucceeded;
 }
 
-std::string * SettingReader::GetErrorMessage()
+string * SettingReader::GetErrorMessage()
 {
-    return errorMessage;
+    return errorMessage.get();
 }
 
 SettingReader::SettingReader()
 {
-    directory = new std::string();
-    fileName = new std::string();
+    directory = unique_ptr<string>();
+    fileName = unique_ptr<string>();
+    errorMessage = unique_ptr<string>();
     myNode = new NodeEntity();
-    errorMessage = new std::string();
     stream = nullptr;
     reader = nullptr;
     disposed = false;
@@ -251,9 +251,6 @@ SettingReader::SettingReader()
 void SettingReader::Dispose()
 {
     myNode->Dispose();
-    delete directory;
-    delete fileName;
-    delete errorMessage;
     if (stream != nullptr) {
         delete stream;
     }

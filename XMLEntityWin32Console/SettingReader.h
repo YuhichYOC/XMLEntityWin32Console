@@ -12,9 +12,9 @@ class SettingReader
 {
 private:
 
-    std::string * directory;
+    unique_ptr<string> directory;
 
-    std::string * fileName;
+    unique_ptr<string> fileName;
 
     NodeEntity * myNode;
 
@@ -28,35 +28,35 @@ private:
 
     bool parseSucceeded;
 
-    std::string * errorMessage;
+    unique_ptr<string> errorMessage;
 
-    wchar_t * WChar_tFromStr(std::string * arg);
+    wchar_t * WChar_tFromStr(string * arg);
 
-    void ParseElement(IXmlReader * reader, std::vector<std::string *> * tree);
+    void ParseElement(IXmlReader * reader, vector<string *> * tree);
 
-    void ParseText(IXmlReader * reader, std::vector<std::string *> * tree);
+    void ParseText(IXmlReader * reader, vector<string *> * tree);
 
-    void ParseCDATA(IXmlReader * reader, std::vector<std::string *> * tree);
+    void ParseCDATA(IXmlReader * reader, vector<string *> * tree);
 
-    void ParseEndElement(IXmlReader * reader, std::vector<std::string *> * tree);
+    void ParseEndElement(IXmlReader * reader, vector<string *> * tree);
 
-    void ParseAttributes(IXmlReader * reader, std::vector<std::string *> * tree, std::string * name);
+    void ParseAttributes(IXmlReader * reader, vector<string *> * tree, string * name);
 
-    std::string * StrFromWChar_t(wchar_t * arg);
+    string * StrFromWChar_t(wchar_t * arg);
 
-    std::string * StrFromCWChar_t(const wchar_t * arg);
+    string * StrFromCWChar_t(const wchar_t * arg);
 
     bool disposed;
 
 public:
 
-    void SetDirectory(std::string * arg);
+    void SetDirectory(string * arg);
 
-    std::string * GetDirectory();
+    string * GetDirectory();
 
-    void SetFileName(std::string * arg);
+    void SetFileName(string * arg);
 
-    std::string * GetFileName();
+    string * GetFileName();
 
     NodeEntity * GetNode();
 
@@ -68,7 +68,7 @@ public:
 
     bool IsParseSucceeded();
 
-    std::string * GetErrorMessage();
+    string * GetErrorMessage();
 
     SettingReader();
 

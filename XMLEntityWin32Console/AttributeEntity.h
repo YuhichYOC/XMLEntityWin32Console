@@ -6,29 +6,29 @@ class AttributeEntity
 {
 private:
 
-    std::string * attrName;
+    unique_ptr<string> attrName;
 
-    std::string * attrValue;
+    unique_ptr<string> attrValue;
 
     bool disposed;
 
 public:
 
-    void SetAttrName(std::string * arg);
+    void SetAttrName(string * arg);
 
-    std::string * GetAttrName();
+    string * GetAttrName();
 
-    std::string * CloneAttrName();
+    string * CloneAttrName();
 
-    void SetAttrValue(std::string * arg);
+    void SetAttrValue(string * arg);
 
-    std::string * GetAttrValue();
+    string * GetAttrValue();
 
-    std::string * CloneAttrValue();
+    string * CloneAttrValue();
 
-    bool NameEquals(std::string * arg);
+    bool NameEquals(string * arg);
 
-    bool ValueEquals(std::string * arg);
+    bool ValueEquals(string * arg);
 
     AttributeEntity * Clone();
 

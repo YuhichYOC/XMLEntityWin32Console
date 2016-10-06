@@ -17,3 +17,5 @@
 #include <string>
 #include <vector>
 #include <xmllite.h>
+
+using namespace std;

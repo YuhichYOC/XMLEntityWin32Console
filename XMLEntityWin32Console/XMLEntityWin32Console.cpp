@@ -12,10 +12,10 @@ void NodeEntityTest01()
     NodeEntityTest * nTest = new NodeEntityTest();
     nTest->NodeEntityTest01();
     if (nTest->GetTestSuccess()) {
-        std::cout << "nTest 01 success." << "\n";
+        cout << "nTest 01 success." << "\n";
     }
     else {
-        std::cout << "nTest 01 failed." << "\n";
+        cout << "nTest 01 failed." << "\n";
     }
     delete nTest;
 }
@@ -25,10 +25,10 @@ void NodeEntityTest02()
     NodeEntityTest * nTest = new NodeEntityTest();
     nTest->NodeEntityTest02();
     if (nTest->GetTestSuccess()) {
-        std::cout << "nTest 02 success." << "\n";
+        cout << "nTest 02 success." << "\n";
     }
     else {
-        std::cout << "nTest 02 failed." << "\n";
+        cout << "nTest 02 failed." << "\n";
     }
     delete nTest;
 }
@@ -38,10 +38,10 @@ void NodeEntityTest03()
     NodeEntityTest * nTest = new NodeEntityTest();
     nTest->NodeEntityTest03();
     if (nTest->GetTestSuccess()) {
-        std::cout << "nTest 03 success." << "\n";
+        cout << "nTest 03 success." << "\n";
     }
     else {
-        std::cout << "nTest 03 failed." << "\n";
+        cout << "nTest 03 failed." << "\n";
     }
     delete nTest;
 }
@@ -51,10 +51,10 @@ void NodeEntityTest04()
     NodeEntityTest * nTest = new NodeEntityTest();
     nTest->NodeEntityTest04();
     if (nTest->GetTestSuccess()) {
-        std::cout << "nTest 04 success." << "\n";
+        cout << "nTest 04 success." << "\n";
     }
     else {
-        std::cout << "nTest 04 failed." << "\n";
+        cout << "nTest 04 failed." << "\n";
     }
     delete nTest;
 }
@@ -64,10 +64,10 @@ void SettingReaderTest01()
     SettingReaderTest * sTest = new SettingReaderTest();
     sTest->SettingReaderTest01();
     if (sTest->GetTestSuccess()) {
-        std::cout << "sTest 01 success." << "\n";
+        cout << "sTest 01 success." << "\n";
     }
     else {
-        std::cout << "sTest 01 failed." << "\n";
+        cout << "sTest 01 failed." << "\n";
     }
     delete sTest;
 }
@@ -77,10 +77,10 @@ void SettingReaderTest02()
     SettingReaderTest * sTest = new SettingReaderTest();
     sTest->SettingReaderTest02();
     if (sTest->GetTestSuccess()) {
-        std::cout << "sTest 02 success." << "\n";
+        cout << "sTest 02 success." << "\n";
     }
     else {
-        std::cout << "sTest 02 failed." << "\n";
+        cout << "sTest 02 failed." << "\n";
     }
     delete sTest;
 }
@@ -90,10 +90,10 @@ void SmartPointerTest01()
     SmartPointerTest * sTest = new SmartPointerTest();
     sTest->SmartPointerTest01();
     if (sTest->GetTestSuccess()) {
-        std::cout << "sTest 01 success." << "\n";
+        cout << "sTest 01 success." << "\n";
     }
     else {
-        std::cout << "sTest 01 failed." << "\n";
+        cout << "sTest 01 failed." << "\n";
     }
     delete sTest;
 }
@@ -103,10 +103,10 @@ void SmartPointerTest02()
     SmartPointerTest * sTest = new SmartPointerTest();
     sTest->SmartPointerTest02();
     if (sTest->GetTestSuccess()) {
-        std::cout << "sTest 02 success." << "\n";
+        cout << "sTest 02 success." << "\n";
     }
     else {
-        std::cout << "sTest 02 failed." << "\n";
+        cout << "sTest 02 failed." << "\n";
     }
     delete sTest;
 }
@@ -123,7 +123,7 @@ int main()
     */
     SettingReaderTest02();
 
-    std::string value;
-    std::cin >> value;
+    string value;
+    cin >> value;
     return 0;
 }

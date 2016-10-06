@@ -2,7 +2,7 @@
 
 #include "NodeEntity.h"
 
-NodeEntity * NodeEntity::Find(NodeEntity * node, std::string * tagName)
+NodeEntity * NodeEntity::Find(NodeEntity * node, string * tagName)
 {
     if (node == nullptr) {
         node = this;
@@ -20,7 +20,7 @@ NodeEntity * NodeEntity::Find(NodeEntity * node, std::string * tagName)
     return nullptr;
 }
 
-NodeEntity * NodeEntity::Find(NodeEntity * node, std::string * tagName, std::string * attrName, std::string * attrValue)
+NodeEntity * NodeEntity::Find(NodeEntity * node, string * tagName, string * attrName, string * attrValue)
 {
     if (node == nullptr) {
         node = this;
@@ -40,7 +40,7 @@ NodeEntity * NodeEntity::Find(NodeEntity * node, std::string * tagName, std::str
     return nullptr;
 }
 
-NodeEntity * NodeEntity::Find(NodeEntity * node, std::string * tagName, std::string * attr1Name, std::string * attr1Value, std::string * attr2Name, std::string * attr2Value)
+NodeEntity * NodeEntity::Find(NodeEntity * node, string * tagName, string * attr1Name, string * attr1Value, string * attr2Name, string * attr2Value)
 {
     if (node == nullptr) {
         node = this;
@@ -60,7 +60,7 @@ NodeEntity * NodeEntity::Find(NodeEntity * node, std::string * tagName, std::str
     return nullptr;
 }
 
-NodeEntity * NodeEntity::FindFromTail(NodeEntity * node, std::vector<std::string *> tree)
+NodeEntity * NodeEntity::FindFromTail(NodeEntity * node, vector<string *> tree)
 {
     if (node == nullptr) {
         node = this;
@@ -78,7 +78,7 @@ NodeEntity * NodeEntity::FindFromTail(NodeEntity * node, std::vector<std::string
     }
 }
 
-NodeEntity * NodeEntity::FindFromTail(NodeEntity * node, std::vector<std::string *> tree, std::string leafName)
+NodeEntity * NodeEntity::FindFromTail(NodeEntity * node, vector<string *> tree, string leafName)
 {
     if (node == nullptr) {
         node = this;
@@ -102,7 +102,7 @@ NodeEntity * NodeEntity::FindFromTail(NodeEntity * node, std::vector<std::string
     }
 }
 
-int NodeEntity::FindChildIndexByName(NodeEntity * node, std::string name)
+int NodeEntity::FindChildIndexByName(NodeEntity * node, string name)
 {
     int pos = -1;
     int iLoopCount = (int)node->GetChildList()->size();
@@ -134,14 +134,14 @@ void NodeEntity::DisposeChildList()
     delete childList;
 }
 
-void NodeEntity::SetNodeName(std::string * arg)
+void NodeEntity::SetNodeName(string * arg)
 {
-    nodeName = arg;
+    nodeName.reset(arg);
 }
 
-std::string * NodeEntity::GetNodeName()
+string * NodeEntity::GetNodeName()
 {
-    return nodeName;
+    return nodeName.get();
 }
 
 void NodeEntity::SetNodeID(int arg)
@@ -154,22 +154,22 @@ int NodeEntity::GetNodeID()
     return nodeId;
 }
 
-void NodeEntity::SetNodeValue(std::string * arg)
+void NodeEntity::SetNodeValue(string * arg)
 {
-    nodeValue = arg;
+    nodeValue.reset(arg);
 }
 
-std::string * NodeEntity::GetNodeValue()
+string * NodeEntity::GetNodeValue()
 {
-    return nodeValue;
+    return nodeValue.get();
 }
 
-void NodeEntity::SetAttrList(std::vector<AttributeEntity *> * arg)
+void NodeEntity::SetAttrList(vector<AttributeEntity *> * arg)
 {
     attrList = arg;
 }
 
-std::vector<AttributeEntity *> * NodeEntity::GetAttrList()
+vector<AttributeEntity *> * NodeEntity::GetAttrList()
 {
     return attrList;
 }
@@ -179,12 +179,12 @@ void NodeEntity::AddAttribute(AttributeEntity * arg)
     attrList->push_back(arg);
 }
 
-void NodeEntity::SetChildList(std::vector<NodeEntity *> * arg)
+void NodeEntity::SetChildList(vector<NodeEntity *> * arg)
 {
     childList = arg;
 }
 
-std::vector<NodeEntity *> * NodeEntity::GetChildList()
+vector<NodeEntity *> * NodeEntity::GetChildList()
 {
     return childList;
 }
@@ -194,7 +194,7 @@ void NodeEntity::AddChild(NodeEntity * arg)
     childList->push_back(arg);
 }
 
-bool NodeEntity::AttrExists(std::string * name)
+bool NodeEntity::AttrExists(string * name)
 {
     bool retVal = false;
     int iLoopCount = (int)attrList->size();
@@ -206,9 +206,9 @@ bool NodeEntity::AttrExists(std::string * name)
     return retVal;
 }
 
-std::string * NodeEntity::AttrByName(std::string * name)
+string * NodeEntity::AttrByName(string * name)
 {
-    std::string * retVal = new std::string();
+    string * retVal = new string();
     int iLoopCount = (int)attrList->size();
     for (int i = 0; i < iLoopCount; i++) {
         if (attrList->at(i)->NameEquals(name)) {
@@ -218,7 +218,7 @@ std::string * NodeEntity::AttrByName(std::string * name)
     return retVal;
 }
 
-NodeEntity * NodeEntity::Find(std::string * tagName)
+NodeEntity * NodeEntity::Find(string * tagName)
 {
     NodeEntity * node = this;
     if ((node->GetNodeName()->compare(*tagName) == 0)) {
@@ -234,7 +234,7 @@ NodeEntity * NodeEntity::Find(std::string * tagName)
     return nullptr;
 }
 
-NodeEntity * NodeEntity::Find(std::string * tagName, std::string * attrName, std::string * attrValue)
+NodeEntity * NodeEntity::Find(string * tagName, string * attrName, string * attrValue)
 {
     NodeEntity * node = this;
     if ((node->GetNodeName()->compare(*tagName) == 0)) {
@@ -252,7 +252,7 @@ NodeEntity * NodeEntity::Find(std::string * tagName, std::string * attrName, std
     return nullptr;
 }
 
-NodeEntity * NodeEntity::Find(std::string * tagName, std::string * attr1Name, std::string * attr1Value, std::string * attr2Name, std::string * attr2Value)
+NodeEntity * NodeEntity::Find(string * tagName, string * attr1Name, string * attr1Value, string * attr2Name, string * attr2Value)
 {
     NodeEntity * node = this;
     if ((node->GetNodeName()->compare(*tagName) == 0)) {
@@ -270,20 +270,20 @@ NodeEntity * NodeEntity::Find(std::string * tagName, std::string * attr1Name, st
     return nullptr;
 }
 
-NodeEntity * NodeEntity::FindFromTail(std::vector<std::string *> * tree)
+NodeEntity * NodeEntity::FindFromTail(vector<string *> * tree)
 {
     NodeEntity * node = this;
     if (tree->size() <= 1) {
         return node;
     }
     else {
-        std::vector<std::string *> subtree = *tree;
+        vector<string *> subtree = *tree;
         subtree.erase(subtree.begin());
         return FindFromTail(node, subtree);
     }
 }
 
-NodeEntity * NodeEntity::FindFromTail(std::vector<std::string *> * tree, std::string * leafName)
+NodeEntity * NodeEntity::FindFromTail(vector<string *> * tree, string * leafName)
 {
     NodeEntity * node = this;
     if (tree->size() <= 0) {
@@ -299,82 +299,82 @@ NodeEntity * NodeEntity::FindFromTail(std::vector<std::string *> * tree, std::st
         }
         */
         else {
-            std::vector<std::string *> subtree = *tree;
+            vector<string *> subtree = *tree;
             subtree.erase(subtree.begin());
             return FindFromTail(node, subtree, *leafName);
         }
     }
 }
 
-NodeEntity * NodeEntity::Dir(std::string * name)
+NodeEntity * NodeEntity::Dir(string * name)
 {
-    std::string arg1Item = "Item";
-    std::string arg2Type = "type";
-    std::string arg3Dir = "Dir";
-    std::string arg4Name = "name";
+    string arg1Item = "Item";
+    string arg2Type = "type";
+    string arg3Dir = "Dir";
+    string arg4Name = "name";
     return Find(&arg1Item, &arg2Type, &arg3Dir, &arg4Name, name);
 }
 
-NodeEntity * NodeEntity::File(std::string * name)
+NodeEntity * NodeEntity::File(string * name)
 {
-    std::string arg1Item = "Item";
-    std::string arg2Type = "type";
-    std::string arg3File = "File";
-    std::string arg4Name = "name";
+    string arg1Item = "Item";
+    string arg2Type = "type";
+    string arg3File = "File";
+    string arg4Name = "name";
     return Find(&arg1Item, &arg2Type, &arg3File, &arg4Name, name);
 }
 
-NodeEntity * NodeEntity::Tag(std::string * name)
+NodeEntity * NodeEntity::Tag(string * name)
 {
-    std::string arg1Item = "Item";
-    std::string arg2Type = "type";
-    std::string arg3Tag = "Tag";
-    std::string arg4Name = "name";
+    string arg1Item = "Item";
+    string arg2Type = "type";
+    string arg3Tag = "Tag";
+    string arg4Name = "name";
     return Find(&arg1Item, &arg2Type, &arg3Tag, &arg4Name, name);
 }
 
-NodeEntity * NodeEntity::Attr(std::string * name)
+NodeEntity * NodeEntity::Attr(string * name)
 {
-    std::string arg1Item = "Item";
-    std::string arg2Type = "type";
-    std::string arg3Attr = "Attr";
-    std::string arg4Name = "name";
+    string arg1Item = "Item";
+    string arg2Type = "type";
+    string arg3Attr = "Attr";
+    string arg4Name = "name";
     return Find(&arg1Item, &arg2Type, &arg3Attr, &arg4Name, name);
 }
 
-NodeEntity * NodeEntity::Table(std::string * name)
+NodeEntity * NodeEntity::Table(string * name)
 {
-    std::string arg1Item = "Item";
-    std::string arg2Type = "type";
-    std::string arg3Table = "Table";
-    std::string arg4Name = "name";
+    string arg1Item = "Item";
+    string arg2Type = "type";
+    string arg3Table = "Table";
+    string arg4Name = "name";
     return Find(&arg1Item, &arg2Type, &arg3Table, &arg4Name, name);
 }
 
-NodeEntity * NodeEntity::SubCategory(std::string * name)
+NodeEntity * NodeEntity::SubCategory(string * name)
 {
-    std::string arg1Category = "Category";
-    std::string arg2Name = "name";
+    string arg1Category = "Category";
+    string arg2Name = "name";
     return Find(&arg1Category, &arg2Name, name);
 }
 
-NodeEntity * NodeEntity::SubCategory(std::string * childName, std::string * grandChildName)
+NodeEntity * NodeEntity::SubCategory(string * childName, string * grandChildName)
 {
-    std::string arg1Category = "Category";
-    std::string arg2Name = "name";
-    std::string arg3Category = "Category";
-    std::string arg4Name = "name";
+    string arg1Category = "Category";
+    string arg2Name = "name";
+    string arg3Category = "Category";
+    string arg4Name = "name";
     return Find(&arg1Category, &arg2Name, childName)->Find(&arg3Category, &arg4Name, grandChildName);
 }
 
-NodeEntity * NodeEntity::SubCategory(std::string * childName, std::string * grandChildName, std::string * greatGrandChildName)
+NodeEntity * NodeEntity::SubCategory(string * childName, string * grandChildName, string * greatGrandChildName)
 {
-    std::string arg1Category = "Category";
-    std::string arg2Name = "name";
-    std::string arg3Category = "Category";
-    std::string arg4Name = "name";
-    std::string arg5Category = "Category";
-    std::string arg6Name = "name";
+    string arg1Category = "Category";
+    string arg2Name = "name";
+    string arg3Category = "Category";
+    string arg4Name = "name";
+    string arg5Category = "Category";
+    string arg6Name = "name";
     return Find(&arg1Category, &arg2Name, childName)->Find(&arg3Category, &arg4Name, grandChildName)->Find(&arg5Category, &arg6Name, greatGrandChildName);
 }
 
@@ -398,10 +398,10 @@ NodeEntity * NodeEntity::Clone()
 
 NodeEntity::NodeEntity()
 {
-    nodeName = new std::string();
-    nodeValue = new std::string();
-    attrList = new std::vector<AttributeEntity *>();
-    childList = new std::vector<NodeEntity *>();
+    nodeName = unique_ptr<string>();
+    nodeValue = unique_ptr<string>();
+    attrList = new vector<AttributeEntity *>();
+    childList = new vector<NodeEntity *>();
     disposed = false;
 }
 
@@ -409,8 +409,6 @@ void NodeEntity::Dispose()
 {
     DisposeAttrList();
     DisposeChildList();
-    delete nodeName;
-    delete nodeValue;
     disposed = true;
 }
 
