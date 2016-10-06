@@ -376,6 +376,24 @@ NodeEntity * NodeEntity::SubCategory(std::string * childName, std::string * gran
     return Find(&arg1Category, &arg2Name, childName)->Find(&arg3Category, &arg4Name, grandChildName)->Find(&arg5Category, &arg6Name, greatGrandChildName);
 }
 
+NodeEntity * NodeEntity::Clone()
+{
+    NodeEntity * clone = new NodeEntity();
+
+    int iLoopCount = attrList->size();
+    for (int i = 0; i < iLoopCount; i++) {
+        AttributeEntity * cloneAttr = attrList->at(i)->Clone();
+        clone->AddAttribute(cloneAttr);
+    }
+
+    int jLoopCount = childList->size();
+    for (int j = 0; j < jLoopCount; j++) {
+        clone->AddChild(childList->at(j)->Clone());
+    }
+
+    return clone;
+}
+
 NodeEntity::NodeEntity()
 {
     nodeName = new std::string();

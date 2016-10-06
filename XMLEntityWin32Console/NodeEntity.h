@@ -92,6 +92,8 @@ public:
 
     NodeEntity * SubCategory(std::string * childName, std::string * grandChildName, std::string * greatGrandChildName);
 
+    NodeEntity * Clone();
+
     NodeEntity();
 
     void Dispose();

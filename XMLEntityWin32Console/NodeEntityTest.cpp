@@ -144,18 +144,13 @@ void NodeEntityTest::NodeEntityTest02()
     testSuccess = true;
 
     delete node;
-
-    int iLoopCount = tree->size();
-    for (int i = 0; i < iLoopCount; i++) {
-        std::string * deleteItem = tree->at(i);
-        delete deleteItem;
-    }
 }
 
 void NodeEntityTest::NodeEntityTest03()
 {
     std::unique_ptr<NodeEntity> node(new NodeEntity());
-    std::unique_ptr<std::vector<std::string *>> tree(new std::vector<std::string *>());
+    //std::unique_ptr<std::vector<std::string *>> tree(new std::vector<std::string *>());
+    std::vector<std::string *> * tree = new std::vector<std::string *>();
     std::string * name;
 
     /*
@@ -204,7 +199,7 @@ void NodeEntityTest::NodeEntityTest03()
     addAttrBBBtype->SetAttrValue(name);
     addNodeBBB->AddAttribute(addAttrBBBtype);
 
-    node->FindFromTail(tree.get())->AddChild(addNodeBBB);
+    node->FindFromTail(tree)->AddChild(addNodeBBB);
     name = new std::string("BBB");
     tree->push_back(name);
 
@@ -219,7 +214,7 @@ void NodeEntityTest::NodeEntityTest03()
     addAttrCCCtype->SetAttrValue(name);
     addNodeCCC->AddAttribute(addAttrCCCtype);
 
-    node->FindFromTail(tree.get())->AddChild(addNodeCCC);
+    node->FindFromTail(tree)->AddChild(addNodeCCC);
 
     NodeEntity * addNodeDDD = new NodeEntity();
     name = new std::string("DDD");
@@ -232,10 +227,10 @@ void NodeEntityTest::NodeEntityTest03()
     addAttrDDDname->SetAttrValue(name);
     addNodeDDD->AddAttribute(addAttrDDDname);
 
-    node->FindFromTail(tree.get())->AddChild(addNodeDDD);
+    node->FindFromTail(tree)->AddChild(addNodeDDD);
 
     name = new std::string("CCC");
-    NodeEntity testNode = *node.get()->FindFromTail(tree.get(), name);
+    NodeEntity * testNode = node.get()->FindFromTail(tree, name)->Clone();
 
     testSuccess = true;
 }
@@ -323,7 +318,7 @@ void NodeEntityTest::NodeEntityTest04()
     node->FindFromTail(tree.get())->AddChild(addNodeDDD);
 
     name = new std::string("BBB");
-    NodeEntity testNode = *node.get()->FindFromTail(tree.get(), name);
+    NodeEntity * testNode = node.get()->FindFromTail(tree.get(), name)->Clone();
 
     testSuccess = true;
 }

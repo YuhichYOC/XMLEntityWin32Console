@@ -12,6 +12,12 @@ std::string * AttributeEntity::GetAttrName()
     return attrName;
 }
 
+std::string * AttributeEntity::CloneAttrName()
+{
+    std::string * cloneName = new std::string(*attrName);
+    return cloneName;
+}
+
 void AttributeEntity::SetAttrValue(std::string * arg)
 {
     attrValue = arg;
@@ -20,6 +26,12 @@ void AttributeEntity::SetAttrValue(std::string * arg)
 std::string * AttributeEntity::GetAttrValue()
 {
     return attrValue;
+}
+
+std::string * AttributeEntity::CloneAttrValue()
+{
+    std::string * cloneValue = new std::string(*attrValue);
+    return cloneValue;
 }
 
 bool AttributeEntity::NameEquals(std::string * arg)
@@ -40,6 +52,14 @@ bool AttributeEntity::ValueEquals(std::string * arg)
     else {
         return false;
     }
+}
+
+AttributeEntity * AttributeEntity::Clone()
+{
+    AttributeEntity * clone = new AttributeEntity();
+    clone->SetAttrName(CloneAttrName());
+    clone->SetAttrValue(CloneAttrValue());
+    return clone;
 }
 
 AttributeEntity::AttributeEntity()
