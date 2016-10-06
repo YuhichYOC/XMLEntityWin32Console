@@ -6,32 +6,6 @@
 #include "NodeEntityTest.h"
 #include "SettingReaderTest.h"
 
-void SmartPointerTest01()
-{
-    NodeEntityTest * nSmartPointerTest = new NodeEntityTest();
-    nSmartPointerTest->SmartPointerTest01();
-    if (nSmartPointerTest->GetTestSuccess()) {
-        std::cout << "nSmartPointerTest 01 success." << "\n";
-    }
-    else {
-        std::cout << "nSmartPointerTest 01 failed." << "\n";
-    }
-    delete nSmartPointerTest;
-}
-
-void NoSmartPointerTest01()
-{
-    NodeEntityTest * nNoSmartPointerTest = new NodeEntityTest();
-    nNoSmartPointerTest->NoSmartPointerTest01();
-    if (nNoSmartPointerTest->GetTestSuccess()) {
-        std::cout << "nNoSmartPointerTest 01 success." << "\n";
-    }
-    else {
-        std::cout << "nNoSmartPointerTest 01 failed." << "\n";
-    }
-    delete nNoSmartPointerTest;
-}
-
 void NodeEntityTest01()
 {
     NodeEntityTest * nTest = new NodeEntityTest();
@@ -100,12 +74,10 @@ void SettingReaderTest01()
 int main()
 {
     /*
-    SmartPointerTest01();
-    NoSmartPointerTest01();
+    SettingReaderTest01();
     NodeEntityTest01();
     NodeEntityTest02();
     NodeEntityTest04();
-    SettingReaderTest01();
     */
     NodeEntityTest03();
 
