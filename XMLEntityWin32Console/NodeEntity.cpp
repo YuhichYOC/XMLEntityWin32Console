@@ -293,9 +293,11 @@ NodeEntity * NodeEntity::FindFromTail(std::vector<std::string *> * tree, std::st
         if (leafName->length() == 0) {
             return FindFromTail(tree);
         }
+        /*
         else if (tree->at(tree->size() - 1)->compare(*leafName) == 0) {
-            return FindFromTail(tree);
+        return FindFromTail(tree);
         }
+        */
         else {
             std::vector<std::string *> subtree = *tree;
             subtree.erase(subtree.begin());

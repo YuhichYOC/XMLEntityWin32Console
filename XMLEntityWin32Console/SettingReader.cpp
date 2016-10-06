@@ -92,6 +92,7 @@ void SettingReader::Parse()
         case XmlNodeType_Attribute:
             break;
         case XmlNodeType_Text:
+            ParseText(reader, tree);
             break;
         case XmlNodeType_CDATA:
             ParseCDATA(reader, tree);
@@ -146,6 +147,15 @@ void SettingReader::ParseElement(IXmlReader * reader, std::vector<std::string *>
     }
     ParseAttributes(reader, tree, newNode->GetNodeName());
     tree->push_back(newNode->GetNodeName());
+}
+
+void SettingReader::ParseText(IXmlReader * reader, std::vector<std::string *> * tree)
+{
+    const wchar_t * value;
+    if (FAILED(reader->GetValue(&value, NULL))) {
+        return;
+    }
+    myNode->FindFromTail(tree)->SetNodeValue(StrFromCWChar_t(value));
 }
 
 void SettingReader::ParseCDATA(IXmlReader * reader, std::vector<std::string *> * tree)
@@ -232,21 +242,30 @@ SettingReader::SettingReader()
     directory = new std::string();
     fileName = new std::string();
     myNode = new NodeEntity();
+    errorMessage = new std::string();
     stream = nullptr;
     reader = nullptr;
-    errorMessage = new std::string();
+    disposed = false;
 }
 
-SettingReader::~SettingReader()
+void SettingReader::Dispose()
 {
+    myNode->Dispose();
     delete directory;
     delete fileName;
-    delete myNode;
+    delete errorMessage;
     if (stream != nullptr) {
         delete stream;
     }
     if (reader != nullptr) {
         delete reader;
     }
-    delete errorMessage;
+    disposed = true;
+}
+
+SettingReader::~SettingReader()
+{
+    if (!disposed) {
+        Dispose();
+    }
 }

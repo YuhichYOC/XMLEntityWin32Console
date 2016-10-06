@@ -34,6 +34,8 @@ private:
 
     void ParseElement(IXmlReader * reader, std::vector<std::string *> * tree);
 
+    void ParseText(IXmlReader * reader, std::vector<std::string *> * tree);
+
     void ParseCDATA(IXmlReader * reader, std::vector<std::string *> * tree);
 
     void ParseEndElement(IXmlReader * reader, std::vector<std::string *> * tree);
@@ -43,6 +45,8 @@ private:
     std::string * StrFromWChar_t(wchar_t * arg);
 
     std::string * StrFromCWChar_t(const wchar_t * arg);
+
+    bool disposed;
 
 public:
 
@@ -67,6 +71,8 @@ public:
     std::string * GetErrorMessage();
 
     SettingReader();
+
+    void Dispose();
 
     ~SettingReader();
 };

@@ -72,6 +72,19 @@ void SettingReaderTest01()
     delete sTest;
 }
 
+void SettingReaderTest02()
+{
+    SettingReaderTest * sTest = new SettingReaderTest();
+    sTest->SettingReaderTest02();
+    if (sTest->GetTestSuccess()) {
+        std::cout << "sTest 02 success." << "\n";
+    }
+    else {
+        std::cout << "sTest 02 failed." << "\n";
+    }
+    delete sTest;
+}
+
 void SmartPointerTest01()
 {
     SmartPointerTest * sTest = new SmartPointerTest();
@@ -103,11 +116,12 @@ int main()
     /*
     NodeEntityTest01();
     NodeEntityTest02();
+    NodeEntityTest03();
     NodeEntityTest04();
     SettingReaderTest01();
     SmartPointerTest01();
     */
-    NodeEntityTest03();
+    SettingReaderTest02();
 
     std::string value;
     std::cin >> value;
