@@ -2,39 +2,39 @@
 
 #include "AttributeEntity.h"
 
-void AttributeEntity::SetAttrName(std::string * arg)
+void AttributeEntity::SetAttrName(string * arg)
 {
     attrName.reset(arg);
 }
 
-std::string * AttributeEntity::GetAttrName()
+string * AttributeEntity::GetAttrName()
 {
     return attrName.get();
 }
 
-std::string * AttributeEntity::CloneAttrName()
+string * AttributeEntity::CloneAttrName()
 {
-    std::string * cloneName = new std::string(*attrName);
+    string * cloneName = new string(*attrName);
     return cloneName;
 }
 
-void AttributeEntity::SetAttrValue(std::string * arg)
+void AttributeEntity::SetAttrValue(string * arg)
 {
     attrValue.reset(arg);
 }
 
-std::string * AttributeEntity::GetAttrValue()
+string * AttributeEntity::GetAttrValue()
 {
     return attrValue.get();
 }
 
-std::string * AttributeEntity::CloneAttrValue()
+string * AttributeEntity::CloneAttrValue()
 {
-    std::string * cloneValue = new std::string(*attrValue);
+    string * cloneValue = new string(*attrValue);
     return cloneValue;
 }
 
-bool AttributeEntity::NameEquals(std::string * arg)
+bool AttributeEntity::NameEquals(string * arg)
 {
     if ((attrName->compare(*arg)) == 0) {
         return true;
@@ -44,7 +44,7 @@ bool AttributeEntity::NameEquals(std::string * arg)
     }
 }
 
-bool AttributeEntity::ValueEquals(std::string * arg)
+bool AttributeEntity::ValueEquals(string * arg)
 {
     if ((attrValue->compare(*arg)) == 0) {
         return true;
