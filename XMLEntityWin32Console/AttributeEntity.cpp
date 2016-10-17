@@ -2,41 +2,43 @@
 
 #include "AttributeEntity.h"
 
-void AttributeEntity::SetAttrName(string * arg)
+void AttributeEntity::SetAttrName(string arg)
 {
-    attrName.reset(arg);
+    attrName.assign(arg);
 }
 
-string * AttributeEntity::GetAttrName()
+string AttributeEntity::GetAttrName()
 {
-    return attrName.get();
+    return attrName;
 }
 
 string * AttributeEntity::CloneAttrName()
 {
-    string * cloneName = new string(*attrName);
+    string * cloneName = new string();
+    cloneName->assign(attrName);
     return cloneName;
 }
 
-void AttributeEntity::SetAttrValue(string * arg)
+void AttributeEntity::SetAttrValue(string arg)
 {
-    attrValue.reset(arg);
+    attrValue.assign(arg);
 }
 
-string * AttributeEntity::GetAttrValue()
+string AttributeEntity::GetAttrValue()
 {
-    return attrValue.get();
+    return attrValue;
 }
 
 string * AttributeEntity::CloneAttrValue()
 {
-    string * cloneValue = new string(*attrValue);
+    string * cloneValue = new string();
+    cloneValue->assign(attrValue);
     return cloneValue;
 }
 
-bool AttributeEntity::NameEquals(string * arg)
+bool AttributeEntity::NameEquals(string arg)
 {
-    if ((attrName->compare(*arg)) == 0) {
+    if ((attrName.compare(arg)) == 0) {
         return true;
     }
     else {
@@ -44,9 +46,9 @@ bool AttributeEntity::NameEquals(string * arg)
     }
 }
 
-bool AttributeEntity::ValueEquals(string * arg)
+bool AttributeEntity::ValueEquals(string arg)
 {
-    if ((attrValue->compare(*arg)) == 0) {
+    if ((attrValue.compare(arg)) == 0) {
         return true;
     }
     else {
@@ -57,15 +59,13 @@ bool AttributeEntity::ValueEquals(string * arg)
 AttributeEntity * AttributeEntity::Clone()
 {
     AttributeEntity * clone = new AttributeEntity();
-    clone->SetAttrName(CloneAttrName());
-    clone->SetAttrValue(CloneAttrValue());
+    clone->SetAttrName(*CloneAttrName());
+    clone->SetAttrValue(*CloneAttrValue());
     return clone;
 }
 
 AttributeEntity::AttributeEntity()
 {
-    attrName = unique_ptr<string>();
-    attrValue = unique_ptr<string>();
     disposed = false;
 }
 

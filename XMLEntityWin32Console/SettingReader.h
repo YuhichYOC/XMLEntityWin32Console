@@ -12,9 +12,9 @@ class SettingReader
 {
 private:
 
-    unique_ptr<string> directory;
+    string directory;
 
-    unique_ptr<string> fileName;
+    string fileName;
 
     NodeEntity * myNode;
 
@@ -28,35 +28,35 @@ private:
 
     bool parseSucceeded;
 
-    unique_ptr<string> errorMessage;
+    string errorMessage;
 
-    wchar_t * WChar_tFromStr(string * arg);
+    wchar_t * WChar_tFromStr(string arg);
 
-    void ParseElement(IXmlReader * reader, vector<string *> * tree);
+    void ParseElement(IXmlReader * reader, vector<string> * tree);
 
-    void ParseText(IXmlReader * reader, vector<string *> * tree);
+    void ParseText(IXmlReader * reader, vector<string> * tree);
 
-    void ParseCDATA(IXmlReader * reader, vector<string *> * tree);
+    void ParseCDATA(IXmlReader * reader, vector<string> * tree);
 
-    void ParseEndElement(IXmlReader * reader, vector<string *> * tree);
+    void ParseEndElement(IXmlReader * reader, vector<string> * tree);
 
-    void ParseAttributes(IXmlReader * reader, vector<string *> * tree, string * name);
+    void ParseAttributes(IXmlReader * reader, vector<string> * tree, string name);
 
-    string * StrFromWChar_t(wchar_t * arg);
+    string StrFromWChar_t(wchar_t * arg);
 
-    string * StrFromCWChar_t(const wchar_t * arg);
+    string StrFromCWChar_t(const wchar_t * arg);
 
     bool disposed;
 
 public:
 
-    void SetDirectory(string * arg);
+    void SetDirectory(string arg);
 
-    string * GetDirectory();
+    string GetDirectory();
 
-    void SetFileName(string * arg);
+    void SetFileName(string arg);
 
-    string * GetFileName();
+    string GetFileName();
 
     NodeEntity * GetNode();
 
@@ -68,7 +68,7 @@ public:
 
     bool IsParseSucceeded();
 
-    string * GetErrorMessage();
+    string GetErrorMessage();
 
     SettingReader();
 

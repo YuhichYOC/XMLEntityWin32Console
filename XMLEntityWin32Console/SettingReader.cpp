@@ -2,24 +2,24 @@
 
 #include "SettingReader.h"
 
-void SettingReader::SetDirectory(string * arg)
+void SettingReader::SetDirectory(string arg)
 {
-    directory.reset(arg);
+    directory.assign(arg);
 }
 
-string * SettingReader::GetDirectory()
+string SettingReader::GetDirectory()
 {
-    return directory.get();
+    return directory;
 }
 
-void SettingReader::SetFileName(string * arg)
+void SettingReader::SetFileName(string arg)
 {
-    fileName.reset(arg);
+    fileName.assign(arg);
 }
 
-string * SettingReader::GetFileName()
+string SettingReader::GetFileName()
 {
-    return fileName.get();
+    return fileName;
 }
 
 NodeEntity * SettingReader::GetNode()
@@ -31,28 +31,28 @@ void SettingReader::Prepare()
 {
     setlocale(LC_ALL, "japanese");
 
-    if (fileName->length() == 0) {
-        errorMessage->assign("SettingReader::Prepare -- File name is not set. Method : Parse");
+    if (fileName.length() == 0) {
+        errorMessage.assign("SettingReader::Prepare -- File name is not set. Method : Parse");
         prepared = false;
         return;
     }
-    if (FAILED(SHCreateStreamOnFile(WChar_tFromStr(fileName.get()), STGM_READ, &stream))) {
-        errorMessage->assign("SettingReader::Prepare -- File reader can't be create. Method : SHCreateStreamOnFile");
+    if (FAILED(SHCreateStreamOnFile(WChar_tFromStr(fileName), STGM_READ, &stream))) {
+        errorMessage.assign("SettingReader::Prepare -- File reader can't be create. Method : SHCreateStreamOnFile");
         prepared = false;
         return;
     }
     if (FAILED(CreateXmlReader(__uuidof(IXmlReader), (void**)&reader, NULL))) {
-        errorMessage->assign("SettingReader::Prepare -- Xml reader can't be create. Method : CreateXmlReader");
+        errorMessage.assign("SettingReader::Prepare -- Xml reader can't be create. Method : CreateXmlReader");
         prepared = false;
         return;
     }
     if (FAILED(reader->SetProperty(XmlReaderProperty_DtdProcessing, DtdProcessing_Prohibit))) {
-        errorMessage->assign("SettingReader::Prepare -- Reader property can't set. Method : SetProperty");
+        errorMessage.assign("SettingReader::Prepare -- Reader property can't set. Method : SetProperty");
         prepared = false;
         return;
     }
     if (FAILED(reader->SetInput(stream))) {
-        errorMessage->assign("SettingReader::Prepare -- Reader stream can't set. Method : SetInput");
+        errorMessage.assign("SettingReader::Prepare -- Reader stream can't set. Method : SetInput");
         parseSucceeded = false;
         return;
     }
@@ -60,13 +60,13 @@ void SettingReader::Prepare()
     prepared = true;
 }
 
-wchar_t * SettingReader::WChar_tFromStr(string * arg)
+wchar_t * SettingReader::WChar_tFromStr(string arg)
 {
-    size_t retSize = strlen(arg->c_str()) + 1;
-    size_t convSize = 0;
-    wchar_t * retVal = new wchar_t[retSize];
-    mbstowcs_s(&convSize, retVal, retSize, arg->c_str(), _TRUNCATE);
-    return retVal;
+    size_t retSize = strlen(arg.c_str()) + 1;
+    size_t cnvSize = 0;
+    wchar_t * ret = new wchar_t[retSize];
+    mbstowcs_s(&cnvSize, ret, retSize, arg.c_str(), _TRUNCATE);
+    return ret;
 }
 
 bool SettingReader::IsPrepared()
@@ -78,7 +78,7 @@ void SettingReader::Parse()
 {
     nodeId = 0;
 
-    vector<string *> * tree = new vector<string *>();
+    vector<string> * tree = new vector<string>();
 
     XmlNodeType nodeType;
     while (reader->Read(&nodeType) == S_OK) {
@@ -118,7 +118,7 @@ void SettingReader::Parse()
     parseSucceeded = true;
 }
 
-void SettingReader::ParseElement(IXmlReader * reader, vector<string *> * tree)
+void SettingReader::ParseElement(IXmlReader * reader, vector<string> * tree)
 {
     const wchar_t * prefix;
     const wchar_t * localName;
@@ -149,7 +149,7 @@ void SettingReader::ParseElement(IXmlReader * reader, vector<string *> * tree)
     tree->push_back(newNode->GetNodeName());
 }
 
-void SettingReader::ParseText(IXmlReader * reader, vector<string *> * tree)
+void SettingReader::ParseText(IXmlReader * reader, vector<string> * tree)
 {
     const wchar_t * value;
     if (FAILED(reader->GetValue(&value, NULL))) {
@@ -158,7 +158,7 @@ void SettingReader::ParseText(IXmlReader * reader, vector<string *> * tree)
     myNode->FindFromTail(tree)->SetNodeValue(StrFromCWChar_t(value));
 }
 
-void SettingReader::ParseCDATA(IXmlReader * reader, vector<string *> * tree)
+void SettingReader::ParseCDATA(IXmlReader * reader, vector<string> * tree)
 {
     const wchar_t * value;
     if (FAILED(reader->GetValue(&value, NULL))) {
@@ -167,12 +167,12 @@ void SettingReader::ParseCDATA(IXmlReader * reader, vector<string *> * tree)
     myNode->FindFromTail(tree)->SetNodeValue(StrFromCWChar_t(value));
 }
 
-void SettingReader::ParseEndElement(IXmlReader * reader, vector<string *> * tree)
+void SettingReader::ParseEndElement(IXmlReader * reader, vector<string> * tree)
 {
     tree->pop_back();
 }
 
-void SettingReader::ParseAttributes(IXmlReader * reader, vector<string *> * tree, string * name)
+void SettingReader::ParseAttributes(IXmlReader * reader, vector<string> * tree, string name)
 {
     const wchar_t * prefix;
     const wchar_t * localName;
@@ -204,27 +204,27 @@ void SettingReader::ParseAttributes(IXmlReader * reader, vector<string *> * tree
     }
 }
 
-string * SettingReader::StrFromWChar_t(wchar_t * arg)
+string SettingReader::StrFromWChar_t(wchar_t * arg)
 {
     wstring castedArg = arg;
     size_t retSize = castedArg.length() + 1;
-    size_t convSize = 0;
+    size_t cnvSize = 0;
     unique_ptr<char> arrayFromArg(new char[retSize]);
-    wcstombs_s(&convSize, arrayFromArg.get(), retSize, arg, _TRUNCATE);
-    string * retVal = new string(arrayFromArg.get());
-    return retVal;
+    wcstombs_s(&cnvSize, arrayFromArg.get(), retSize, arg, _TRUNCATE);
+    string ret(arrayFromArg.get());
+    return ret;
 }
 
-string * SettingReader::StrFromCWChar_t(const wchar_t * arg)
+string SettingReader::StrFromCWChar_t(const wchar_t * arg)
 {
     // const ‹³‚Ù‚ñ‚Æ‚Ð‚Å‚½‚é‚Æ‚Ü‚Ð‚ë
     wstring castedArg = arg;
     size_t retSize = castedArg.length() + 1;
-    size_t convSize = 0;
+    size_t cnvSize = 0;
     unique_ptr<char> arrayFromArg(new char[retSize]);
-    wcstombs_s(&convSize, arrayFromArg.get(), retSize, arg, _TRUNCATE);
-    string * retVal = new string(arrayFromArg.get());
-    return retVal;
+    wcstombs_s(&cnvSize, arrayFromArg.get(), retSize, arg, _TRUNCATE);
+    string ret(arrayFromArg.get());
+    return ret;
 }
 
 bool SettingReader::IsParseSucceeded()
@@ -232,16 +232,13 @@ bool SettingReader::IsParseSucceeded()
     return parseSucceeded;
 }
 
-string * SettingReader::GetErrorMessage()
+string SettingReader::GetErrorMessage()
 {
-    return errorMessage.get();
+    return errorMessage;
 }
 
 SettingReader::SettingReader()
 {
-    directory = unique_ptr<string>();
-    fileName = unique_ptr<string>();
-    errorMessage = unique_ptr<string>();
     myNode = new NodeEntity();
     stream = nullptr;
     reader = nullptr;

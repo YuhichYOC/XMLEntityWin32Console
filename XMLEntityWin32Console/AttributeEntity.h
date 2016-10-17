@@ -6,29 +6,29 @@ class AttributeEntity
 {
 private:
 
-    unique_ptr<string> attrName;
+    string attrName;
 
-    unique_ptr<string> attrValue;
+    string attrValue;
 
     bool disposed;
 
 public:
 
-    void SetAttrName(string * arg);
+    void SetAttrName(string arg);
 
-    string * GetAttrName();
+    string GetAttrName();
 
     string * CloneAttrName();
 
-    void SetAttrValue(string * arg);
+    void SetAttrValue(string arg);
 
-    string * GetAttrValue();
+    string GetAttrValue();
 
     string * CloneAttrValue();
 
-    bool NameEquals(string * arg);
+    bool NameEquals(string arg);
 
-    bool ValueEquals(string * arg);
+    bool ValueEquals(string arg);
 
     AttributeEntity * Clone();
 

@@ -2,16 +2,15 @@
 
 #include "NodeEntity.h"
 
-NodeEntity * NodeEntity::Find(NodeEntity * node, string * tagName)
+NodeEntity * NodeEntity::Find(NodeEntity * node, string tagName)
 {
     if (node == nullptr) {
         node = this;
     }
-    if ((node->GetNodeName()->compare(*tagName)) == 0) {
+    if ((node->GetNodeName().compare(tagName)) == 0) {
         return node;
     }
-    int iLoopCount = (int)node->GetChildList()->size();
-    for (int i = 0; i < iLoopCount; i++) {
+    for (size_t i = 0; i < node->GetChildList()->size(); i++) {
         NodeEntity * retVal = Find(node->GetChildList()->at(i), tagName);
         if (retVal != nullptr) {
             return retVal;
@@ -20,18 +19,17 @@ NodeEntity * NodeEntity::Find(NodeEntity * node, string * tagName)
     return nullptr;
 }
 
-NodeEntity * NodeEntity::Find(NodeEntity * node, string * tagName, string * attrName, string * attrValue)
+NodeEntity * NodeEntity::Find(NodeEntity * node, string tagName, string attrName, string attrValue)
 {
     if (node == nullptr) {
         node = this;
     }
-    if ((node->GetNodeName()->compare(*tagName)) == 0) {
-        if (node->AttrExists(attrName) && (node->AttrByName(attrName)->compare(*attrValue) == 0)) {
+    if ((node->GetNodeName().compare(tagName)) == 0) {
+        if (node->AttrExists(attrName) && (node->AttrByName(attrName).compare(attrValue) == 0)) {
             return node;
         }
     }
-    int iLoopCount = (int)node->GetChildList()->size();
-    for (int i = 0; i < iLoopCount; i++) {
+    for (size_t i = 0; i < node->GetChildList()->size(); i++) {
         NodeEntity * retVal = Find(node->GetChildList()->at(i), tagName, attrName, attrValue);
         if (retVal != nullptr) {
             return retVal;
@@ -40,18 +38,17 @@ NodeEntity * NodeEntity::Find(NodeEntity * node, string * tagName, string * attr
     return nullptr;
 }
 
-NodeEntity * NodeEntity::Find(NodeEntity * node, string * tagName, string * attr1Name, string * attr1Value, string * attr2Name, string * attr2Value)
+NodeEntity * NodeEntity::Find(NodeEntity * node, string tagName, string attr1Name, string attr1Value, string attr2Name, string attr2Value)
 {
     if (node == nullptr) {
         node = this;
     }
-    if ((node->GetNodeName()->compare(*tagName)) == 0) {
-        if (node->AttrExists(attr1Name) && node->AttrExists(attr2Name) && (node->AttrByName(attr1Name)->compare(*attr1Value) == 0) && (node->AttrByName(attr2Name)->compare(*attr2Value) == 0)) {
+    if ((node->GetNodeName().compare(tagName)) == 0) {
+        if (node->AttrExists(attr1Name) && node->AttrExists(attr2Name) && (node->AttrByName(attr1Name).compare(attr1Value) == 0) && (node->AttrByName(attr2Name).compare(attr2Value) == 0)) {
             return node;
         }
     }
-    int iLoopCount = (int)node->GetChildList()->size();
-    for (int i = 0; i < iLoopCount; i++) {
+    for (size_t i = 0; i < node->GetChildList()->size(); i++) {
         NodeEntity * retVal = Find(node->GetChildList()->at(i), tagName, attr1Name, attr1Value, attr2Name, attr2Value);
         if (retVal != nullptr) {
             return retVal;
@@ -60,7 +57,7 @@ NodeEntity * NodeEntity::Find(NodeEntity * node, string * tagName, string * attr
     return nullptr;
 }
 
-NodeEntity * NodeEntity::FindFromTail(NodeEntity * node, vector<string *> tree)
+NodeEntity * NodeEntity::FindFromTail(NodeEntity * node, vector<string> tree)
 {
     if (node == nullptr) {
         node = this;
@@ -68,7 +65,7 @@ NodeEntity * NodeEntity::FindFromTail(NodeEntity * node, vector<string *> tree)
     if (tree.size() == 0) {
         return node;
     }
-    int pos = FindChildIndexByName(node, *tree.at(0));
+    int pos = FindChildIndexByName(node, tree.at(0));
     tree.erase(tree.begin());
     if (pos >= 0) {
         return FindFromTail(node->GetChildList()->at(pos), tree);
@@ -78,7 +75,7 @@ NodeEntity * NodeEntity::FindFromTail(NodeEntity * node, vector<string *> tree)
     }
 }
 
-NodeEntity * NodeEntity::FindFromTail(NodeEntity * node, vector<string *> tree, string leafName)
+NodeEntity * NodeEntity::FindFromTail(NodeEntity * node, vector<string> tree, string leafName)
 {
     if (node == nullptr) {
         node = this;
@@ -92,7 +89,7 @@ NodeEntity * NodeEntity::FindFromTail(NodeEntity * node, vector<string *> tree, 
             return nullptr;
         }
     }
-    int pos = FindChildIndexByName(node, *tree.at(0));
+    int pos = FindChildIndexByName(node, tree.at(0));
     tree.erase(tree.begin());
     if (pos >= 0) {
         return FindFromTail(node->GetChildList()->at(pos), tree, leafName);
@@ -107,7 +104,7 @@ int NodeEntity::FindChildIndexByName(NodeEntity * node, string name)
     int pos = -1;
     int iLoopCount = (int)node->GetChildList()->size();
     for (int i = 0; i < iLoopCount; i++) {
-        if ((node->GetChildList()->at(i)->GetNodeName()->compare(name)) == 0) {
+        if ((node->GetChildList()->at(i)->GetNodeName().compare(name)) == 0) {
             pos = i;
         }
     }
@@ -134,14 +131,14 @@ void NodeEntity::DisposeChildList()
     delete childList;
 }
 
-void NodeEntity::SetNodeName(string * arg)
+void NodeEntity::SetNodeName(string arg)
 {
-    nodeName.reset(arg);
+    nodeName.assign(arg);
 }
 
-string * NodeEntity::GetNodeName()
+string NodeEntity::GetNodeName()
 {
-    return nodeName.get();
+    return nodeName;
 }
 
 void NodeEntity::SetNodeID(int arg)
@@ -154,14 +151,14 @@ int NodeEntity::GetNodeID()
     return nodeId;
 }
 
-void NodeEntity::SetNodeValue(string * arg)
+void NodeEntity::SetNodeValue(string arg)
 {
-    nodeValue.reset(arg);
+    nodeValue.assign(arg);
 }
 
-string * NodeEntity::GetNodeValue()
+string NodeEntity::GetNodeValue()
 {
-    return nodeValue.get();
+    return nodeValue;
 }
 
 void NodeEntity::SetAttrList(vector<AttributeEntity *> * arg)
@@ -194,74 +191,69 @@ void NodeEntity::AddChild(NodeEntity * arg)
     childList->push_back(arg);
 }
 
-bool NodeEntity::AttrExists(string * name)
+bool NodeEntity::AttrExists(string name)
 {
-    bool retVal = false;
-    int iLoopCount = (int)attrList->size();
-    for (int i = 0; i < iLoopCount; i++) {
+    bool ret = false;
+    for (size_t i = 0; i < attrList->size(); i++) {
         if (attrList->at(i)->NameEquals(name)) {
-            retVal = true;
+            ret = true;
         }
     }
-    return retVal;
+    return ret;
 }
 
-string * NodeEntity::AttrByName(string * name)
+string NodeEntity::AttrByName(string name)
 {
-    string * retVal = new string();
-    int iLoopCount = (int)attrList->size();
-    for (int i = 0; i < iLoopCount; i++) {
+    string ret;
+    for (size_t i = 0; i < attrList->size(); i++) {
         if (attrList->at(i)->NameEquals(name)) {
-            retVal = attrList->at(i)->GetAttrValue();
+            ret = attrList->at(i)->GetAttrValue();
         }
     }
-    return retVal;
+    return ret;
 }
 
-NodeEntity * NodeEntity::Find(string * tagName)
+NodeEntity * NodeEntity::Find(string tagName)
 {
     NodeEntity * node = this;
-    if ((node->GetNodeName()->compare(*tagName) == 0)) {
+    if ((node->GetNodeName().compare(tagName) == 0)) {
         return node;
     }
-    int iLoopCount = (int)node->GetChildList()->size();
-    for (int i = 0; i < iLoopCount; i++) {
-        NodeEntity * retVal = Find(node->GetChildList()->at(i), tagName);
-        if (retVal != nullptr) {
-            return retVal;
+    for (size_t i = 0; i < node->GetChildList()->size(); i++) {
+        NodeEntity * ret = Find(node->GetChildList()->at(i), tagName);
+        if (ret != nullptr) {
+            return ret;
         }
     }
     return nullptr;
 }
 
-NodeEntity * NodeEntity::Find(string * tagName, string * attrName, string * attrValue)
+NodeEntity * NodeEntity::Find(string tagName, string attrName, string attrValue)
 {
     NodeEntity * node = this;
-    if ((node->GetNodeName()->compare(*tagName) == 0)) {
-        if (node->AttrExists(attrName) && (node->AttrByName(attrName)->compare(*attrValue) == 0)) {
+    if ((node->GetNodeName().compare(tagName) == 0)) {
+        if (node->AttrExists(attrName) && (node->AttrByName(attrName).compare(attrValue) == 0)) {
             return node;
         }
     }
-    int iLoopCount = (int)node->GetChildList()->size();
-    for (int i = 0; i < iLoopCount; i++) {
-        NodeEntity * retVal = Find(node->GetChildList()->at(i), tagName, attrName, attrValue);
-        if (retVal != nullptr) {
-            return retVal;
+    for (size_t i = 0; i < node->GetChildList()->size(); i++) {
+        NodeEntity * ret = Find(node->GetChildList()->at(i), tagName, attrName, attrValue);
+        if (ret != nullptr) {
+            return ret;
         }
     }
     return nullptr;
 }
 
-NodeEntity * NodeEntity::Find(string * tagName, string * attr1Name, string * attr1Value, string * attr2Name, string * attr2Value)
+NodeEntity * NodeEntity::Find(string tagName, string attr1Name, string attr1Value, string attr2Name, string attr2Value)
 {
     NodeEntity * node = this;
-    if ((node->GetNodeName()->compare(*tagName) == 0)) {
-        if (node->AttrExists(attr1Name) && node->AttrExists(attr2Name) && (node->AttrByName(attr1Name)->compare(*attr1Value) == 0) && (node->AttrByName(attr2Name)->compare(*attr2Value) == 0)) {
+    if ((node->GetNodeName().compare(tagName) == 0)) {
+        if (node->AttrExists(attr1Name) && node->AttrExists(attr2Name) && (node->AttrByName(attr1Name).compare(attr1Value) == 0) && (node->AttrByName(attr2Name).compare(attr2Value) == 0)) {
             return node;
         }
     }
-    int iLoopCount = (int)node->GetChildList()->size();
-    for (int i = 0; i < iLoopCount; i++) {
+    for (size_t i = 0; i < node->GetChildList()->size(); i++) {
         NodeEntity * retVal = Find(node->GetChildList()->at(i), tagName, attr1Name, attr1Value, attr2Name, attr2Value);
         if (retVal != nullptr) {
             return retVal;
@@ -270,27 +262,27 @@ NodeEntity * NodeEntity::Find(string * tagName, string * attr1Name, string * att
     return nullptr;
 }
 
-NodeEntity * NodeEntity::FindFromTail(vector<string *> * tree)
+NodeEntity * NodeEntity::FindFromTail(vector<string> * tree)
 {
     NodeEntity * node = this;
     if (tree->size() <= 1) {
         return node;
     }
     else {
-        vector<string *> subtree = *tree;
+        vector<string> subtree = *tree;
         subtree.erase(subtree.begin());
         return FindFromTail(node, subtree);
     }
 }
 
-NodeEntity * NodeEntity::FindFromTail(vector<string *> * tree, string * leafName)
+NodeEntity * NodeEntity::FindFromTail(vector<string> * tree, string leafName)
 {
     NodeEntity * node = this;
     if (tree->size() <= 0) {
         return node;
     }
     else {
-        if (leafName->length() == 0) {
+        if (leafName.length() == 0) {
             return FindFromTail(tree);
         }
         /*
@@ -299,75 +291,75 @@ NodeEntity * NodeEntity::FindFromTail(vector<string *> * tree, string * leafName
         }
         */
         else {
-            vector<string *> subtree = *tree;
+            vector<string> subtree = *tree;
             subtree.erase(subtree.begin());
-            return FindFromTail(node, subtree, *leafName);
+            return FindFromTail(node, subtree, leafName);
         }
     }
 }
 
-NodeEntity * NodeEntity::Dir(string * name)
+NodeEntity * NodeEntity::Dir(string name)
 {
     string arg1Item = "Item";
     string arg2Type = "type";
     string arg3Dir = "Dir";
     string arg4Name = "name";
-    return Find(&arg1Item, &arg2Type, &arg3Dir, &arg4Name, name);
+    return Find(arg1Item, arg2Type, arg3Dir, arg4Name, name);
 }
 
-NodeEntity * NodeEntity::File(string * name)
+NodeEntity * NodeEntity::File(string name)
 {
     string arg1Item = "Item";
     string arg2Type = "type";
     string arg3File = "File";
     string arg4Name = "name";
-    return Find(&arg1Item, &arg2Type, &arg3File, &arg4Name, name);
+    return Find(arg1Item, arg2Type, arg3File, arg4Name, name);
 }
 
-NodeEntity * NodeEntity::Tag(string * name)
+NodeEntity * NodeEntity::Tag(string name)
 {
     string arg1Item = "Item";
     string arg2Type = "type";
     string arg3Tag = "Tag";
     string arg4Name = "name";
-    return Find(&arg1Item, &arg2Type, &arg3Tag, &arg4Name, name);
+    return Find(arg1Item, arg2Type, arg3Tag, arg4Name, name);
 }
 
-NodeEntity * NodeEntity::Attr(string * name)
+NodeEntity * NodeEntity::Attr(string name)
 {
     string arg1Item = "Item";
     string arg2Type = "type";
     string arg3Attr = "Attr";
     string arg4Name = "name";
-    return Find(&arg1Item, &arg2Type, &arg3Attr, &arg4Name, name);
+    return Find(arg1Item, arg2Type, arg3Attr, arg4Name, name);
 }
 
-NodeEntity * NodeEntity::Table(string * name)
+NodeEntity * NodeEntity::Table(string name)
 {
     string arg1Item = "Item";
     string arg2Type = "type";
     string arg3Table = "Table";
     string arg4Name = "name";
-    return Find(&arg1Item, &arg2Type, &arg3Table, &arg4Name, name);
+    return Find(arg1Item, arg2Type, arg3Table, arg4Name, name);
 }
 
-NodeEntity * NodeEntity::SubCategory(string * name)
+NodeEntity * NodeEntity::SubCategory(string name)
 {
     string arg1Category = "Category";
     string arg2Name = "name";
-    return Find(&arg1Category, &arg2Name, name);
+    return Find(arg1Category, arg2Name, name);
 }
 
-NodeEntity * NodeEntity::SubCategory(string * childName, string * grandChildName)
+NodeEntity * NodeEntity::SubCategory(string childName, string grandChildName)
 {
     string arg1Category = "Category";
     string arg2Name = "name";
     string arg3Category = "Category";
     string arg4Name = "name";
-    return Find(&arg1Category, &arg2Name, childName)->Find(&arg3Category, &arg4Name, grandChildName);
+    return Find(arg1Category, arg2Name, childName)->Find(arg3Category, arg4Name, grandChildName);
 }
 
-NodeEntity * NodeEntity::SubCategory(string * childName, string * grandChildName, string * greatGrandChildName)
+NodeEntity * NodeEntity::SubCategory(string childName, string grandChildName, string greatGrandChildName)
 {
     string arg1Category = "Category";
     string arg2Name = "name";
@@ -375,21 +367,19 @@ NodeEntity * NodeEntity::SubCategory(string * childName, string * grandChildName
     string arg4Name = "name";
     string arg5Category = "Category";
     string arg6Name = "name";
-    return Find(&arg1Category, &arg2Name, childName)->Find(&arg3Category, &arg4Name, grandChildName)->Find(&arg5Category, &arg6Name, greatGrandChildName);
+    return Find(arg1Category, arg2Name, childName)->Find(arg3Category, arg4Name, grandChildName)->Find(arg5Category, arg6Name, greatGrandChildName);
 }
 
 NodeEntity * NodeEntity::Clone()
 {
     NodeEntity * clone = new NodeEntity();
 
-    int iLoopCount = attrList->size();
-    for (int i = 0; i < iLoopCount; i++) {
+    for (size_t i = 0; i < attrList->size(); i++) {
         AttributeEntity * cloneAttr = attrList->at(i)->Clone();
         clone->AddAttribute(cloneAttr);
     }
 
-    int jLoopCount = childList->size();
-    for (int j = 0; j < jLoopCount; j++) {
+    for (size_t j = 0; j < childList->size(); j++) {
         clone->AddChild(childList->at(j)->Clone());
     }
 
@@ -398,8 +388,6 @@ NodeEntity * NodeEntity::Clone()
 
 NodeEntity::NodeEntity()
 {
-    nodeName = unique_ptr<string>();
-    nodeValue = unique_ptr<string>();
     attrList = new vector<AttributeEntity *>();
     childList = new vector<NodeEntity *>();
     disposed = false;
