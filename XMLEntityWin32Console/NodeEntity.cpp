@@ -383,6 +383,10 @@ NodeEntity * NodeEntity::Clone()
         clone->AddChild(childList->at(j)->Clone());
     }
 
+    clone->SetNodeName(this->GetNodeName());
+    clone->SetNodeID(this->GetNodeID());
+    clone->SetNodeValue(this->GetNodeValue());
+
     return clone;
 }
 

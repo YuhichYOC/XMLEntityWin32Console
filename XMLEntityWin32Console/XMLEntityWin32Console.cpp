@@ -114,13 +114,13 @@ void SmartPointerTest02()
 int main()
 {
     /*
+    SmartPointerTest01();
+    */
     NodeEntityTest01();
     NodeEntityTest02();
     NodeEntityTest03();
     NodeEntityTest04();
     SettingReaderTest01();
-    SmartPointerTest01();
-    */
     SettingReaderTest02();
 
     string value;

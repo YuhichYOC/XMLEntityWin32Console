@@ -317,6 +317,9 @@ void NodeEntityTest::NodeEntityTest04()
 
     node->FindFromTail(tree.get())->AddChild(addNodeDDD);
 
+    // 2016-10-14 ? ノード名指定にリーフが必ず入るよう仕様変更？
+    tree.get()->pop_back();
+
     name = new string("BBB");
     NodeEntity * testNode = node.get()->FindFromTail(tree.get(), *name)->Clone();
 
