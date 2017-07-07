@@ -1,9 +1,9 @@
-/*
+ï»¿/*
 *
 * SettingReaderTest.cpp
 *
 * Copyright 2016 Yuichi Yoshii
-*     ‹gˆä—Yˆê @ ‹gˆäŽY‹Æ  you.65535.kir@gmail.com
+*     å‰äº•é›„ä¸€ @ å‰äº•ç”£æ¥­  you.65535.kir@gmail.com
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -41,7 +41,7 @@ void SettingReaderTest::SettingReaderTest01()
     if (!sr.IsParseSucceeded()) {
         return;
     }
-    // ŽÀÛ‚Ì’l‚É‚Â‚¢‚ÄŒŸØ
+    // å®Ÿéš›ã®å€¤ã«ã¤ã„ã¦æ¤œè¨¼
 }
 
 void SettingReaderTest::SettingReaderTest02()
@@ -57,7 +57,7 @@ void SettingReaderTest::SettingReaderTest02()
     if (!sr.IsParseSucceeded()) {
         return;
     }
-    // ŽÀÛ‚Ì’l‚É‚Â‚¢‚ÄŒŸØ
+    // å®Ÿéš›ã®å€¤ã«ã¤ã„ã¦æ¤œè¨¼
 
     string value;
     cin >> value;
