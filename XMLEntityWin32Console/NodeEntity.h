@@ -35,17 +35,13 @@ private:
 
     string nodeValue;
 
-    vector<unique_ptr<AttributeEntity>> attrList;
+    vector<AttributeEntity *> attrList;
 
-    vector<unique_ptr<NodeEntity>> children;
+    vector<NodeEntity *> children;
 
-    unique_ptr<NodeEntity> Find(unique_ptr<NodeEntity> node, string tagName);
+    NodeEntity * Find(NodeEntity * node, string tagName);
 
-    unique_ptr<NodeEntity> Find(unique_ptr<NodeEntity> node, string tagName, string attrName, string attrValue);
-
-    unique_ptr<NodeEntity> Find(unique_ptr<NodeEntity> node, string tagName, string attr1Name, string attr1Value, string attr2Name, string attr2Value);
-
-    unique_ptr<NodeEntity> FindTail(unique_ptr<NodeEntity> node, int depth);
+    NodeEntity * FindTail(NodeEntity * node, int depth);
 
     bool disposed;
 
@@ -63,43 +59,21 @@ public:
 
     string GetNodeValue();
 
-    void AddAttribute(unique_ptr<AttributeEntity> arg);
+    void AddAttribute(AttributeEntity * arg);
 
-    vector<unique_ptr<AttributeEntity>> GetAttrList();
+    vector<AttributeEntity *> GetAttrList();
 
-    void AddChild(unique_ptr<NodeEntity> arg);
+    void AddChild(NodeEntity * arg);
 
-    vector<unique_ptr<NodeEntity>> GetChildren();
+    vector<NodeEntity *> GetChildren();
 
     bool AttrExists(string name);
 
     string AttrByName(string name);
 
-    unique_ptr<NodeEntity> Find(string tagName);
+    NodeEntity * Find(string tagName);
 
-    unique_ptr<NodeEntity> Find(string tagName, string attrName, string attrValue);
-
-    unique_ptr<NodeEntity> Find(string tagName, string attr1Name, string attr1Value, string attr2Name, string attr2Value);
-
-    unique_ptr<NodeEntity> FindTail(int depth);
-
-    unique_ptr<NodeEntity> Dir(string name);
-
-    unique_ptr<NodeEntity> File(string name);
-
-    unique_ptr<NodeEntity> Tag(string name);
-
-    unique_ptr<NodeEntity> Attr(string name);
-
-    unique_ptr<NodeEntity> Table(string name);
-
-    unique_ptr<NodeEntity> SubCategory(string name);
-
-    unique_ptr<NodeEntity> SubCategory(string childName, string grandChildName);
-
-    unique_ptr<NodeEntity> SubCategory(string childName, string grandChildName, string greatGrandChildName);
-
-    unique_ptr<NodeEntity> Clone();
+    NodeEntity * FindTail(int depth);
 
     NodeEntity();
 

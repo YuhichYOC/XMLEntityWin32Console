@@ -78,7 +78,4 @@
   <ItemGroup>
     <Text Include="..\ReadMe.txt" />
   </ItemGroup>
-  <ItemGroup>
-    <Xml Include="Setting.config" />
-  </ItemGroup>
 </Project>

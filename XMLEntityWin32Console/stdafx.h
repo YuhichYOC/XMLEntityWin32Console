@@ -12,7 +12,9 @@
 
 // TODO: プログラムに必要な追加ヘッダーをここで参照してください
 
+#include <codecvt>
 #include <iostream>
+#include <locale>
 #include <memory>
 #include <string>
 #include <vector>

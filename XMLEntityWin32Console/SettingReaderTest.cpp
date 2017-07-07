@@ -30,7 +30,7 @@ bool SettingReaderTest::GetTestSuccess()
 
 void SettingReaderTest::SettingReaderTest01()
 {
-    string fileName = "./Setting.config";
+    string fileName = "D:\\workspace\\Setting.config";
     SettingReader sr;
     sr.SetFileName(fileName);
     sr.Prepare();
@@ -46,7 +46,7 @@ void SettingReaderTest::SettingReaderTest01()
 
 void SettingReaderTest::SettingReaderTest02()
 {
-    string fileName = "./Setting.config";
+    string fileName = "D:\\workspace\\Setting.config";
     SettingReader sr;
     sr.SetFileName(fileName);
     sr.Prepare();

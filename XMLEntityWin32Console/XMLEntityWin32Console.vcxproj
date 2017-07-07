@@ -174,9 +174,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\LICENSE" />
-    <Xml Include="Setting.config">
-      <FileType>Document</FileType>
-    </Xml>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

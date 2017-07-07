@@ -30,7 +30,7 @@ bool NodeEntityTest::GetTestSuccess()
 
 void NodeEntityTest::NodeEntityTest01()
 {
-    unique_ptr<NodeEntity> node;
+    NodeEntity * node = new NodeEntity();
     string name;
 
     /*
@@ -46,36 +46,37 @@ void NodeEntityTest::NodeEntityTest01()
     name = "Root";
     node->SetNodeName(name);
 
-    unique_ptr<NodeEntity> addNodeAAA;
+    NodeEntity * addNodeAAA = new NodeEntity();
     name = "AAA";
     addNodeAAA->SetNodeName(name);
 
-    node->AddChild(move(addNodeAAA));
+    node->AddChild(addNodeAAA);
 
-    unique_ptr<NodeEntity> addNodeBBB;
+    NodeEntity * addNodeBBB = new NodeEntity();
     name = "BBB";
     addNodeBBB->SetNodeName(name);
 
-    node->FindTail(2)->AddChild(move(addNodeBBB));
+    node->FindTail(2)->AddChild(addNodeBBB);
 
-    unique_ptr<NodeEntity> addNodeCCC;
+    NodeEntity * addNodeCCC = new NodeEntity();
     name = "CCC";
     addNodeCCC->SetNodeName(name);
 
-    node->FindTail(3)->AddChild(move(addNodeCCC));
+    node->FindTail(3)->AddChild(addNodeCCC);
 
-    unique_ptr<NodeEntity> addNodeDDD;
+    NodeEntity * addNodeDDD = new NodeEntity();
     name = "DDD";
     addNodeDDD->SetNodeName(name);
 
-    node->FindTail(4)->AddChild(move(addNodeDDD));
+    node->FindTail(3)->AddChild(addNodeDDD);
 
+    delete node;
     testSuccess = true;
 }
 
 void NodeEntityTest::NodeEntityTest02()
 {
-    unique_ptr<NodeEntity> node;
+    NodeEntity * node = new NodeEntity();
     string name;
 
     /*
@@ -91,72 +92,71 @@ void NodeEntityTest::NodeEntityTest02()
     name = "Root";
     node->SetNodeName(name);
 
-    unique_ptr<NodeEntity> addNodeAAA;
+    NodeEntity * addNodeAAA = new NodeEntity();
     name = "AAA";
     addNodeAAA->SetNodeName(name);
 
-    unique_ptr<AttributeEntity> addAttrAAAtype;
+    AttributeEntity * addAttrAAAtype = new AttributeEntity();
     name = "type";
     addAttrAAAtype->SetAttrName(name);
     name = "typeAAA";
     addAttrAAAtype->SetAttrValue(name);
-    addNodeAAA->AddAttribute(move(addAttrAAAtype));
+    addNodeAAA->AddAttribute(addAttrAAAtype);
 
-    node->AddChild(move(addNodeAAA));
-    name = "AAA";
+    node->AddChild(addNodeAAA);
 
-    unique_ptr<NodeEntity> addNodeBBB;
+    NodeEntity * addNodeBBB = new NodeEntity();
     name = "BBB";
     addNodeBBB->SetNodeName(name);
 
-    unique_ptr<AttributeEntity> addAttrBBBname;
+    AttributeEntity * addAttrBBBname = new AttributeEntity();
     name = "name";
     addAttrBBBname->SetAttrName(name);
     name = "nameBBB";
     addAttrBBBname->SetAttrValue(name);
-    addNodeBBB->AddAttribute(move(addAttrBBBname));
-    unique_ptr<AttributeEntity> addAttrBBBtype;
+    addNodeBBB->AddAttribute(addAttrBBBname);
+    AttributeEntity * addAttrBBBtype = new AttributeEntity();
     name = "type";
     addAttrBBBtype->SetAttrName(name);
     name = "typeBBB";
     addAttrBBBtype->SetAttrValue(name);
-    addNodeBBB->AddAttribute(move(addAttrBBBtype));
+    addNodeBBB->AddAttribute(addAttrBBBtype);
 
-    node->FindTail(2)->AddChild(move(addNodeBBB));
-    name = "BBB";
+    node->FindTail(2)->AddChild(addNodeBBB);
 
-    unique_ptr<NodeEntity> addNodeCCC;
+    NodeEntity * addNodeCCC = new NodeEntity();
     name = "CCC";
     addNodeCCC->SetNodeName(name);
 
-    unique_ptr<AttributeEntity> addAttrCCCtype;
+    AttributeEntity * addAttrCCCtype = new AttributeEntity();
     name = "type";
     addAttrCCCtype->SetAttrName(name);
     name = "typeCCC";
     addAttrCCCtype->SetAttrValue(name);
-    addNodeCCC->AddAttribute(move(addAttrCCCtype));
+    addNodeCCC->AddAttribute(addAttrCCCtype);
 
-    node->FindTail(3)->AddChild(move(addNodeCCC));
+    node->FindTail(3)->AddChild(addNodeCCC);
 
-    unique_ptr<NodeEntity> addNodeDDD;
+    NodeEntity * addNodeDDD = new NodeEntity();
     name = "DDD";
     addNodeDDD->SetNodeName(name);
 
-    unique_ptr<AttributeEntity> addAttrDDDname;
+    AttributeEntity * addAttrDDDname = new AttributeEntity();
     name = "name";
     addAttrDDDname->SetAttrName(name);
     name = "nameDDD";
     addAttrDDDname->SetAttrValue(name);
-    addNodeDDD->AddAttribute(move(addAttrDDDname));
+    addNodeDDD->AddAttribute(addAttrDDDname);
 
-    node->FindTail(3)->AddChild(move(addNodeDDD));
+    node->FindTail(3)->AddChild(addNodeDDD);
 
+    delete node;
     testSuccess = true;
 }
 
 void NodeEntityTest::NodeEntityTest03()
 {
-    unique_ptr<NodeEntity> node;
+    NodeEntity * node = new NodeEntity();
     string name;
 
     /*
@@ -172,74 +172,73 @@ void NodeEntityTest::NodeEntityTest03()
     name = "Root";
     node->SetNodeName(name);
 
-    unique_ptr<NodeEntity> addNodeAAA;
+    NodeEntity * addNodeAAA = new NodeEntity();
     name = "AAA";
     addNodeAAA->SetNodeName(name);
 
-    unique_ptr<AttributeEntity> addAttrAAAtype;
+    AttributeEntity * addAttrAAAtype = new AttributeEntity();
     name = "type";
     addAttrAAAtype->SetAttrName(name);
     name = "typeAAA";
     addAttrAAAtype->SetAttrValue(name);
-    addNodeAAA->AddAttribute(move(addAttrAAAtype));
+    addNodeAAA->AddAttribute(addAttrAAAtype);
 
-    node->AddChild(move(addNodeAAA));
-    name = "AAA";
+    node->AddChild(addNodeAAA);
 
-    unique_ptr<NodeEntity> addNodeBBB;
+    NodeEntity * addNodeBBB = new NodeEntity();
     name = "BBB";
     addNodeBBB->SetNodeName(name);
 
-    unique_ptr<AttributeEntity> addAttrBBBname;
+    AttributeEntity * addAttrBBBname = new AttributeEntity();
     name = "name";
     addAttrBBBname->SetAttrName(name);
     name = "nameBBB";
     addAttrBBBname->SetAttrValue(name);
-    addNodeBBB->AddAttribute(move(addAttrBBBname));
-    unique_ptr<AttributeEntity> addAttrBBBtype;
+    addNodeBBB->AddAttribute(addAttrBBBname);
+    AttributeEntity * addAttrBBBtype = new AttributeEntity();
     name = "type";
     addAttrBBBtype->SetAttrName(name);
     name = "typeBBB";
     addAttrBBBtype->SetAttrValue(name);
-    addNodeBBB->AddAttribute(move(addAttrBBBtype));
+    addNodeBBB->AddAttribute(addAttrBBBtype);
 
-    node->FindTail(2)->AddChild(move(addNodeBBB));
-    name = "BBB";
+    node->FindTail(2)->AddChild(addNodeBBB);
 
-    unique_ptr<NodeEntity> addNodeCCC;
+    NodeEntity * addNodeCCC = new NodeEntity();
     name = "CCC";
     addNodeCCC->SetNodeName(name);
 
-    unique_ptr<AttributeEntity> addAttrCCCtype;
+    AttributeEntity * addAttrCCCtype = new AttributeEntity();
     name = "type";
     addAttrCCCtype->SetAttrName(name);
     name = "typeCCC";
     addAttrCCCtype->SetAttrValue(name);
-    addNodeCCC->AddAttribute(move(addAttrCCCtype));
+    addNodeCCC->AddAttribute(addAttrCCCtype);
 
-    node->FindTail(3)->AddChild(move(addNodeCCC));
+    node->FindTail(3)->AddChild(addNodeCCC);
 
-    unique_ptr<NodeEntity> addNodeDDD;
+    NodeEntity * addNodeDDD = new NodeEntity();
     name = "DDD";
     addNodeDDD->SetNodeName(name);
 
-    unique_ptr<AttributeEntity> addAttrDDDname;
+    AttributeEntity * addAttrDDDname = new AttributeEntity();
     name = "name";
     addAttrDDDname->SetAttrName(name);
     name = "nameDDD";
     addAttrDDDname->SetAttrValue(name);
-    addNodeDDD->AddAttribute(move(addAttrDDDname));
+    addNodeDDD->AddAttribute(addAttrDDDname);
 
-    node->FindTail(3)->AddChild(move(addNodeDDD));
+    node->FindTail(3)->AddChild(addNodeDDD);
 
-    unique_ptr<NodeEntity> testNode = node->FindTail(3)->Clone();
+    //unique_ptr<NodeEntity> testNode = node->FindTail(3)->Clone();
 
+    delete node;
     testSuccess = true;
 }
 
 void NodeEntityTest::NodeEntityTest04()
 {
-    unique_ptr<NodeEntity> node;
+    NodeEntity * node = new NodeEntity();
     string name;
 
     /*
@@ -255,68 +254,67 @@ void NodeEntityTest::NodeEntityTest04()
     name = "Root";
     node->SetNodeName(name);
 
-    unique_ptr<NodeEntity> addNodeAAA;
+    NodeEntity * addNodeAAA = new NodeEntity();
     name = "AAA";
     addNodeAAA->SetNodeName(name);
 
-    unique_ptr<AttributeEntity> addAttrAAAtype;
+    AttributeEntity * addAttrAAAtype = new AttributeEntity();
     name = "type";
     addAttrAAAtype->SetAttrName(name);
     name = "typeAAA";
     addAttrAAAtype->SetAttrValue(name);
-    addNodeAAA->AddAttribute(move(addAttrAAAtype));
+    addNodeAAA->AddAttribute(addAttrAAAtype);
 
-    node->AddChild(move(addNodeAAA));
-    name = "AAA";
+    node->AddChild(addNodeAAA);
 
-    unique_ptr<NodeEntity> addNodeBBB;
+    NodeEntity * addNodeBBB = new NodeEntity();
     name = "BBB";
     addNodeBBB->SetNodeName(name);
 
-    unique_ptr<AttributeEntity> addAttrBBBname;
+    AttributeEntity * addAttrBBBname = new AttributeEntity();
     name = "name";
     addAttrBBBname->SetAttrName(name);
     name = "nameBBB";
     addAttrBBBname->SetAttrValue(name);
-    addNodeBBB->AddAttribute(move(addAttrBBBname));
-    unique_ptr<AttributeEntity> addAttrBBBtype;
+    addNodeBBB->AddAttribute(addAttrBBBname);
+    AttributeEntity * addAttrBBBtype = new AttributeEntity();
     name = "type";
     addAttrBBBtype->SetAttrName(name);
     name = "typeBBB";
     addAttrBBBtype->SetAttrValue(name);
-    addNodeBBB->AddAttribute(move(addAttrBBBtype));
+    addNodeBBB->AddAttribute(addAttrBBBtype);
 
-    node->FindTail(2)->AddChild(move(addNodeBBB));
-    name = "BBB";
+    node->FindTail(2)->AddChild(addNodeBBB);
 
-    unique_ptr<NodeEntity> addNodeCCC;
+    NodeEntity * addNodeCCC = new NodeEntity();
     name = "CCC";
     addNodeCCC->SetNodeName(name);
 
-    unique_ptr<AttributeEntity> addAttrCCCtype;
+    AttributeEntity * addAttrCCCtype = new AttributeEntity();
     name = "type";
     addAttrCCCtype->SetAttrName(name);
     name = "typeCCC";
     addAttrCCCtype->SetAttrValue(name);
-    addNodeCCC->AddAttribute(move(addAttrCCCtype));
+    addNodeCCC->AddAttribute(addAttrCCCtype);
 
-    node->FindTail(3)->AddChild(move(addNodeCCC));
+    node->FindTail(3)->AddChild(addNodeCCC);
 
-    unique_ptr<NodeEntity> addNodeDDD;
+    NodeEntity * addNodeDDD = new NodeEntity();
     name = "DDD";
     addNodeDDD->SetNodeName(name);
 
-    unique_ptr<AttributeEntity> addAttrDDDname;
+    AttributeEntity * addAttrDDDname = new AttributeEntity();
     name = "name";
     addAttrDDDname->SetAttrName(name);
     name = "nameDDD";
     addAttrDDDname->SetAttrValue(name);
-    addNodeDDD->AddAttribute(move(addAttrDDDname));
+    addNodeDDD->AddAttribute(addAttrDDDname);
 
-    node->FindTail(3)->AddChild(move(addNodeDDD));
+    node->FindTail(3)->AddChild(addNodeDDD);
 
-    unique_ptr<NodeEntity> testNode = node->FindTail(3)->Clone();
+    //unique_ptr<NodeEntity> testNode = node->FindTail(3)->Clone();
 
+    delete node;
     testSuccess = true;
 }
 

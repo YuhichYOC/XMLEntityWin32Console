@@ -130,10 +130,8 @@ int main()
     NodeEntityTest02();
     NodeEntityTest03();
     NodeEntityTest04();
-    /*
     SettingReaderTest01();
     SettingReaderTest02();
-    */
 
     string value;
     cin >> value;

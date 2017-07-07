@@ -43,22 +43,20 @@ string SettingReader::GetFileName()
     return fileName;
 }
 
-unique_ptr<NodeEntity> SettingReader::GetNode()
+NodeEntity * SettingReader::GetNode()
 {
-    return move(myNode);
+    return myNode.get();
 }
 
 void SettingReader::Prepare()
 {
-    setlocale(LC_ALL, "japanese");
-
     if (fileName.length() == 0) {
         errorMessage.assign("SettingReader::Prepare -- File name is not set. Method : Parse");
         prepared = false;
         return;
     }
-    WCharString wc = wc.Value(fileName);
-    if (FAILED(SHCreateStreamOnFile((LPCWSTR)(wc.ToWChar().get()), STGM_READ, &stream))) {
+    WCharString wc;
+    if (FAILED(SHCreateStreamOnFile(wc.Value(fileName).ToLPWStr(), STGM_READ, &stream))) {
         errorMessage.assign("SettingReader::Prepare -- File reader can't be create. Method : SHCreateStreamOnFile");
         prepared = false;
         return;
@@ -102,6 +100,7 @@ void SettingReader::Parse()
 
 void SettingReader::ParseElement(IXmlReader * reader, XmlNodeType nodeType)
 {
+    if (nodeType != XmlNodeType::XmlNodeType_Element) { return; }
     const wchar_t * prefix;
     const wchar_t * localName;
     uint32_t prefixLength;
@@ -114,24 +113,24 @@ void SettingReader::ParseElement(IXmlReader * reader, XmlNodeType nodeType)
 
     nodeId++;
 
-    unique_ptr<NodeEntity> newNode;
+    NodeEntity * newNode = new NodeEntity();
     WCharString wc;
     newNode->SetNodeName(wc.Value(localName).ToString());
     newNode->SetNodeID(nodeId);
-    newNode = move(ParseAttributes(reader, move(newNode)));
+    newNode = ParseAttributes(reader, newNode);
 
     if (nodeId == 1) {
-        myNode = move(newNode);
+        myNode.reset(newNode);
     }
     else {
-        myNode->FindTail(depth)->AddChild(move(newNode));
+        myNode->FindTail(depth)->AddChild(newNode);
     }
     if (!reader->IsEmptyElement()) {
         depth++;
     }
 }
 
-unique_ptr<NodeEntity> SettingReader::ParseAttributes(IXmlReader * reader, unique_ptr<NodeEntity> node)
+NodeEntity * SettingReader::ParseAttributes(IXmlReader * reader, NodeEntity * node)
 {
     const wchar_t * prefix;
     const wchar_t * localName;
@@ -139,7 +138,7 @@ unique_ptr<NodeEntity> SettingReader::ParseAttributes(IXmlReader * reader, uniqu
     uint32_t prefixLength;
 
     if (FAILED(reader->MoveToFirstAttribute())) {
-        return move(node);
+        return node;
     }
     while (true) {
         if (!reader->IsDefault()) {
@@ -152,17 +151,17 @@ unique_ptr<NodeEntity> SettingReader::ParseAttributes(IXmlReader * reader, uniqu
             if (FAILED(reader->GetValue(&value, NULL))) {
                 continue;
             }
-            unique_ptr<AttributeEntity> newAttr;
+            AttributeEntity * newAttr = new AttributeEntity();
             WCharString wc;
             newAttr->SetAttrName(wc.Value(localName).ToString());
             newAttr->SetAttrValue(wc.Value(value).ToString());
-            node->AddAttribute(move(newAttr));
+            node->AddAttribute(newAttr);
         }
         if (S_OK != reader->MoveToNextAttribute()) {
             break;
         }
     }
-    return move(node);
+    return node;
 }
 
 void SettingReader::ParseText(IXmlReader * reader, XmlNodeType nodeType)
@@ -207,19 +206,11 @@ SettingReader::SettingReader()
 {
     depth = 0;
     nodeId = 0;
-    stream = nullptr;
-    reader = nullptr;
     disposed = false;
 }
 
 void SettingReader::Dispose()
 {
-    if (stream != nullptr) {
-        delete stream;
-    }
-    if (reader != nullptr) {
-        delete reader;
-    }
     disposed = true;
 }
 

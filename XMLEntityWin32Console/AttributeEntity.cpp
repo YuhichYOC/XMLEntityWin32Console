@@ -63,27 +63,10 @@ bool AttributeEntity::ValueEquals(string arg)
     }
 }
 
-unique_ptr<AttributeEntity> AttributeEntity::Clone()
-{
-    unique_ptr<AttributeEntity> clone(new AttributeEntity());
-    clone->SetAttrName(attrName);
-    clone->SetAttrValue(attrValue);
-    return move(clone);
-}
-
 AttributeEntity::AttributeEntity()
 {
-    disposed = false;
-}
-
-void AttributeEntity::Dispose()
-{
-    disposed = true;
 }
 
 AttributeEntity::~AttributeEntity()
 {
-    if (!disposed) {
-        Dispose();
-    }
 }

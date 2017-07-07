@@ -53,7 +53,7 @@ private:
 
     void ParseElement(IXmlReader * reader, XmlNodeType nodeType);
 
-    unique_ptr<NodeEntity> ParseAttributes(IXmlReader * reader, unique_ptr<NodeEntity> node);
+    NodeEntity * ParseAttributes(IXmlReader * reader, NodeEntity * node);
 
     void ParseText(IXmlReader * reader, XmlNodeType nodeType);
 
@@ -73,7 +73,7 @@ public:
 
     string GetFileName();
 
-    unique_ptr<NodeEntity> GetNode();
+    NodeEntity * GetNode();
 
     void Prepare();
 

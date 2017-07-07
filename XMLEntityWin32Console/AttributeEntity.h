@@ -31,8 +31,6 @@ private:
 
     string attrValue;
 
-    bool disposed;
-
 public:
 
     void SetAttrName(string arg);
@@ -47,11 +45,7 @@ public:
 
     bool ValueEquals(string arg);
 
-    unique_ptr<AttributeEntity> Clone();
-
     AttributeEntity();
-
-    void Dispose();
 
     ~AttributeEntity();
 };
