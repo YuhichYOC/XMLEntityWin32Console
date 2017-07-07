@@ -23,133 +23,59 @@
 
 #include "NodeEntity.h"
 
-NodeEntity * NodeEntity::Find(NodeEntity * node, string tagName)
+unique_ptr<NodeEntity> NodeEntity::Find(unique_ptr<NodeEntity> node, string tagName)
 {
-    if (node == nullptr) {
-        node = this;
+    unique_ptr<NodeEntity> ret = move(node);
+    if ((ret->GetNodeName().compare(tagName)) == 0) {
+        return move(ret);
     }
-    if ((node->GetNodeName().compare(tagName)) == 0) {
-        return node;
+    size_t loop = ret->GetChildren().size();
+    for (size_t i = 0; i < loop; i++) {
+        ret = Find(move(ret->GetChildren().at(i)), tagName);
     }
-    for (size_t i = 0; i < node->GetChildList()->size(); i++) {
-        NodeEntity * retVal = Find(node->GetChildList()->at(i), tagName);
-        if (retVal != nullptr) {
-            return retVal;
-        }
-    }
-    return nullptr;
+    return move(ret);
 }
 
-NodeEntity * NodeEntity::Find(NodeEntity * node, string tagName, string attrName, string attrValue)
+unique_ptr<NodeEntity> NodeEntity::Find(unique_ptr<NodeEntity> node, string tagName, string attrName, string attrValue)
 {
-    if (node == nullptr) {
-        node = this;
-    }
-    if ((node->GetNodeName().compare(tagName)) == 0) {
-        if (node->AttrExists(attrName) && (node->AttrByName(attrName).compare(attrValue) == 0)) {
-            return node;
+    unique_ptr<NodeEntity> ret = move(node);
+    if ((ret->GetNodeName().compare(tagName)) == 0) {
+        if (ret->AttrExists(attrName) && (ret->AttrByName(attrName).compare(attrValue) == 0)) {
+            return move(ret);
         }
     }
-    for (size_t i = 0; i < node->GetChildList()->size(); i++) {
-        NodeEntity * retVal = Find(node->GetChildList()->at(i), tagName, attrName, attrValue);
-        if (retVal != nullptr) {
-            return retVal;
-        }
+    size_t loop = ret->GetChildren().size();
+    for (size_t i = 0; i < loop; i++) {
+        ret = Find(move(ret->GetChildren().at(i)), tagName, attrName, attrValue);
     }
-    return nullptr;
+    return move(ret);
 }
 
-NodeEntity * NodeEntity::Find(NodeEntity * node, string tagName, string attr1Name, string attr1Value, string attr2Name, string attr2Value)
+unique_ptr<NodeEntity> NodeEntity::Find(unique_ptr<NodeEntity> node, string tagName, string attr1Name, string attr1Value, string attr2Name, string attr2Value)
 {
-    if (node == nullptr) {
-        node = this;
-    }
-    if ((node->GetNodeName().compare(tagName)) == 0) {
-        if (node->AttrExists(attr1Name) && node->AttrExists(attr2Name) && (node->AttrByName(attr1Name).compare(attr1Value) == 0) && (node->AttrByName(attr2Name).compare(attr2Value) == 0)) {
-            return node;
+    unique_ptr<NodeEntity> ret = move(node);
+    if ((ret->GetNodeName().compare(tagName)) == 0) {
+        if (ret->AttrExists(attr1Name) && ret->AttrExists(attr2Name) && (ret->AttrByName(attr1Name).compare(attr1Value) == 0) && (ret->AttrByName(attr2Name).compare(attr2Value) == 0)) {
+            return move(ret);
         }
     }
-    for (size_t i = 0; i < node->GetChildList()->size(); i++) {
-        NodeEntity * retVal = Find(node->GetChildList()->at(i), tagName, attr1Name, attr1Value, attr2Name, attr2Value);
-        if (retVal != nullptr) {
-            return retVal;
-        }
+    size_t loop = ret->GetChildren().size();
+    for (size_t i = 0; i < loop; i++) {
+        ret = Find(move(ret->GetChildren().at(i)), tagName, attr1Name, attr1Value, attr2Name, attr2Value);
     }
-    return nullptr;
+    return move(ret);
 }
 
-NodeEntity * NodeEntity::FindFromTail(NodeEntity * node, vector<string> tree)
+unique_ptr<NodeEntity> NodeEntity::FindTail(unique_ptr<NodeEntity> node, int depth)
 {
-    if (node == nullptr) {
-        node = this;
-    }
-    if (tree.size() == 0) {
-        return node;
-    }
-    int pos = FindChildIndexByName(node, tree.at(0));
-    tree.erase(tree.begin());
-    if (pos >= 0) {
-        return FindFromTail(node->GetChildList()->at(pos), tree);
+    if (depth == 1) {
+        return move(node);
     }
     else {
-        return nullptr;
+        depth--;
+        size_t count = node->GetChildren().size();
+        return move(FindTail(move(node->GetChildren().at(count - 1)), depth));
     }
-}
-
-NodeEntity * NodeEntity::FindFromTail(NodeEntity * node, vector<string> tree, string leafName)
-{
-    if (node == nullptr) {
-        node = this;
-    }
-    if (tree.size() == 0) {
-        int retPos = FindChildIndexByName(node, leafName);
-        if (retPos >= 0) {
-            return node->GetChildList()->at(retPos);
-        }
-        else {
-            return nullptr;
-        }
-    }
-    int pos = FindChildIndexByName(node, tree.at(0));
-    tree.erase(tree.begin());
-    if (pos >= 0) {
-        return FindFromTail(node->GetChildList()->at(pos), tree, leafName);
-    }
-    else {
-        return nullptr;
-    }
-}
-
-int NodeEntity::FindChildIndexByName(NodeEntity * node, string name)
-{
-    int pos = -1;
-    int iLoopCount = (int)node->GetChildList()->size();
-    for (int i = 0; i < iLoopCount; i++) {
-        if ((node->GetChildList()->at(i)->GetNodeName().compare(name)) == 0) {
-            pos = i;
-        }
-    }
-    return pos;
-}
-
-void NodeEntity::DisposeAttrList()
-{
-    int iLoopCount = attrList->size();
-    for (int i = 0; i < iLoopCount; i++) {
-        attrList->at(i)->Dispose();
-        delete attrList->at(i);
-    }
-    delete attrList;
-}
-
-void NodeEntity::DisposeChildList()
-{
-    int iLoopCount = childList->size();
-    for (int i = 0; i < iLoopCount; i++) {
-        childList->at(i)->Dispose();
-        delete childList->at(i);
-    }
-    delete childList;
 }
 
 void NodeEntity::SetNodeName(string arg)
@@ -182,41 +108,32 @@ string NodeEntity::GetNodeValue()
     return nodeValue;
 }
 
-void NodeEntity::SetAttrList(vector<AttributeEntity *> * arg)
+void NodeEntity::AddAttribute(unique_ptr<AttributeEntity> arg)
 {
-    attrList = arg;
+    attrList.push_back(arg);
 }
 
-vector<AttributeEntity *> * NodeEntity::GetAttrList()
+vector<unique_ptr<AttributeEntity>> NodeEntity::GetAttrList()
 {
     return attrList;
 }
 
-void NodeEntity::AddAttribute(AttributeEntity * arg)
+void NodeEntity::AddChild(unique_ptr<NodeEntity> arg)
 {
-    attrList->push_back(arg);
+    children.push_back(arg);
 }
 
-void NodeEntity::SetChildList(vector<NodeEntity *> * arg)
+vector<unique_ptr<NodeEntity>> NodeEntity::GetChildren()
 {
-    childList = arg;
-}
-
-vector<NodeEntity *> * NodeEntity::GetChildList()
-{
-    return childList;
-}
-
-void NodeEntity::AddChild(NodeEntity * arg)
-{
-    childList->push_back(arg);
+    return children;
 }
 
 bool NodeEntity::AttrExists(string name)
 {
     bool ret = false;
-    for (size_t i = 0; i < attrList->size(); i++) {
-        if (attrList->at(i)->NameEquals(name)) {
+    size_t loop = attrList.size();
+    for (size_t i = 0; i < loop; i++) {
+        if (attrList.at(i)->NameEquals(name)) {
             ret = true;
         }
     }
@@ -226,161 +143,129 @@ bool NodeEntity::AttrExists(string name)
 string NodeEntity::AttrByName(string name)
 {
     string ret;
-    for (size_t i = 0; i < attrList->size(); i++) {
-        if (attrList->at(i)->NameEquals(name)) {
-            ret = attrList->at(i)->GetAttrValue();
+    size_t loop = attrList.size();
+    for (size_t i = 0; i < loop; i++) {
+        if (attrList.at(i)->NameEquals(name)) {
+            ret = attrList.at(i)->GetAttrValue();
         }
     }
     return ret;
 }
 
-NodeEntity * NodeEntity::Find(string tagName)
+unique_ptr<NodeEntity> NodeEntity::Find(string tagName)
 {
-    NodeEntity * node = this;
-    if ((node->GetNodeName().compare(tagName) == 0)) {
-        return node;
+    unique_ptr<NodeEntity> ret(this);
+    if ((ret->GetNodeName().compare(tagName) == 0)) {
+        return move(ret);
     }
-    for (size_t i = 0; i < node->GetChildList()->size(); i++) {
-        NodeEntity * ret = Find(node->GetChildList()->at(i), tagName);
-        if (ret != nullptr) {
-            return ret;
-        }
+    size_t loop = ret->GetChildren().size();
+    for (size_t i = 0; i < loop; i++) {
+        ret = Find(move(ret->GetChildren().at(i)), tagName);
     }
-    return nullptr;
+    return move(ret);
 }
 
-NodeEntity * NodeEntity::Find(string tagName, string attrName, string attrValue)
+unique_ptr<NodeEntity> NodeEntity::Find(string tagName, string attrName, string attrValue)
 {
-    NodeEntity * node = this;
-    if ((node->GetNodeName().compare(tagName) == 0)) {
-        if (node->AttrExists(attrName) && (node->AttrByName(attrName).compare(attrValue) == 0)) {
-            return node;
+    unique_ptr<NodeEntity> ret(this);
+    if ((ret->GetNodeName().compare(tagName) == 0)) {
+        if (ret->AttrExists(attrName) && (ret->AttrByName(attrName).compare(attrValue) == 0)) {
+            return move(ret);
         }
     }
-    for (size_t i = 0; i < node->GetChildList()->size(); i++) {
-        NodeEntity * ret = Find(node->GetChildList()->at(i), tagName, attrName, attrValue);
-        if (ret != nullptr) {
-            return ret;
-        }
+    size_t loop = ret->GetChildren().size();
+    for (size_t i = 0; i < loop; i++) {
+        ret = Find(move(ret->GetChildren().at(i)), tagName, attrName, attrValue);
     }
-    return nullptr;
+    return move(ret);
 }
 
-NodeEntity * NodeEntity::Find(string tagName, string attr1Name, string attr1Value, string attr2Name, string attr2Value)
+unique_ptr<NodeEntity> NodeEntity::Find(string tagName, string attr1Name, string attr1Value, string attr2Name, string attr2Value)
 {
-    NodeEntity * node = this;
-    if ((node->GetNodeName().compare(tagName) == 0)) {
-        if (node->AttrExists(attr1Name) && node->AttrExists(attr2Name) && (node->AttrByName(attr1Name).compare(attr1Value) == 0) && (node->AttrByName(attr2Name).compare(attr2Value) == 0)) {
-            return node;
+    unique_ptr<NodeEntity> ret(this);
+    if ((ret->GetNodeName().compare(tagName) == 0)) {
+        if (ret->AttrExists(attr1Name) && ret->AttrExists(attr2Name) && (ret->AttrByName(attr1Name).compare(attr1Value) == 0) && (ret->AttrByName(attr2Name).compare(attr2Value) == 0)) {
+            return move(ret);
         }
     }
-    for (size_t i = 0; i < node->GetChildList()->size(); i++) {
-        NodeEntity * retVal = Find(node->GetChildList()->at(i), tagName, attr1Name, attr1Value, attr2Name, attr2Value);
-        if (retVal != nullptr) {
-            return retVal;
-        }
+    size_t loop = ret->GetChildren().size();
+    for (size_t i = 0; i < loop; i++) {
+        ret = Find(move(ret->GetChildren().at(i)), tagName, attr1Name, attr1Value, attr2Name, attr2Value);
     }
-    return nullptr;
+    return move(ret);
 }
 
-NodeEntity * NodeEntity::FindFromTail(vector<string> * tree)
+unique_ptr<NodeEntity> NodeEntity::FindTail(int depth)
 {
-    NodeEntity * node = this;
-    if (tree->size() <= 1) {
-        return node;
-    }
-    else {
-        vector<string> subtree = *tree;
-        subtree.erase(subtree.begin());
-        return FindFromTail(node, subtree);
-    }
+    unique_ptr<NodeEntity> ret(this);
+    if (depth == 1) { return move(ret); }
+    depth--;
+    size_t count = ret->GetChildren().size();
+    return move(FindTail(move(ret->GetChildren().at(count - 1)), depth));
 }
 
-NodeEntity * NodeEntity::FindFromTail(vector<string> * tree, string leafName)
-{
-    NodeEntity * node = this;
-    if (tree->size() <= 0) {
-        return node;
-    }
-    else {
-        if (leafName.length() == 0) {
-            return FindFromTail(tree);
-        }
-        /*
-        else if (tree->at(tree->size() - 1)->compare(*leafName) == 0) {
-        return FindFromTail(tree);
-        }
-        */
-        else {
-            vector<string> subtree = *tree;
-            subtree.erase(subtree.begin());
-            return FindFromTail(node, subtree, leafName);
-        }
-    }
-}
-
-NodeEntity * NodeEntity::Dir(string name)
+unique_ptr<NodeEntity> NodeEntity::Dir(string name)
 {
     string arg1Item = "Item";
     string arg2Type = "type";
     string arg3Dir = "Dir";
     string arg4Name = "name";
-    return Find(arg1Item, arg2Type, arg3Dir, arg4Name, name);
+    return move(Find(arg1Item, arg2Type, arg3Dir, arg4Name, name));
 }
 
-NodeEntity * NodeEntity::File(string name)
+unique_ptr<NodeEntity> NodeEntity::File(string name)
 {
     string arg1Item = "Item";
     string arg2Type = "type";
     string arg3File = "File";
     string arg4Name = "name";
-    return Find(arg1Item, arg2Type, arg3File, arg4Name, name);
+    return move(Find(arg1Item, arg2Type, arg3File, arg4Name, name));
 }
 
-NodeEntity * NodeEntity::Tag(string name)
+unique_ptr<NodeEntity> NodeEntity::Tag(string name)
 {
     string arg1Item = "Item";
     string arg2Type = "type";
     string arg3Tag = "Tag";
     string arg4Name = "name";
-    return Find(arg1Item, arg2Type, arg3Tag, arg4Name, name);
+    return move(Find(arg1Item, arg2Type, arg3Tag, arg4Name, name));
 }
 
-NodeEntity * NodeEntity::Attr(string name)
+unique_ptr<NodeEntity> NodeEntity::Attr(string name)
 {
     string arg1Item = "Item";
     string arg2Type = "type";
     string arg3Attr = "Attr";
     string arg4Name = "name";
-    return Find(arg1Item, arg2Type, arg3Attr, arg4Name, name);
+    return move(Find(arg1Item, arg2Type, arg3Attr, arg4Name, name));
 }
 
-NodeEntity * NodeEntity::Table(string name)
+unique_ptr<NodeEntity> NodeEntity::Table(string name)
 {
     string arg1Item = "Item";
     string arg2Type = "type";
     string arg3Table = "Table";
     string arg4Name = "name";
-    return Find(arg1Item, arg2Type, arg3Table, arg4Name, name);
+    return move(Find(arg1Item, arg2Type, arg3Table, arg4Name, name));
 }
 
-NodeEntity * NodeEntity::SubCategory(string name)
+unique_ptr<NodeEntity> NodeEntity::SubCategory(string name)
 {
     string arg1Category = "Category";
     string arg2Name = "name";
-    return Find(arg1Category, arg2Name, name);
+    return move(Find(arg1Category, arg2Name, name));
 }
 
-NodeEntity * NodeEntity::SubCategory(string childName, string grandChildName)
+unique_ptr<NodeEntity> NodeEntity::SubCategory(string childName, string grandChildName)
 {
     string arg1Category = "Category";
     string arg2Name = "name";
     string arg3Category = "Category";
     string arg4Name = "name";
-    return Find(arg1Category, arg2Name, childName)->Find(arg3Category, arg4Name, grandChildName);
+    return move(Find(arg1Category, arg2Name, childName)->Find(arg3Category, arg4Name, grandChildName));
 }
 
-NodeEntity * NodeEntity::SubCategory(string childName, string grandChildName, string greatGrandChildName)
+unique_ptr<NodeEntity> NodeEntity::SubCategory(string childName, string grandChildName, string greatGrandChildName)
 {
     string arg1Category = "Category";
     string arg2Name = "name";
@@ -388,40 +273,37 @@ NodeEntity * NodeEntity::SubCategory(string childName, string grandChildName, st
     string arg4Name = "name";
     string arg5Category = "Category";
     string arg6Name = "name";
-    return Find(arg1Category, arg2Name, childName)->Find(arg3Category, arg4Name, grandChildName)->Find(arg5Category, arg6Name, greatGrandChildName);
+    return move(Find(arg1Category, arg2Name, childName)->Find(arg3Category, arg4Name, grandChildName)->Find(arg5Category, arg6Name, greatGrandChildName));
 }
 
-NodeEntity * NodeEntity::Clone()
+unique_ptr<NodeEntity> NodeEntity::Clone()
 {
-    NodeEntity * clone = new NodeEntity();
+    unique_ptr<NodeEntity> clone;
 
-    for (size_t i = 0; i < attrList->size(); i++) {
-        AttributeEntity * cloneAttr = attrList->at(i)->Clone();
-        clone->AddAttribute(cloneAttr);
+    for (size_t i = 0; i < attrList.size(); i++) {
+        unique_ptr<AttributeEntity> cloneAttr = move(attrList.at(i)->Clone());
+        clone->AddAttribute(move(cloneAttr));
     }
 
-    for (size_t j = 0; j < childList->size(); j++) {
-        clone->AddChild(childList->at(j)->Clone());
+    for (size_t j = 0; j < children.size(); j++) {
+        unique_ptr<NodeEntity> cloneChild = move(children.at(j)->Clone());
+        clone->AddChild(move(cloneChild));
     }
 
     clone->SetNodeName(this->GetNodeName());
     clone->SetNodeID(this->GetNodeID());
     clone->SetNodeValue(this->GetNodeValue());
 
-    return clone;
+    return move(clone);
 }
 
 NodeEntity::NodeEntity()
 {
-    attrList = new vector<AttributeEntity *>();
-    childList = new vector<NodeEntity *>();
     disposed = false;
 }
 
 void NodeEntity::Dispose()
 {
-    DisposeAttrList();
-    DisposeChildList();
     disposed = true;
 }
 

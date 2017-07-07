@@ -35,27 +35,19 @@ private:
 
     string nodeValue;
 
-    vector<AttributeEntity *> * attrList;
+    vector<unique_ptr<AttributeEntity>> attrList;
 
-    vector<NodeEntity *> * childList;
+    vector<unique_ptr<NodeEntity>> children;
 
-    NodeEntity * Find(NodeEntity * node, string tagName);
+    unique_ptr<NodeEntity> Find(unique_ptr<NodeEntity> node, string tagName);
 
-    NodeEntity * Find(NodeEntity * node, string tagName, string attrName, string attrValue);
+    unique_ptr<NodeEntity> Find(unique_ptr<NodeEntity> node, string tagName, string attrName, string attrValue);
 
-    NodeEntity * Find(NodeEntity * node, string tagName, string attr1Name, string attr1Value, string attr2Name, string attr2Value);
+    unique_ptr<NodeEntity> Find(unique_ptr<NodeEntity> node, string tagName, string attr1Name, string attr1Value, string attr2Name, string attr2Value);
 
-    NodeEntity * FindFromTail(NodeEntity * node, vector<string> tree);
-
-    NodeEntity * FindFromTail(NodeEntity * node, vector<string> tree, string leafName);
-
-    int FindChildIndexByName(NodeEntity * node, string name);
+    unique_ptr<NodeEntity> FindTail(unique_ptr<NodeEntity> node, int depth);
 
     bool disposed;
-
-    void DisposeAttrList();
-
-    void DisposeChildList();
 
 public:
 
@@ -71,49 +63,43 @@ public:
 
     string GetNodeValue();
 
-    void SetAttrList(vector<AttributeEntity *> * arg);
+    void AddAttribute(unique_ptr<AttributeEntity> arg);
 
-    vector<AttributeEntity *> * GetAttrList();
+    vector<unique_ptr<AttributeEntity>> GetAttrList();
 
-    void AddAttribute(AttributeEntity * arg);
+    void AddChild(unique_ptr<NodeEntity> arg);
 
-    void SetChildList(vector<NodeEntity *> * arg);
-
-    vector<NodeEntity *> * GetChildList();
-
-    void AddChild(NodeEntity * arg);
+    vector<unique_ptr<NodeEntity>> GetChildren();
 
     bool AttrExists(string name);
 
     string AttrByName(string name);
 
-    NodeEntity * Find(string tagName);
+    unique_ptr<NodeEntity> Find(string tagName);
 
-    NodeEntity * Find(string tagName, string attrName, string attrValue);
+    unique_ptr<NodeEntity> Find(string tagName, string attrName, string attrValue);
 
-    NodeEntity * Find(string tagName, string attr1Name, string attr1Value, string attr2Name, string attr2Value);
+    unique_ptr<NodeEntity> Find(string tagName, string attr1Name, string attr1Value, string attr2Name, string attr2Value);
 
-    NodeEntity * FindFromTail(vector<string> * tree);
+    unique_ptr<NodeEntity> FindTail(int depth);
 
-    NodeEntity * FindFromTail(vector<string> * tree, string leafName);
+    unique_ptr<NodeEntity> Dir(string name);
 
-    NodeEntity * Dir(string name);
+    unique_ptr<NodeEntity> File(string name);
 
-    NodeEntity * File(string name);
+    unique_ptr<NodeEntity> Tag(string name);
 
-    NodeEntity * Tag(string name);
+    unique_ptr<NodeEntity> Attr(string name);
 
-    NodeEntity * Attr(string name);
+    unique_ptr<NodeEntity> Table(string name);
 
-    NodeEntity * Table(string name);
+    unique_ptr<NodeEntity> SubCategory(string name);
 
-    NodeEntity * SubCategory(string name);
+    unique_ptr<NodeEntity> SubCategory(string childName, string grandChildName);
 
-    NodeEntity * SubCategory(string childName, string grandChildName);
+    unique_ptr<NodeEntity> SubCategory(string childName, string grandChildName, string greatGrandChildName);
 
-    NodeEntity * SubCategory(string childName, string grandChildName, string greatGrandChildName);
-
-    NodeEntity * Clone();
+    unique_ptr<NodeEntity> Clone();
 
     NodeEntity();
 

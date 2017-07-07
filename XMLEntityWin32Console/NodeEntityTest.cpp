@@ -30,9 +30,8 @@ bool NodeEntityTest::GetTestSuccess()
 
 void NodeEntityTest::NodeEntityTest01()
 {
-    unique_ptr<NodeEntity> node(new NodeEntity());
-    unique_ptr<vector<string>> tree(new vector<string>());
-    string * name;
+    unique_ptr<NodeEntity> node;
+    string name;
 
     /*
     *
@@ -44,47 +43,40 @@ void NodeEntityTest::NodeEntityTest01()
     *
     */
 
-    name = new string("Root");
-    node->SetNodeName(*name);
-    tree->push_back(*name);
+    name = "Root";
+    node->SetNodeName(name);
 
-    NodeEntity * addNodeAAA = new NodeEntity();
-    name = new string("AAA");
-    addNodeAAA->SetNodeName(*name);
+    unique_ptr<NodeEntity> addNodeAAA;
+    name = "AAA";
+    addNodeAAA->SetNodeName(name);
 
-    node->AddChild(addNodeAAA);
-    tree->push_back(*name);
+    node->AddChild(move(addNodeAAA));
 
-    NodeEntity * addNodeBBB = new NodeEntity();
-    name = new string("BBB");
-    addNodeBBB->SetNodeName(*name);
+    unique_ptr<NodeEntity> addNodeBBB;
+    name = "BBB";
+    addNodeBBB->SetNodeName(name);
 
-    node->FindFromTail(tree.get())->AddChild(addNodeBBB);
-    tree->push_back(*name);
+    node->FindTail(2)->AddChild(move(addNodeBBB));
 
-    NodeEntity * addNodeCCC = new NodeEntity();
-    name = new string("CCC");
-    addNodeCCC->SetNodeName(*name);
+    unique_ptr<NodeEntity> addNodeCCC;
+    name = "CCC";
+    addNodeCCC->SetNodeName(name);
 
-    node->FindFromTail(tree.get())->AddChild(addNodeCCC);
+    node->FindTail(3)->AddChild(move(addNodeCCC));
 
-    NodeEntity * addNodeDDD = new NodeEntity();
-    name = new string("DDD");
-    addNodeDDD->SetNodeName(*name);
+    unique_ptr<NodeEntity> addNodeDDD;
+    name = "DDD";
+    addNodeDDD->SetNodeName(name);
 
-    node->FindFromTail(tree.get())->AddChild(addNodeDDD);
+    node->FindTail(4)->AddChild(move(addNodeDDD));
 
     testSuccess = true;
-
-    delete name;
 }
 
 void NodeEntityTest::NodeEntityTest02()
 {
-    //unique_ptr<NodeEntity> node(new NodeEntity());
-    NodeEntity * node = new NodeEntity();
-    vector<string> * tree = new vector<string>();
-    string * name;
+    unique_ptr<NodeEntity> node;
+    string name;
 
     /*
     *
@@ -96,83 +88,76 @@ void NodeEntityTest::NodeEntityTest02()
     *
     */
 
-    name = new string("Root");
-    node->SetNodeName(*name);
-    tree->push_back(*name);
+    name = "Root";
+    node->SetNodeName(name);
 
-    NodeEntity * addNodeAAA = new NodeEntity();
-    name = new string("AAA");
-    addNodeAAA->SetNodeName(*name);
+    unique_ptr<NodeEntity> addNodeAAA;
+    name = "AAA";
+    addNodeAAA->SetNodeName(name);
 
-    AttributeEntity * addAttrAAAtype = new AttributeEntity();
-    name = new string("type");
-    addAttrAAAtype->SetAttrName(*name);
-    name = new string("typeAAA");
-    addAttrAAAtype->SetAttrValue(*name);
-    addNodeAAA->AddAttribute(addAttrAAAtype);
+    unique_ptr<AttributeEntity> addAttrAAAtype;
+    name = "type";
+    addAttrAAAtype->SetAttrName(name);
+    name = "typeAAA";
+    addAttrAAAtype->SetAttrValue(name);
+    addNodeAAA->AddAttribute(move(addAttrAAAtype));
 
-    node->AddChild(addNodeAAA);
-    name = new string("AAA");
-    tree->push_back(*name);
+    node->AddChild(move(addNodeAAA));
+    name = "AAA";
 
-    NodeEntity * addNodeBBB = new NodeEntity();
-    name = new string("BBB");
-    addNodeBBB->SetNodeName(*name);
+    unique_ptr<NodeEntity> addNodeBBB;
+    name = "BBB";
+    addNodeBBB->SetNodeName(name);
 
-    AttributeEntity * addAttrBBBname = new AttributeEntity();
-    name = new string("name");
-    addAttrBBBname->SetAttrName(*name);
-    name = new string("nameBBB");
-    addAttrBBBname->SetAttrValue(*name);
-    addNodeBBB->AddAttribute(addAttrBBBname);
-    AttributeEntity * addAttrBBBtype = new AttributeEntity();
-    name = new string("type");
-    addAttrBBBtype->SetAttrName(*name);
-    name = new string("typeBBB");
-    addAttrBBBtype->SetAttrValue(*name);
-    addNodeBBB->AddAttribute(addAttrBBBtype);
+    unique_ptr<AttributeEntity> addAttrBBBname;
+    name = "name";
+    addAttrBBBname->SetAttrName(name);
+    name = "nameBBB";
+    addAttrBBBname->SetAttrValue(name);
+    addNodeBBB->AddAttribute(move(addAttrBBBname));
+    unique_ptr<AttributeEntity> addAttrBBBtype;
+    name = "type";
+    addAttrBBBtype->SetAttrName(name);
+    name = "typeBBB";
+    addAttrBBBtype->SetAttrValue(name);
+    addNodeBBB->AddAttribute(move(addAttrBBBtype));
 
-    node->FindFromTail(tree)->AddChild(addNodeBBB);
-    name = new string("BBB");
-    tree->push_back(*name);
+    node->FindTail(2)->AddChild(move(addNodeBBB));
+    name = "BBB";
 
-    NodeEntity * addNodeCCC = new NodeEntity();
-    name = new string("CCC");
-    addNodeCCC->SetNodeName(*name);
+    unique_ptr<NodeEntity> addNodeCCC;
+    name = "CCC";
+    addNodeCCC->SetNodeName(name);
 
-    AttributeEntity * addAttrCCCtype = new AttributeEntity();
-    name = new string("type");
-    addAttrCCCtype->SetAttrName(*name);
-    name = new string("typeCCC");
-    addAttrCCCtype->SetAttrValue(*name);
-    addNodeCCC->AddAttribute(addAttrCCCtype);
+    unique_ptr<AttributeEntity> addAttrCCCtype;
+    name = "type";
+    addAttrCCCtype->SetAttrName(name);
+    name = "typeCCC";
+    addAttrCCCtype->SetAttrValue(name);
+    addNodeCCC->AddAttribute(move(addAttrCCCtype));
 
-    node->FindFromTail(tree)->AddChild(addNodeCCC);
+    node->FindTail(3)->AddChild(move(addNodeCCC));
 
-    NodeEntity * addNodeDDD = new NodeEntity();
-    name = new string("DDD");
-    addNodeDDD->SetNodeName(*name);
+    unique_ptr<NodeEntity> addNodeDDD;
+    name = "DDD";
+    addNodeDDD->SetNodeName(name);
 
-    AttributeEntity * addAttrDDDname = new AttributeEntity();
-    name = new string("name");
-    addAttrDDDname->SetAttrName(*name);
-    name = new string("nameDDD");
-    addAttrDDDname->SetAttrValue(*name);
-    addNodeDDD->AddAttribute(addAttrDDDname);
+    unique_ptr<AttributeEntity> addAttrDDDname;
+    name = "name";
+    addAttrDDDname->SetAttrName(name);
+    name = "nameDDD";
+    addAttrDDDname->SetAttrValue(name);
+    addNodeDDD->AddAttribute(move(addAttrDDDname));
 
-    node->FindFromTail(tree)->AddChild(addNodeDDD);
+    node->FindTail(3)->AddChild(move(addNodeDDD));
 
     testSuccess = true;
-
-    delete node;
 }
 
 void NodeEntityTest::NodeEntityTest03()
 {
-    unique_ptr<NodeEntity> node(new NodeEntity());
-    //unique_ptr<vector<string *>> tree(new vector<string *>());
-    vector<string> * tree = new vector<string>();
-    string * name;
+    unique_ptr<NodeEntity> node;
+    string name;
 
     /*
     *
@@ -184,83 +169,78 @@ void NodeEntityTest::NodeEntityTest03()
     *
     */
 
-    name = new string("Root");
-    node->SetNodeName(*name);
-    tree->push_back(*name);
+    name = "Root";
+    node->SetNodeName(name);
 
-    NodeEntity * addNodeAAA = new NodeEntity();
-    name = new string("AAA");
-    addNodeAAA->SetNodeName(*name);
+    unique_ptr<NodeEntity> addNodeAAA;
+    name = "AAA";
+    addNodeAAA->SetNodeName(name);
 
-    AttributeEntity * addAttrAAAtype = new AttributeEntity();
-    name = new string("type");
-    addAttrAAAtype->SetAttrName(*name);
-    name = new string("typeAAA");
-    addAttrAAAtype->SetAttrValue(*name);
-    addNodeAAA->AddAttribute(addAttrAAAtype);
+    unique_ptr<AttributeEntity> addAttrAAAtype;
+    name = "type";
+    addAttrAAAtype->SetAttrName(name);
+    name = "typeAAA";
+    addAttrAAAtype->SetAttrValue(name);
+    addNodeAAA->AddAttribute(move(addAttrAAAtype));
 
-    node->AddChild(addNodeAAA);
-    name = new string("AAA");
-    tree->push_back(*name);
+    node->AddChild(move(addNodeAAA));
+    name = "AAA";
 
-    NodeEntity * addNodeBBB = new NodeEntity();
-    name = new string("BBB");
-    addNodeBBB->SetNodeName(*name);
+    unique_ptr<NodeEntity> addNodeBBB;
+    name = "BBB";
+    addNodeBBB->SetNodeName(name);
 
-    AttributeEntity * addAttrBBBname = new AttributeEntity();
-    name = new string("name");
-    addAttrBBBname->SetAttrName(*name);
-    name = new string("nameBBB");
-    addAttrBBBname->SetAttrValue(*name);
-    addNodeBBB->AddAttribute(addAttrBBBname);
-    AttributeEntity * addAttrBBBtype = new AttributeEntity();
-    name = new string("type");
-    addAttrBBBtype->SetAttrName(*name);
-    name = new string("typeBBB");
-    addAttrBBBtype->SetAttrValue(*name);
-    addNodeBBB->AddAttribute(addAttrBBBtype);
+    unique_ptr<AttributeEntity> addAttrBBBname;
+    name = "name";
+    addAttrBBBname->SetAttrName(name);
+    name = "nameBBB";
+    addAttrBBBname->SetAttrValue(name);
+    addNodeBBB->AddAttribute(move(addAttrBBBname));
+    unique_ptr<AttributeEntity> addAttrBBBtype;
+    name = "type";
+    addAttrBBBtype->SetAttrName(name);
+    name = "typeBBB";
+    addAttrBBBtype->SetAttrValue(name);
+    addNodeBBB->AddAttribute(move(addAttrBBBtype));
 
-    node->FindFromTail(tree)->AddChild(addNodeBBB);
-    name = new string("BBB");
-    tree->push_back(*name);
+    node->FindTail(2)->AddChild(move(addNodeBBB));
+    name = "BBB";
 
-    NodeEntity * addNodeCCC = new NodeEntity();
-    name = new string("CCC");
-    addNodeCCC->SetNodeName(*name);
+    unique_ptr<NodeEntity> addNodeCCC;
+    name = "CCC";
+    addNodeCCC->SetNodeName(name);
 
-    AttributeEntity * addAttrCCCtype = new AttributeEntity();
-    name = new string("type");
-    addAttrCCCtype->SetAttrName(*name);
-    name = new string("typeCCC");
-    addAttrCCCtype->SetAttrValue(*name);
-    addNodeCCC->AddAttribute(addAttrCCCtype);
+    unique_ptr<AttributeEntity> addAttrCCCtype;
+    name = "type";
+    addAttrCCCtype->SetAttrName(name);
+    name = "typeCCC";
+    addAttrCCCtype->SetAttrValue(name);
+    addNodeCCC->AddAttribute(move(addAttrCCCtype));
 
-    node->FindFromTail(tree)->AddChild(addNodeCCC);
+    node->FindTail(3)->AddChild(move(addNodeCCC));
 
-    NodeEntity * addNodeDDD = new NodeEntity();
-    name = new string("DDD");
-    addNodeDDD->SetNodeName(*name);
+    unique_ptr<NodeEntity> addNodeDDD;
+    name = "DDD";
+    addNodeDDD->SetNodeName(name);
 
-    AttributeEntity * addAttrDDDname = new AttributeEntity();
-    name = new string("name");
-    addAttrDDDname->SetAttrName(*name);
-    name = new string("nameDDD");
-    addAttrDDDname->SetAttrValue(*name);
-    addNodeDDD->AddAttribute(addAttrDDDname);
+    unique_ptr<AttributeEntity> addAttrDDDname;
+    name = "name";
+    addAttrDDDname->SetAttrName(name);
+    name = "nameDDD";
+    addAttrDDDname->SetAttrValue(name);
+    addNodeDDD->AddAttribute(move(addAttrDDDname));
 
-    node->FindFromTail(tree)->AddChild(addNodeDDD);
+    node->FindTail(3)->AddChild(move(addNodeDDD));
 
-    name = new string("CCC");
-    NodeEntity * testNode = node.get()->FindFromTail(tree, *name)->Clone();
+    unique_ptr<NodeEntity> testNode = node->FindTail(3)->Clone();
 
     testSuccess = true;
 }
 
 void NodeEntityTest::NodeEntityTest04()
 {
-    unique_ptr<NodeEntity> node(new NodeEntity());
-    unique_ptr<vector<string>> tree(new vector<string>());
-    string * name;
+    unique_ptr<NodeEntity> node;
+    string name;
 
     /*
     *
@@ -272,77 +252,70 @@ void NodeEntityTest::NodeEntityTest04()
     *
     */
 
-    name = new string("Root");
-    node->SetNodeName(*name);
-    tree->push_back(*name);
+    name = "Root";
+    node->SetNodeName(name);
 
-    NodeEntity * addNodeAAA = new NodeEntity();
-    name = new string("AAA");
-    addNodeAAA->SetNodeName(*name);
+    unique_ptr<NodeEntity> addNodeAAA;
+    name = "AAA";
+    addNodeAAA->SetNodeName(name);
 
-    AttributeEntity * addAttrAAAtype = new AttributeEntity();
-    name = new string("type");
-    addAttrAAAtype->SetAttrName(*name);
-    name = new string("typeAAA");
-    addAttrAAAtype->SetAttrValue(*name);
-    addNodeAAA->AddAttribute(addAttrAAAtype);
+    unique_ptr<AttributeEntity> addAttrAAAtype;
+    name = "type";
+    addAttrAAAtype->SetAttrName(name);
+    name = "typeAAA";
+    addAttrAAAtype->SetAttrValue(name);
+    addNodeAAA->AddAttribute(move(addAttrAAAtype));
 
-    node->AddChild(addNodeAAA);
-    name = new string("AAA");
-    tree->push_back(*name);
+    node->AddChild(move(addNodeAAA));
+    name = "AAA";
 
-    NodeEntity * addNodeBBB = new NodeEntity();
-    name = new string("BBB");
-    addNodeBBB->SetNodeName(*name);
+    unique_ptr<NodeEntity> addNodeBBB;
+    name = "BBB";
+    addNodeBBB->SetNodeName(name);
 
-    AttributeEntity * addAttrBBBname = new AttributeEntity();
-    name = new string("name");
-    addAttrBBBname->SetAttrName(*name);
-    name = new string("nameBBB");
-    addAttrBBBname->SetAttrValue(*name);
-    addNodeBBB->AddAttribute(addAttrBBBname);
-    AttributeEntity * addAttrBBBtype = new AttributeEntity();
-    name = new string("type");
-    addAttrBBBtype->SetAttrName(*name);
-    name = new string("typeBBB");
-    addAttrBBBtype->SetAttrValue(*name);
-    addNodeBBB->AddAttribute(addAttrBBBtype);
+    unique_ptr<AttributeEntity> addAttrBBBname;
+    name = "name";
+    addAttrBBBname->SetAttrName(name);
+    name = "nameBBB";
+    addAttrBBBname->SetAttrValue(name);
+    addNodeBBB->AddAttribute(move(addAttrBBBname));
+    unique_ptr<AttributeEntity> addAttrBBBtype;
+    name = "type";
+    addAttrBBBtype->SetAttrName(name);
+    name = "typeBBB";
+    addAttrBBBtype->SetAttrValue(name);
+    addNodeBBB->AddAttribute(move(addAttrBBBtype));
 
-    node->FindFromTail(tree.get())->AddChild(addNodeBBB);
-    name = new string("BBB");
-    tree->push_back(*name);
+    node->FindTail(2)->AddChild(move(addNodeBBB));
+    name = "BBB";
 
-    NodeEntity * addNodeCCC = new NodeEntity();
-    name = new string("CCC");
-    addNodeCCC->SetNodeName(*name);
+    unique_ptr<NodeEntity> addNodeCCC;
+    name = "CCC";
+    addNodeCCC->SetNodeName(name);
 
-    AttributeEntity * addAttrCCCtype = new AttributeEntity();
-    name = new string("type");
-    addAttrCCCtype->SetAttrName(*name);
-    name = new string("typeCCC");
-    addAttrCCCtype->SetAttrValue(*name);
-    addNodeCCC->AddAttribute(addAttrCCCtype);
+    unique_ptr<AttributeEntity> addAttrCCCtype;
+    name = "type";
+    addAttrCCCtype->SetAttrName(name);
+    name = "typeCCC";
+    addAttrCCCtype->SetAttrValue(name);
+    addNodeCCC->AddAttribute(move(addAttrCCCtype));
 
-    node->FindFromTail(tree.get())->AddChild(addNodeCCC);
+    node->FindTail(3)->AddChild(move(addNodeCCC));
 
-    NodeEntity * addNodeDDD = new NodeEntity();
-    name = new string("DDD");
-    addNodeDDD->SetNodeName(*name);
+    unique_ptr<NodeEntity> addNodeDDD;
+    name = "DDD";
+    addNodeDDD->SetNodeName(name);
 
-    AttributeEntity * addAttrDDDname = new AttributeEntity();
-    name = new string("name");
-    addAttrDDDname->SetAttrName(*name);
-    name = new string("nameDDD");
-    addAttrDDDname->SetAttrValue(*name);
-    addNodeDDD->AddAttribute(addAttrDDDname);
+    unique_ptr<AttributeEntity> addAttrDDDname;
+    name = "name";
+    addAttrDDDname->SetAttrName(name);
+    name = "nameDDD";
+    addAttrDDDname->SetAttrValue(name);
+    addNodeDDD->AddAttribute(move(addAttrDDDname));
 
-    node->FindFromTail(tree.get())->AddChild(addNodeDDD);
+    node->FindTail(3)->AddChild(move(addNodeDDD));
 
-    // 2016-10-14 ? ノード名指定にリーフが必ず入るよう仕様変更？
-    tree.get()->pop_back();
-
-    name = new string("BBB");
-    NodeEntity * testNode = node.get()->FindFromTail(tree.get(), *name)->Clone();
+    unique_ptr<NodeEntity> testNode = node->FindTail(3)->Clone();
 
     testSuccess = true;
 }

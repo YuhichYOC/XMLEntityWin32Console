@@ -39,19 +39,15 @@ public:
 
     string GetAttrName();
 
-    string * CloneAttrName();
-
     void SetAttrValue(string arg);
 
     string GetAttrValue();
-
-    string * CloneAttrValue();
 
     bool NameEquals(string arg);
 
     bool ValueEquals(string arg);
 
-    AttributeEntity * Clone();
+    unique_ptr<AttributeEntity> Clone();
 
     AttributeEntity();
 

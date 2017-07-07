@@ -33,10 +33,10 @@ void SmartPointerTest::SmartPointerTest01()
     unique_ptr<NodeEntity> node(new NodeEntity());
     node->SetNodeName(string("test"));
 
-    AttributeEntity * attr = new AttributeEntity();
+    unique_ptr<AttributeEntity> attr;
     attr->SetAttrName(string("test"));
 
-    node->AddAttribute(attr);
+    node->AddAttribute(move(attr));
 
     testSuccess = true;
 }

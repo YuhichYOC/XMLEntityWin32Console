@@ -43,9 +43,9 @@ string SettingReader::GetFileName()
     return fileName;
 }
 
-NodeEntity * SettingReader::GetNode()
+unique_ptr<NodeEntity> SettingReader::GetNode()
 {
-    return myNode;
+    return move(myNode);
 }
 
 void SettingReader::Prepare()
@@ -57,7 +57,8 @@ void SettingReader::Prepare()
         prepared = false;
         return;
     }
-    if (FAILED(SHCreateStreamOnFile(WChar_tFromStr(fileName), STGM_READ, &stream))) {
+    WCharString wc = wc.Value(fileName);
+    if (FAILED(SHCreateStreamOnFile((LPCWSTR)(wc.ToWChar().get()), STGM_READ, &stream))) {
         errorMessage.assign("SettingReader::Prepare -- File reader can't be create. Method : SHCreateStreamOnFile");
         prepared = false;
         return;
@@ -81,15 +82,6 @@ void SettingReader::Prepare()
     prepared = true;
 }
 
-wchar_t * SettingReader::WChar_tFromStr(string arg)
-{
-    size_t retSize = strlen(arg.c_str()) + 1;
-    size_t cnvSize = 0;
-    wchar_t * ret = new wchar_t[retSize];
-    mbstowcs_s(&cnvSize, ret, retSize, arg.c_str(), _TRUNCATE);
-    return ret;
-}
-
 bool SettingReader::IsPrepared()
 {
     return prepared;
@@ -97,49 +89,18 @@ bool SettingReader::IsPrepared()
 
 void SettingReader::Parse()
 {
-    nodeId = 0;
-
-    vector<string> * tree = new vector<string>();
-
     XmlNodeType nodeType;
     while (reader->Read(&nodeType) == S_OK) {
-        switch (nodeType)
-        {
-        case XmlNodeType_None:
-            break;
-        case XmlNodeType_Element:
-            ParseElement(reader, tree);
-            break;
-        case XmlNodeType_Attribute:
-            break;
-        case XmlNodeType_Text:
-            ParseText(reader, tree);
-            break;
-        case XmlNodeType_CDATA:
-            ParseCDATA(reader, tree);
-            break;
-        case XmlNodeType_ProcessingInstruction:
-            break;
-        case XmlNodeType_Comment:
-            break;
-        case XmlNodeType_DocumentType:
-            break;
-        case XmlNodeType_Whitespace:
-            break;
-        case XmlNodeType_EndElement:
-            ParseEndElement(reader, tree);
-            break;
-        case XmlNodeType_XmlDeclaration:
-            break;
-        default:
-            break;
-        }
+        ParseElement(reader, nodeType);
+        ParseText(reader, nodeType);
+        ParseCDATA(reader, nodeType);
+        ParseEndElement(reader, nodeType);
     }
 
     parseSucceeded = true;
 }
 
-void SettingReader::ParseElement(IXmlReader * reader, vector<string> * tree)
+void SettingReader::ParseElement(IXmlReader * reader, XmlNodeType nodeType)
 {
     const wchar_t * prefix;
     const wchar_t * localName;
@@ -153,47 +114,24 @@ void SettingReader::ParseElement(IXmlReader * reader, vector<string> * tree)
 
     nodeId++;
 
-    NodeEntity * newNode = new NodeEntity();
-    newNode->SetNodeName(StrFromCWChar_t(localName));
+    unique_ptr<NodeEntity> newNode;
+    WCharString wc;
+    newNode->SetNodeName(wc.Value(localName).ToString());
     newNode->SetNodeID(nodeId);
+    newNode = move(ParseAttributes(reader, move(newNode)));
 
     if (nodeId == 1) {
-        myNode = newNode;
+        myNode = move(newNode);
     }
     else {
-        if (reader->IsEmptyElement()) {
-            tree->pop_back();
-        }
-        myNode->FindFromTail(tree)->AddChild(newNode);
+        myNode->FindTail(depth)->AddChild(move(newNode));
     }
-    ParseAttributes(reader, tree, newNode->GetNodeName());
-    tree->push_back(newNode->GetNodeName());
-}
-
-void SettingReader::ParseText(IXmlReader * reader, vector<string> * tree)
-{
-    const wchar_t * value;
-    if (FAILED(reader->GetValue(&value, NULL))) {
-        return;
+    if (!reader->IsEmptyElement()) {
+        depth++;
     }
-    myNode->FindFromTail(tree)->SetNodeValue(StrFromCWChar_t(value));
 }
 
-void SettingReader::ParseCDATA(IXmlReader * reader, vector<string> * tree)
-{
-    const wchar_t * value;
-    if (FAILED(reader->GetValue(&value, NULL))) {
-        return;
-    }
-    myNode->FindFromTail(tree)->SetNodeValue(StrFromCWChar_t(value));
-}
-
-void SettingReader::ParseEndElement(IXmlReader * reader, vector<string> * tree)
-{
-    tree->pop_back();
-}
-
-void SettingReader::ParseAttributes(IXmlReader * reader, vector<string> * tree, string name)
+unique_ptr<NodeEntity> SettingReader::ParseAttributes(IXmlReader * reader, unique_ptr<NodeEntity> node)
 {
     const wchar_t * prefix;
     const wchar_t * localName;
@@ -201,7 +139,7 @@ void SettingReader::ParseAttributes(IXmlReader * reader, vector<string> * tree, 
     uint32_t prefixLength;
 
     if (FAILED(reader->MoveToFirstAttribute())) {
-        return;
+        return move(node);
     }
     while (true) {
         if (!reader->IsDefault()) {
@@ -214,38 +152,45 @@ void SettingReader::ParseAttributes(IXmlReader * reader, vector<string> * tree, 
             if (FAILED(reader->GetValue(&value, NULL))) {
                 continue;
             }
-            AttributeEntity * newAttr = new AttributeEntity();
-            newAttr->SetAttrName(StrFromCWChar_t(localName));
-            newAttr->SetAttrValue(StrFromCWChar_t(value));
-            myNode->FindFromTail(tree, name)->AddAttribute(newAttr);
+            unique_ptr<AttributeEntity> newAttr;
+            WCharString wc;
+            newAttr->SetAttrName(wc.Value(localName).ToString());
+            newAttr->SetAttrValue(wc.Value(value).ToString());
+            node->AddAttribute(move(newAttr));
         }
         if (S_OK != reader->MoveToNextAttribute()) {
             break;
         }
     }
+    return move(node);
 }
 
-string SettingReader::StrFromWChar_t(wchar_t * arg)
+void SettingReader::ParseText(IXmlReader * reader, XmlNodeType nodeType)
 {
-    wstring castedArg = arg;
-    size_t retSize = castedArg.length() + 1;
-    size_t cnvSize = 0;
-    unique_ptr<char> arrayFromArg(new char[retSize]);
-    wcstombs_s(&cnvSize, arrayFromArg.get(), retSize, arg, _TRUNCATE);
-    string ret(arrayFromArg.get());
-    return ret;
+    if (nodeType != XmlNodeType::XmlNodeType_Text) { return; }
+    const wchar_t * value;
+    if (FAILED(reader->GetValue(&value, NULL))) {
+        return;
+    }
+    WCharString wc;
+    myNode->FindTail(depth)->SetNodeValue(wc.Value(value).ToString());
 }
 
-string SettingReader::StrFromCWChar_t(const wchar_t * arg)
+void SettingReader::ParseCDATA(IXmlReader * reader, XmlNodeType nodeType)
 {
-    // const ‹³‚Ù‚ñ‚Æ‚Ð‚Å‚½‚é‚Æ‚Ü‚Ð‚ë
-    wstring castedArg = arg;
-    size_t retSize = castedArg.length() + 1;
-    size_t cnvSize = 0;
-    unique_ptr<char> arrayFromArg(new char[retSize]);
-    wcstombs_s(&cnvSize, arrayFromArg.get(), retSize, arg, _TRUNCATE);
-    string ret(arrayFromArg.get());
-    return ret;
+    if (nodeType != XmlNodeType::XmlNodeType_CDATA) { return; }
+    const wchar_t * value;
+    if (FAILED(reader->GetValue(&value, NULL))) {
+        return;
+    }
+    WCharString wc;
+    myNode->FindTail(depth)->SetNodeValue(wc.Value(value).ToString());
+}
+
+void SettingReader::ParseEndElement(IXmlReader * reader, XmlNodeType nodeType)
+{
+    if (nodeType != XmlNodeType::XmlNodeType_EndElement) { return; }
+    depth--;
 }
 
 bool SettingReader::IsParseSucceeded()
@@ -260,7 +205,8 @@ string SettingReader::GetErrorMessage()
 
 SettingReader::SettingReader()
 {
-    myNode = new NodeEntity();
+    depth = 0;
+    nodeId = 0;
     stream = nullptr;
     reader = nullptr;
     disposed = false;
@@ -268,7 +214,6 @@ SettingReader::SettingReader()
 
 void SettingReader::Dispose()
 {
-    myNode->Dispose();
     if (stream != nullptr) {
         delete stream;
     }

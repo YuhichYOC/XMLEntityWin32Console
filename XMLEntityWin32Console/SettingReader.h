@@ -1,4 +1,4 @@
-#p/*
+/*
 *
 * SettingReader.h
 *
@@ -21,13 +21,11 @@
 
 #pragma once
 
-#include <codecvt>                 // wstring_convert を利用するために必要
-
-#include <Shlwapi.h>               // SHCreateStreamOnFile を利用するために必要
-
-#include <atlbase.h>
+#include "stdafx.h"
 
 #include "NodeEntity.h"
+
+#include "WCharString.h"
 
 class SettingReader
 {
@@ -37,7 +35,9 @@ private:
 
     string fileName;
 
-    NodeEntity * myNode;
+    unique_ptr<NodeEntity> myNode;
+
+    int depth;
 
     int nodeId;
 
@@ -51,21 +51,15 @@ private:
 
     string errorMessage;
 
-    wchar_t * WChar_tFromStr(string arg);
+    void ParseElement(IXmlReader * reader, XmlNodeType nodeType);
 
-    void ParseElement(IXmlReader * reader, vector<string> * tree);
+    unique_ptr<NodeEntity> ParseAttributes(IXmlReader * reader, unique_ptr<NodeEntity> node);
 
-    void ParseText(IXmlReader * reader, vector<string> * tree);
+    void ParseText(IXmlReader * reader, XmlNodeType nodeType);
 
-    void ParseCDATA(IXmlReader * reader, vector<string> * tree);
+    void ParseCDATA(IXmlReader * reader, XmlNodeType nodeType);
 
-    void ParseEndElement(IXmlReader * reader, vector<string> * tree);
-
-    void ParseAttributes(IXmlReader * reader, vector<string> * tree, string name);
-
-    string StrFromWChar_t(wchar_t * arg);
-
-    string StrFromCWChar_t(const wchar_t * arg);
+    void ParseEndElement(IXmlReader * reader, XmlNodeType nodeType);
 
     bool disposed;
 
@@ -79,7 +73,7 @@ public:
 
     string GetFileName();
 
-    NodeEntity * GetNode();
+    unique_ptr<NodeEntity> GetNode();
 
     void Prepare();
 

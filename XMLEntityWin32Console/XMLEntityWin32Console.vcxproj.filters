@@ -39,6 +39,9 @@
     <ClInclude Include="SmartPointerTest.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="WCharString.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -65,11 +68,17 @@
     <ClCompile Include="SmartPointerTest.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="WCharString.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\LICENSE" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="Setting.config" />
   </ItemGroup>
 </Project>

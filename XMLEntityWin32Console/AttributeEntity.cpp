@@ -33,13 +33,6 @@ string AttributeEntity::GetAttrName()
     return attrName;
 }
 
-string * AttributeEntity::CloneAttrName()
-{
-    string * cloneName = new string();
-    cloneName->assign(attrName);
-    return cloneName;
-}
-
 void AttributeEntity::SetAttrValue(string arg)
 {
     attrValue.assign(arg);
@@ -48,13 +41,6 @@ void AttributeEntity::SetAttrValue(string arg)
 string AttributeEntity::GetAttrValue()
 {
     return attrValue;
-}
-
-string * AttributeEntity::CloneAttrValue()
-{
-    string * cloneValue = new string();
-    cloneValue->assign(attrValue);
-    return cloneValue;
 }
 
 bool AttributeEntity::NameEquals(string arg)
@@ -77,12 +63,12 @@ bool AttributeEntity::ValueEquals(string arg)
     }
 }
 
-AttributeEntity * AttributeEntity::Clone()
+unique_ptr<AttributeEntity> AttributeEntity::Clone()
 {
-    AttributeEntity * clone = new AttributeEntity();
-    clone->SetAttrName(*CloneAttrName());
-    clone->SetAttrValue(*CloneAttrValue());
-    return clone;
+    unique_ptr<AttributeEntity> clone(new AttributeEntity());
+    clone->SetAttrName(attrName);
+    clone->SetAttrValue(attrValue);
+    return move(clone);
 }
 
 AttributeEntity::AttributeEntity()

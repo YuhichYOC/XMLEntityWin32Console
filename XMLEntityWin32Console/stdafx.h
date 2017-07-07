@@ -16,6 +16,11 @@
 #include <memory>
 #include <string>
 #include <vector>
+
 #include <xmllite.h>
+#pragma comment (lib, "xmllite.lib")
+
+#include <Shlwapi.h>
+#pragma comment (lib, "shlwapi.lib")
 
 using namespace std;
